@@ -48,10 +48,10 @@ const SiteHeader = () => {
               <Scale className="w-5 h-5 text-accent-light" />
             </div>
             <div>
-              <span className="font-display text-xl font-bold text-primary-deep block leading-tight">
+              <span className="font-display text-2xl lg:text-3xl font-bold text-primary-deep block leading-tight tracking-tight">
                 Vega Hukuk
               </span>
-              <span className="text-[11px] font-medium tracking-[2px] uppercase text-muted-foreground">
+              <span className="text-[11px] font-semibold tracking-[3px] uppercase text-accent">
                 Danışmanlık & Arabuluculuk
               </span>
             </div>
