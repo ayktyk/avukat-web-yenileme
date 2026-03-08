@@ -48,7 +48,7 @@ const SiteHeader = () => {
               <Scale className="w-6 h-6 text-accent-light" />
             </div>
             <div>
-              <span className="font-display text-2xl lg:text-3xl font-bold text-primary-deep block leading-tight tracking-tight">
+              <span className="font-display text-3xl lg:text-4xl font-bold text-primary-deep block leading-tight tracking-tight">
                 Vega Hukuk
               </span>
               <span className="text-[11px] font-semibold tracking-[3px] uppercase text-accent">
