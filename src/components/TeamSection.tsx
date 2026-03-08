@@ -67,7 +67,7 @@ const TeamSection = () => {
               </div>
               <h4 className="font-display text-xl font-bold text-primary-deep">Av. Mücahit İslam Keskün</h4>
               <div className="gold-line my-3" />
-              <p className="text-primary font-semibold mb-2">Ceza Hukuku</p>
+              <p className="text-primary font-semibold mb-2">Kurucu Avukat · Ceza Hukuku</p>
               <p className="text-[14.5px] leading-relaxed text-muted-foreground">
                 Ceza davalarında savunma, soruşturma ve kovuşturma süreçlerinde etkin temsil ve stratejik savunma hizmeti sunar.
               </p>
