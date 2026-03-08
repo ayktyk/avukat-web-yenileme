@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Scale, Check, Calendar, ArrowRight } from "lucide-react";
 import { useState } from "react";
-import heroBg from "@/assets/hero-bg.jpg";
+import heroBg from "@/assets/hero-bg-1.jpg";
 
 const HeroSection = () => {
   const [formData, setFormData] = useState({ ad: "", tel: "", konu: "", mesaj: "" });
