@@ -1,4 +1,4 @@
-﻿import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GET as getAuth } from "../../api/cms/auth";
 import { GET as getCallback } from "../../api/cms/callback";
 
@@ -42,10 +42,12 @@ describe("cms oauth api", () => {
       }),
     );
 
-    const cookieValue = encodeURIComponent(JSON.stringify({
-      state: "test-state",
-      origin: "https://www.vegahukukistanbul.com",
-    }));
+    const cookieValue = encodeURIComponent(
+      JSON.stringify({
+        state: "test-state",
+        origin: "https://www.vegahukukistanbul.com",
+      }),
+    );
 
     const response = await getCallback(
       new Request("https://vegahukukistanbul.com/api/cms/callback?code=test-code&state=test-state", {
@@ -61,6 +63,6 @@ describe("cms oauth api", () => {
     expect(body).toContain("authorizing:github");
     expect(body).toContain("authorization:github:success");
     expect(body).toContain("github_access_token");
-    expect(body).toContain('postMessage(payload, "*")');
+    expect(body).toContain('finish(message && message.origin ? message.origin : "*")');
   });
 });

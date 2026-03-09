@@ -1,4 +1,4 @@
-﻿const getEnv = (key: string) => process.env[key]?.trim() ?? "";
+const getEnv = (key: string) => process.env[key]?.trim() ?? "";
 
 const html = (content: string, status = 200, headers?: HeadersInit) =>
   new Response(content, {
@@ -55,29 +55,30 @@ const renderMessagePage = (message: string) => `<!doctype html>
     <script>
       (function () {
         var payload = ${JSON.stringify(message)};
+        var finished = false;
 
-        function finish() {
-          if (!window.opener) {
+        function finish(targetOrigin) {
+          if (finished || !window.opener) {
             return;
           }
 
-          window.opener.postMessage(payload, "*");
+          finished = true;
+          window.opener.postMessage(payload, targetOrigin || "*");
           window.close();
         }
 
-        window.addEventListener(
-          "message",
-          function receiveMessage() {
-            finish();
-          },
-          false,
-        );
+        function receiveMessage(message) {
+          window.removeEventListener("message", receiveMessage, false);
+          finish(message && message.origin ? message.origin : "*");
+        }
+
+        window.addEventListener("message", receiveMessage, false);
 
         if (window.opener) {
           window.opener.postMessage("authorizing:github", "*");
           window.setTimeout(function () {
-            finish();
-          }, 1500);
+            finish("*");
+          }, 3000);
         }
       })();
     </script>
