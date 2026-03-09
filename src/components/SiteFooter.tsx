@@ -17,7 +17,7 @@ const SiteFooter = () => {
       <div className="section-container grid grid-cols-1 gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <div className="mb-4 flex items-center gap-3.5">
-            <div className="flex h-11 w-11 items-center justify-center rounded-md border border-primary-foreground/10 gradient-navy shadow-md">
+            <div className="gradient-navy flex h-11 w-11 items-center justify-center rounded-md border border-primary-foreground/10 shadow-md">
               <Scale className="h-5 w-5 text-accent-light" />
             </div>
             <div>
@@ -40,6 +40,7 @@ const SiteFooter = () => {
               { label: "Hakkımızda", href: "#hakkimizda" },
               { label: "Çalışma Alanları", href: "#calisma-alanlari" },
               { label: "Yayınlar", href: "#yayinlar" },
+              { label: "Hukuk Gündemi", href: "#hukuk-gundemi" },
               { label: "İletişim", href: "#iletisim" },
             ].map((link) => (
               <li key={link.href}>

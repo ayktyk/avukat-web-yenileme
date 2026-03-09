@@ -31,6 +31,12 @@ describe("app routing", () => {
     expect(screen.getAllByText("Blog listesine dön")[0]).toBeInTheDocument();
   });
 
+  it("renders the legal updates index route", async () => {
+    renderAt("/guncel-hukuk-gundemi");
+
+    expect(await screen.findByRole("heading", { name: "Güncel Hukuk Gündemi" })).toBeInTheDocument();
+  });
+
   it("renders the kvkk legal page route", async () => {
     renderAt("/kvkk-aydinlatma");
 

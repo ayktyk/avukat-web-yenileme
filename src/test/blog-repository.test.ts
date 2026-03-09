@@ -13,7 +13,7 @@ describe("blog repository", () => {
     vi.unstubAllEnvs();
   });
 
-  it("returns local posts sorted by publication date", async () => {
+  it("returns local markdown posts sorted by publication date", async () => {
     vi.stubEnv("VITE_BLOG_API_URL", "");
 
     const posts = await listBlogPosts();
@@ -22,6 +22,7 @@ describe("blog repository", () => {
     expect(posts[0]?.slug).toBe("ise-iade-arabuluculukta-kritik-noktalar");
     expect(posts[1]?.slug).toBe("menfi-tespit-davasinda-ispat-yuku");
     expect(posts[2]?.slug).toBe("kira-uyarlama-davasi-yol-haritasi");
+    expect(posts[0]?.content).toContain("Arabuluculuk başvurusu");
   });
 
   it("maps nested CMS payloads with env-based field paths", async () => {
@@ -48,16 +49,16 @@ describe("blog repository", () => {
               {
                 fields: {
                   slug: "cms-uyumlu-yazi",
-                  title: "CMS Uyumlu Yazi",
-                  summary: "Ozet metni",
-                  body: "Birinci paragraf\n\nIkinci paragraf",
+                  title: "CMS Uyumlu Yazı",
+                  summary: "Özet metni",
+                  body: "Birinci paragraf\n\nİkinci paragraf",
                   category: "Blog",
-                  author: { name: "Editor" },
+                  author: { name: "Editör" },
                   publishDate: "2026-03-08",
                   updatedDate: "2026-03-09",
                   seo: {
-                    title: "CMS SEO Baslik",
-                    description: "CMS SEO Aciklama",
+                    title: "CMS SEO Başlık",
+                    description: "CMS SEO Açıklama",
                   },
                   cover: { url: "/images/cms-cover.jpg" },
                 },
@@ -73,20 +74,20 @@ describe("blog repository", () => {
     expect(posts).toHaveLength(1);
     expect(posts[0]).toMatchObject({
       slug: "cms-uyumlu-yazi",
-      title: "CMS Uyumlu Yazi",
-      excerpt: "Ozet metni",
+      title: "CMS Uyumlu Yazı",
+      excerpt: "Özet metni",
       category: "Blog",
-      author: "Editor",
+      author: "Editör",
       publishedAt: "2026-03-08",
       updatedAt: "2026-03-09",
-      seoTitle: "CMS SEO Baslik",
-      seoDescription: "CMS SEO Aciklama",
+      seoTitle: "CMS SEO Başlık",
+      seoDescription: "CMS SEO Açıklama",
       coverImage: "/images/cms-cover.jpg",
     });
-    expect(posts[0]?.content).toEqual(["Birinci paragraf", "Ikinci paragraf"]);
+    expect(posts[0]?.content).toContain("İkinci paragraf");
   });
 
-  it("falls back to local posts when remote API fails", async () => {
+  it("falls back to local markdown posts when remote API fails", async () => {
     vi.stubEnv("VITE_BLOG_API_URL", "https://cms.example.test/posts");
     vi.stubGlobal(
       "fetch",
@@ -107,4 +108,3 @@ describe("blog repository", () => {
     expect(post?.title).toBe("Menfi Tespit Davasında İspat Yükü");
   });
 });
-

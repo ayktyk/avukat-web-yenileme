@@ -1,6 +1,8 @@
 ﻿import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { useSeo } from "@/hooks/use-seo";
 import { formatDateTr } from "@/lib/format-date";
 import { getBlogPostBySlug } from "@/lib/blog-repository";
@@ -117,12 +119,25 @@ const BlogPost = () => {
           }`}
         />
 
-        <div className="space-y-5">
-          {post.content.map((paragraph, index) => (
-            <p key={`${post.slug}-${index}`} className="text-[17px] leading-[1.85] text-foreground/90">
-              {paragraph}
-            </p>
-          ))}
+        <div className="space-y-5 text-[17px] leading-[1.85] text-foreground/90">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              h2: ({ node, ...props }) => <h2 className="mt-10 font-display text-3xl font-bold text-primary-deep" {...props} />,
+              h3: ({ node, ...props }) => <h3 className="mt-8 font-display text-2xl font-bold text-primary-deep" {...props} />,
+              p: ({ node, ...props }) => <p className="mt-5" {...props} />,
+              ul: ({ node, ...props }) => <ul className="mt-5 list-disc space-y-2 pl-6" {...props} />,
+              ol: ({ node, ...props }) => <ol className="mt-5 list-decimal space-y-2 pl-6" {...props} />,
+              li: ({ node, ...props }) => <li className="pl-1" {...props} />,
+              a: ({ node, ...props }) => <a className="font-semibold text-primary underline underline-offset-4" {...props} />,
+              blockquote: ({ node, ...props }) => (
+                <blockquote className="mt-6 border-l-4 border-accent/40 bg-card px-5 py-3 italic text-muted-foreground" {...props} />
+              ),
+              strong: ({ node, ...props }) => <strong className="font-semibold text-primary-deep" {...props} />,
+            }}
+          >
+            {post.content}
+          </ReactMarkdown>
         </div>
 
         <div className="mt-12 rounded-xl border border-border bg-card p-5">

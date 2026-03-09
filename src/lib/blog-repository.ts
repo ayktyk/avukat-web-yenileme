@@ -1,5 +1,4 @@
-import { blogPosts } from "@/data/blog-posts";
-import type { BlogPost } from "@/types/blog";
+﻿import type { BlogPost } from "@/types/blog";
 
 type RemoteBlogPayload = BlogPost[] | Record<string, unknown>;
 
@@ -18,6 +17,18 @@ type BlogFieldMap = {
   coverClass: string;
   coverImage: string;
 };
+
+type MarkdownModuleMap = Record<string, string>;
+
+type MarkdownFrontmatter = Partial<BlogPost> & {
+  slug?: string;
+};
+
+const markdownModules = import.meta.glob("../content/blog/*.md", {
+  eager: true,
+  query: "?raw",
+  import: "default",
+}) as MarkdownModuleMap;
 
 const sortByDateDesc = (posts: BlogPost[]) =>
   [...posts].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
@@ -66,16 +77,6 @@ const getFieldMap = (): BlogFieldMap => ({
   coverImage: readEnv("VITE_BLOG_FIELD_COVER_IMAGE") || DEFAULT_FIELD_MAP.coverImage,
 });
 
-const hasRequiredFields = (value: unknown): value is Pick<BlogPost, "slug" | "title" | "excerpt" | "publishedAt"> =>
-  Boolean(
-    value &&
-      typeof value === "object" &&
-      "slug" in value &&
-      "title" in value &&
-      "excerpt" in value &&
-      "publishedAt" in value,
-  );
-
 const getValueByPath = (source: unknown, path: string): unknown => {
   if (!path) {
     return source;
@@ -108,10 +109,14 @@ const toOptionalString = (value: unknown): string | undefined => {
     return String(value);
   }
 
+  if (value instanceof Date) {
+    return value.toISOString().slice(0, 10);
+  }
+
   return undefined;
 };
 
-const normalizeContent = (content: unknown): string[] => {
+const normalizeContent = (content: unknown): string => {
   if (Array.isArray(content)) {
     return content
       .map((item) => {
@@ -125,17 +130,15 @@ const normalizeContent = (content: unknown): string[] => {
 
         return "";
       })
-      .filter(Boolean);
+      .filter(Boolean)
+      .join("\n\n");
   }
 
   if (typeof content === "string") {
-    return content
-      .split(/\n{2,}/)
-      .map((paragraph) => paragraph.trim())
-      .filter(Boolean);
+    return content.trim();
   }
 
-  return [];
+  return "";
 };
 
 const mapRecordToBlogPost = (value: Record<string, unknown>, fieldMap: BlogFieldMap): BlogPost | null => {
@@ -154,7 +157,7 @@ const mapRecordToBlogPost = (value: Record<string, unknown>, fieldMap: BlogField
     slug,
     title,
     excerpt,
-    content: content.length > 0 ? content : [excerpt],
+    content: content || excerpt,
     category: toOptionalString(getValueByPath(value, fieldMap.category)) ?? "Genel",
     author: toOptionalString(getValueByPath(value, fieldMap.author)) ?? "Vega Hukuk",
     publishedAt,
@@ -165,6 +168,16 @@ const mapRecordToBlogPost = (value: Record<string, unknown>, fieldMap: BlogField
     coverImage: toOptionalString(getValueByPath(value, fieldMap.coverImage)),
   };
 };
+
+const hasRequiredFields = (value: unknown): value is Pick<BlogPost, "slug" | "title" | "excerpt" | "publishedAt"> =>
+  Boolean(
+    value &&
+      typeof value === "object" &&
+      "slug" in value &&
+      "title" in value &&
+      "excerpt" in value &&
+      "publishedAt" in value,
+  );
 
 const normalizeBlogPost = (value: unknown, fieldMap: BlogFieldMap): BlogPost | null => {
   if (!value || typeof value !== "object") {
@@ -179,7 +192,7 @@ const normalizeBlogPost = (value: unknown, fieldMap: BlogFieldMap): BlogPost | n
       slug: String(post.slug),
       title: String(post.title),
       excerpt: String(post.excerpt),
-      content: normalizedContent.length > 0 ? normalizedContent : [String(post.excerpt)],
+      content: normalizedContent || String(post.excerpt),
       category: typeof post.category === "string" ? post.category : "Genel",
       author: typeof post.author === "string" ? post.author : "Vega Hukuk",
       publishedAt: String(post.publishedAt),
@@ -213,7 +226,86 @@ const parseRemotePayload = (payload: RemoteBlogPayload, fieldMap: BlogFieldMap):
     .map((item) => normalizeBlogPost(item, fieldMap))
     .filter((post): post is BlogPost => post !== null);
 
-const loadLocalPosts = async (): Promise<BlogPost[]> => sortByDateDesc(blogPosts);
+const toSlugFromPath = (path: string) => path.split("/").pop()?.replace(/\.md$/, "") ?? path;
+
+const stripMatchingQuotes = (value: string) => {
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    return value.slice(1, -1);
+  }
+
+  return value;
+};
+
+const parseMarkdownDocument = (raw: string) => {
+  const normalizedRaw = raw.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
+
+  if (!normalizedRaw.startsWith("---\n")) {
+    return { data: {} as MarkdownFrontmatter, content: normalizedRaw.trim() };
+  }
+
+  const endIndex = normalizedRaw.indexOf("\n---\n", 4);
+  if (endIndex === -1) {
+    return { data: {} as MarkdownFrontmatter, content: normalizedRaw.trim() };
+  }
+
+  const frontmatterBlock = normalizedRaw.slice(4, endIndex);
+  const content = normalizedRaw.slice(endIndex + 5).trim();
+  const data = frontmatterBlock.split(/\r?\n/).reduce<MarkdownFrontmatter>((acc, line) => {
+    const separatorIndex = line.indexOf(":");
+    if (separatorIndex === -1) {
+      return acc;
+    }
+
+    const key = line.slice(0, separatorIndex).trim() as keyof MarkdownFrontmatter;
+    const value = stripMatchingQuotes(line.slice(separatorIndex + 1).trim());
+
+    if (value.length > 0) {
+      acc[key] = value as never;
+    }
+
+    return acc;
+  }, {} as MarkdownFrontmatter);
+
+  return { data, content };
+};
+
+const parseMarkdownPost = (path: string, raw: string): BlogPost | null => {
+  const { data, content } = parseMarkdownDocument(raw);
+  const frontmatter = data as MarkdownFrontmatter;
+  const slug = toOptionalString(frontmatter.slug) || toSlugFromPath(path);
+  const title = toOptionalString(frontmatter.title);
+  const excerpt = toOptionalString(frontmatter.excerpt);
+  const publishedAt = toOptionalString(frontmatter.publishedAt);
+
+  if (!title || !excerpt || !publishedAt) {
+    return null;
+  }
+
+  return {
+    slug,
+    title,
+    excerpt,
+    content: content.trim(),
+    category: toOptionalString(frontmatter.category) || "Genel",
+    author: toOptionalString(frontmatter.author) || "Vega Hukuk",
+    publishedAt,
+    updatedAt: toOptionalString(frontmatter.updatedAt),
+    seoTitle: toOptionalString(frontmatter.seoTitle),
+    seoDescription: toOptionalString(frontmatter.seoDescription),
+    coverClass: toOptionalString(frontmatter.coverClass),
+    coverImage: toOptionalString(frontmatter.coverImage),
+  };
+};
+
+const loadLocalPosts = async (): Promise<BlogPost[]> =>
+  sortByDateDesc(
+    Object.entries(markdownModules)
+      .map(([path, raw]) => parseMarkdownPost(path, raw))
+      .filter((post): post is BlogPost => post !== null),
+  );
 
 const loadRemotePosts = async (): Promise<BlogPost[]> => {
   const { url, token } = getRemoteConfig();
@@ -265,3 +357,4 @@ export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> 
 export const resetBlogRepositoryCache = () => {
   postsPromise = null;
 };
+

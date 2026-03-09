@@ -1,10 +1,9 @@
-﻿export interface BlogPost {
+﻿export interface LegalUpdate {
   slug: string;
   title: string;
   excerpt: string;
   content: string;
   category: string;
-  author: string;
   publishedAt: string;
   updatedAt?: string;
   seoTitle?: string;

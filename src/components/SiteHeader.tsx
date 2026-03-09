@@ -7,6 +7,7 @@ const navLinks = [
   { label: "Çalışma Alanları", href: "#calisma-alanlari" },
   { label: "Ekibimiz", href: "#ekibimiz" },
   { label: "Yayınlar", href: "#yayinlar" },
+  { label: "Hukuk Gündemi", href: "#hukuk-gundemi" },
   { label: "SSS", href: "#sss" },
 ];
 
