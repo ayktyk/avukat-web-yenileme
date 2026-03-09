@@ -58,11 +58,20 @@ const LegalUpdatesIndex = () => {
                 key={item.slug}
                 className="rounded-2xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/25 hover:shadow-elegant-lg"
               >
-                <div
-                  className={`mb-5 aspect-[16/8] w-full rounded-xl bg-gradient-to-br ${
-                    item.coverClass ?? "from-primary/[0.08] to-primary/[0.03]"
-                  }`}
-                />
+                {item.coverImage ? (
+                  <img
+                    src={item.coverImage}
+                    alt={item.title}
+                    className="mb-5 aspect-[16/8] w-full rounded-xl object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div
+                    className={`mb-5 aspect-[16/8] w-full rounded-xl bg-gradient-to-br ${
+                      item.coverClass ?? "from-primary/[0.08] to-primary/[0.03]"
+                    }`}
+                  />
+                )}
                 <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-accent">
                   <CalendarDays className="h-3.5 w-3.5" />
                   {formatDateTr(item.publishedAt)}

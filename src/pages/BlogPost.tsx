@@ -113,11 +113,20 @@ const BlogPost = () => {
           </div>
         </div>
 
-        <div
-          className={`mt-8 mb-9 aspect-[16/8] w-full rounded-2xl bg-gradient-to-br ${
-            post.coverClass ?? "from-primary/[0.08] to-primary/[0.03]"
-          }`}
-        />
+        {post.coverImage ? (
+          <img
+            src={post.coverImage}
+            alt={post.title}
+            className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl object-cover"
+            loading="eager"
+          />
+        ) : (
+          <div
+            className={`mt-8 mb-9 aspect-[16/8] w-full rounded-2xl bg-gradient-to-br ${
+              post.coverClass ?? "from-primary/[0.08] to-primary/[0.03]"
+            }`}
+          />
+        )}
 
         <div className="space-y-5 text-[17px] leading-[1.85] text-foreground/90">
           <ReactMarkdown
