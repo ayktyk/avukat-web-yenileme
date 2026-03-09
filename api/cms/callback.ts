@@ -27,7 +27,24 @@ const readCookie = (request: Request, name: string) => {
   return pair ? decodeURIComponent(pair.split("=").slice(1).join("=")) : "";
 };
 
-const renderMessagePage = (message: string, targetOrigin: string) => `<!doctype html>
+const readOauthContext = (request: Request) => {
+  const raw = readCookie(request, "cms_oauth_context");
+  if (!raw) {
+    return { state: "", origin: getOrigin(request) };
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as { state?: string; origin?: string };
+    return {
+      state: typeof parsed.state === "string" ? parsed.state : "",
+      origin: typeof parsed.origin === "string" ? parsed.origin : getOrigin(request),
+    };
+  } catch {
+    return { state: "", origin: getOrigin(request) };
+  }
+};
+
+const renderMessagePage = (message: string) => `<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -38,14 +55,13 @@ const renderMessagePage = (message: string, targetOrigin: string) => `<!doctype 
     <script>
       (function () {
         var payload = ${JSON.stringify(message)};
-        var targetOrigin = ${JSON.stringify(targetOrigin)};
 
         function finish() {
           if (!window.opener) {
             return;
           }
 
-          window.opener.postMessage(payload, targetOrigin || "*");
+          window.opener.postMessage(payload, "*");
           window.close();
         }
 
@@ -69,11 +85,11 @@ const renderMessagePage = (message: string, targetOrigin: string) => `<!doctype 
   </body>
 </html>`;
 
-const clearCookies = [buildCookie("cms_oauth_state", "", 0), buildCookie("cms_oauth_origin", "", 0)].join(", ");
+const clearCookie = buildCookie("cms_oauth_context", "", 0);
 
-const renderError = (message: string, targetOrigin: string, status = 400) =>
-  html(renderMessagePage(`authorization:github:error:${JSON.stringify({ message })}`, targetOrigin), status, {
-    "set-cookie": clearCookies,
+const renderError = (message: string, status = 400) =>
+  html(renderMessagePage(`authorization:github:error:${JSON.stringify({ message })}`), status, {
+    "set-cookie": clearCookie,
   });
 
 export async function GET(request: Request) {
@@ -82,15 +98,14 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code") ?? "";
   const state = url.searchParams.get("state") ?? "";
-  const storedState = readCookie(request, "cms_oauth_state");
-  const openerOrigin = readCookie(request, "cms_oauth_origin") || getOrigin(request);
+  const oauthContext = readOauthContext(request);
 
   if (!clientId || !clientSecret) {
-    return renderError("GitHub OAuth ayarları eksik.", openerOrigin, 500);
+    return renderError("GitHub OAuth ayarları eksik.", 500);
   }
 
-  if (!code || !state || !storedState || state !== storedState) {
-    return renderError("GitHub doğrulama durumu eşleşmedi.", openerOrigin, 400);
+  if (!code || !state || !oauthContext.state || state !== oauthContext.state) {
+    return renderError("GitHub doğrulama durumu eşleşmedi.", 400);
   }
 
   const response = await fetch("https://github.com/login/oauth/access_token", {
@@ -109,7 +124,7 @@ export async function GET(request: Request) {
   });
 
   if (!response.ok) {
-    return renderError("GitHub erişim anahtarı alınamadı.", openerOrigin, 502);
+    return renderError("GitHub erişim anahtarı alınamadı.", 502);
   }
 
   const payload = (await response.json()) as {
@@ -119,7 +134,7 @@ export async function GET(request: Request) {
   };
 
   if (!payload.access_token) {
-    return renderError(payload.error_description || payload.error || "GitHub erişim anahtarı alınamadı.", openerOrigin, 502);
+    return renderError(payload.error_description || payload.error || "GitHub erişim anahtarı alınamadı.", 502);
   }
 
   const successMessage = `authorization:github:success:${JSON.stringify({
@@ -127,7 +142,7 @@ export async function GET(request: Request) {
     provider: "github",
   })}`;
 
-  return html(renderMessagePage(successMessage, openerOrigin), 200, {
-    "set-cookie": clearCookies,
+  return html(renderMessagePage(successMessage), 200, {
+    "set-cookie": clearCookie,
   });
 }

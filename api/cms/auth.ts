@@ -45,6 +45,7 @@ export async function GET(request: Request) {
   const redirectUri = `${getOrigin(request)}/api/cms/callback`;
   const authorizeUrl = new URL("https://github.com/login/oauth/authorize");
   const openerOrigin = getRequestOrigin(request);
+  const oauthContext = JSON.stringify({ state, origin: openerOrigin });
 
   authorizeUrl.searchParams.set("client_id", clientId);
   authorizeUrl.searchParams.set("redirect_uri", redirectUri);
@@ -55,7 +56,7 @@ export async function GET(request: Request) {
     status: 302,
     headers: {
       location: authorizeUrl.toString(),
-      "set-cookie": [buildCookie("cms_oauth_state", state, 600), buildCookie("cms_oauth_origin", openerOrigin, 600)].join(", "),
+      "set-cookie": buildCookie("cms_oauth_context", oauthContext, 600),
     },
   });
 }
