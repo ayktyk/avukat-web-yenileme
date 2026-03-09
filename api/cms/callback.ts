@@ -27,7 +27,7 @@ const readCookie = (request: Request, name: string) => {
   return pair ? decodeURIComponent(pair.split("=").slice(1).join("=")) : "";
 };
 
-const renderMessagePage = (message: string, targetOrigin: string) => `<!doctype html>
+const renderMessagePage = (message: string) => `<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -37,18 +37,39 @@ const renderMessagePage = (message: string, targetOrigin: string) => `<!doctype 
   <body>
     <script>
       (function () {
-        if (window.opener) {
-          window.opener.postMessage(${JSON.stringify(message)}, ${JSON.stringify(targetOrigin)});
+        var payload = ${JSON.stringify(message)};
+
+        function finish(targetOrigin) {
+          if (!window.opener) {
+            return;
+          }
+
+          window.opener.postMessage(payload, targetOrigin);
+          window.close();
         }
-        window.close();
+
+        window.addEventListener(
+          "message",
+          function receiveMessage(event) {
+            finish(event.origin || window.location.origin);
+          },
+          false,
+        );
+
+        if (window.opener) {
+          window.opener.postMessage("authorizing:github", "*");
+          window.setTimeout(function () {
+            finish(window.location.origin);
+          }, 1500);
+        }
       })();
     </script>
     <p>Bu pencereyi kapatabilirsiniz.</p>
   </body>
 </html>`;
 
-const renderError = (message: string, request: Request, status = 400) =>
-  html(renderMessagePage(`authorization:github:error:${JSON.stringify({ message })}`, getOrigin(request)), status, {
+const renderError = (message: string, status = 400) =>
+  html(renderMessagePage(`authorization:github:error:${JSON.stringify({ message })}`), status, {
     "set-cookie": buildCookie("cms_oauth_state", "", 0),
   });
 
@@ -61,11 +82,11 @@ export async function GET(request: Request) {
   const storedState = readCookie(request, "cms_oauth_state");
 
   if (!clientId || !clientSecret) {
-    return renderError("GitHub OAuth ayarları eksik.", request, 500);
+    return renderError("GitHub OAuth ayarları eksik.", 500);
   }
 
   if (!code || !state || !storedState || state !== storedState) {
-    return renderError("GitHub doğrulama durumu eşleşmedi.", request, 400);
+    return renderError("GitHub doğrulama durumu eşleşmedi.", 400);
   }
 
   const response = await fetch("https://github.com/login/oauth/access_token", {
@@ -84,7 +105,7 @@ export async function GET(request: Request) {
   });
 
   if (!response.ok) {
-    return renderError("GitHub erişim anahtarı alınamadı.", request, 502);
+    return renderError("GitHub erişim anahtarı alınamadı.", 502);
   }
 
   const payload = (await response.json()) as {
@@ -94,7 +115,7 @@ export async function GET(request: Request) {
   };
 
   if (!payload.access_token) {
-    return renderError(payload.error_description || payload.error || "GitHub erişim anahtarı alınamadı.", request, 502);
+    return renderError(payload.error_description || payload.error || "GitHub erişim anahtarı alınamadı.", 502);
   }
 
   const successMessage = `authorization:github:success:${JSON.stringify({
@@ -102,7 +123,7 @@ export async function GET(request: Request) {
     provider: "github",
   })}`;
 
-  return html(renderMessagePage(successMessage, getOrigin(request)), 200, {
+  return html(renderMessagePage(successMessage), 200, {
     "set-cookie": buildCookie("cms_oauth_state", "", 0),
   });
 }

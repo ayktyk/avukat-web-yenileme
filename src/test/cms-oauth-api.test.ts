@@ -46,6 +46,7 @@ describe("cms oauth api", () => {
     const body = await response.text();
 
     expect(response.status).toBe(200);
+    expect(body).toContain("authorizing:github");
     expect(body).toContain("authorization:github:success");
     expect(body).toContain("github_access_token");
   });

@@ -8,6 +8,7 @@ backend:
   auth_endpoint: api/cms/auth
 
 site_url: https://vegahukukistanbul.com
+site_domain: vegahukukistanbul.com
 logo_url: /og-image.svg
 locale: tr
 publish_mode: simple
