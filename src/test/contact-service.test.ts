@@ -1,11 +1,20 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { submitContactForm } from "@/lib/contact-service";
+import { submitCallbackRequest, submitContactForm } from "@/lib/contact-service";
 import { ContactServiceError } from "@/types/contact";
 
 const validPayload = {
   adsoyad: "Ada Lovelace",
   email: "ada@example.com",
   mesaj: "Iletisim formu test mesaji.",
+  kvkkOnay: true,
+  website: "",
+};
+
+const validCallbackPayload = {
+  adsoyad: "Ada Lovelace",
+  telefon: "05551234567",
+  konu: "Ise iade",
+  mesaj: "Geri aranmak istiyorum.",
   kvkkOnay: true,
   website: "",
 };
@@ -28,7 +37,7 @@ describe("contact service", () => {
     });
   });
 
-  it("sends the form payload to the configured endpoint", async () => {
+  it("sends the contact form payload to the configured endpoint", async () => {
     vi.stubEnv("VITE_CONTACT_FORM_ENDPOINT", "https://api.example.test/contact");
     vi.stubGlobal(
       "fetch",
@@ -47,6 +56,26 @@ describe("contact service", () => {
         headers: expect.objectContaining({
           "Content-Type": "application/json",
         }),
+        body: expect.stringContaining('"source":"website-contact-form"'),
+      }),
+    );
+  });
+
+  it("sends the callback form payload to the configured endpoint", async () => {
+    vi.stubEnv("VITE_CONTACT_FORM_ENDPOINT", "https://api.example.test/contact");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+      }),
+    );
+
+    await submitCallbackRequest(validCallbackPayload);
+
+    expect(fetch).toHaveBeenCalledWith(
+      "https://api.example.test/contact",
+      expect.objectContaining({
+        body: expect.stringContaining('"source":"website-callback-form"'),
       }),
     );
   });

@@ -5,6 +5,8 @@ const requestLog = new Map<string, number>();
 type ContactRequestBody = {
   adsoyad?: string;
   email?: string;
+  telefon?: string;
+  konu?: string;
   mesaj?: string;
   source?: string;
   submittedAt?: string;
@@ -84,10 +86,29 @@ const assertRateLimit = (request: Request) => {
 const validateBody = (body: ContactRequestBody) => {
   const adsoyad = normalize(body.adsoyad);
   const email = normalize(body.email);
+  const telefon = normalize(body.telefon);
+  const konu = normalize(body.konu);
   const mesaj = normalize(body.mesaj);
+  const source = normalize(body.source) || "website-contact-form";
 
-  if (!adsoyad || !email || !mesaj) {
-    throw error(400, "invalid_payload", "Zorunlu alanlar eksik.");
+  if (!adsoyad) {
+    throw error(400, "invalid_payload", "Ad soyad zorunludur.");
+  }
+
+  if (!email && !telefon) {
+    throw error(400, "invalid_payload", "En az bir iletisim bilgisi gereklidir.");
+  }
+
+  if (source === "website-contact-form" && !email) {
+    throw error(400, "invalid_payload", "Iletisim formunda e-posta zorunludur.");
+  }
+
+  if (source === "website-callback-form" && !telefon) {
+    throw error(400, "invalid_payload", "On degerlendirme formunda telefon zorunludur.");
+  }
+
+  if (!mesaj && !konu) {
+    throw error(400, "invalid_payload", "Mesaj veya konu bilgisi gereklidir.");
   }
 
   if (mesaj.length > MAX_MESSAGE_LENGTH) {
@@ -96,13 +117,17 @@ const validateBody = (body: ContactRequestBody) => {
 
   return {
     adsoyad,
-    email,
-    mesaj,
-    source: normalize(body.source) || "website-contact-form",
+    email: email || undefined,
+    telefon: telefon || undefined,
+    konu: konu || undefined,
+    mesaj: mesaj || undefined,
+    source,
     submittedAt: normalize(body.submittedAt) || new Date().toISOString(),
     pageUrl: normalize(body.pageUrl),
   };
 };
+
+const sourceTitle = (source: string) => (source === "website-callback-form" ? "On degerlendirme talebi" : "Iletisim formu mesaji");
 
 const sendWithResend = async (body: ReturnType<typeof validateBody>) => {
   const apiKey = getEnv("RESEND_API_KEY");
@@ -117,15 +142,19 @@ const sendWithResend = async (body: ReturnType<typeof validateBody>) => {
     );
   }
 
+  const title = sourceTitle(body.source);
+
   const html = `
-    <h2>Yeni iletisim formu mesaji</h2>
+    <h2>${escapeHtml(title)}</h2>
     <p><strong>Ad Soyad:</strong> ${escapeHtml(body.adsoyad)}</p>
-    <p><strong>E-posta:</strong> ${escapeHtml(body.email)}</p>
+    <p><strong>E-posta:</strong> ${escapeHtml(body.email || "Belirtilmedi")}</p>
+    <p><strong>Telefon:</strong> ${escapeHtml(body.telefon || "Belirtilmedi")}</p>
+    <p><strong>Konu:</strong> ${escapeHtml(body.konu || "Belirtilmedi")}</p>
     <p><strong>Kaynak:</strong> ${escapeHtml(body.source)}</p>
     <p><strong>Gonderim Zamani:</strong> ${escapeHtml(body.submittedAt)}</p>
     <p><strong>Sayfa:</strong> ${escapeHtml(body.pageUrl || "Belirtilmedi")}</p>
     <hr />
-    <p>${escapeHtml(body.mesaj).replaceAll("\n", "<br />")}</p>
+    <p>${escapeHtml(body.mesaj || "Mesaj birakilmadi.").replaceAll("\n", "<br />")}</p>
   `;
 
   const response = await fetch("https://api.resend.com/emails", {
@@ -137,17 +166,19 @@ const sendWithResend = async (body: ReturnType<typeof validateBody>) => {
     body: JSON.stringify({
       from,
       to: [to],
-      subject: `Yeni iletisim formu mesaji | ${body.adsoyad}`,
+      subject: `${title} | ${body.adsoyad}`,
       html,
       text: [
-        "Yeni iletisim formu mesaji",
+        title,
         `Ad Soyad: ${body.adsoyad}`,
-        `E-posta: ${body.email}`,
+        `E-posta: ${body.email || "Belirtilmedi"}`,
+        `Telefon: ${body.telefon || "Belirtilmedi"}`,
+        `Konu: ${body.konu || "Belirtilmedi"}`,
         `Kaynak: ${body.source}`,
         `Gonderim Zamani: ${body.submittedAt}`,
         `Sayfa: ${body.pageUrl || "Belirtilmedi"}`,
         "",
-        body.mesaj,
+        body.mesaj || "Mesaj birakilmadi.",
       ].join("\n"),
     }),
   });

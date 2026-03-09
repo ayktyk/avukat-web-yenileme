@@ -1,4 +1,9 @@
-import { ContactServiceError, type ContactFormPayload } from "@/types/contact";
+import {
+  ContactServiceError,
+  type CallbackRequestPayload,
+  type ContactFormPayload,
+  type InquiryPayload,
+} from "@/types/contact";
 
 const CONTACT_RATE_LIMIT_KEY = "vega-hukuk-contact-last-submit-at";
 const CONTACT_RATE_LIMIT_WINDOW_MS = 60_000;
@@ -23,7 +28,7 @@ const getContactConfig = () => ({
   token: readEnv("VITE_CONTACT_FORM_TOKEN"),
 });
 
-const normalize = (value: string) => value.trim();
+const normalize = (value: string | undefined) => value?.trim() ?? "";
 
 const getRemainingCooldownMs = () => {
   if (typeof window === "undefined") {
@@ -45,13 +50,31 @@ const markSubmittedNow = () => {
   }
 };
 
-const validatePayload = (payload: ContactFormPayload) => {
+const validateInquiryPayload = (payload: InquiryPayload) => {
   const adsoyad = normalize(payload.adsoyad);
   const email = normalize(payload.email);
+  const telefon = normalize(payload.telefon);
+  const konu = normalize(payload.konu);
   const mesaj = normalize(payload.mesaj);
 
-  if (!adsoyad || !email || !mesaj) {
-    throw new ContactServiceError("invalid", "Lutfen tum zorunlu alanlari doldurun.");
+  if (!adsoyad) {
+    throw new ContactServiceError("invalid", "Lutfen ad soyad bilginizi girin.");
+  }
+
+  if (!email && !telefon) {
+    throw new ContactServiceError("invalid", "En az bir iletisim bilgisi girin.");
+  }
+
+  if (payload.source === "website-contact-form" && !email) {
+    throw new ContactServiceError("invalid", "Iletisim formunda e-posta zorunludur.");
+  }
+
+  if (payload.source === "website-callback-form" && !telefon) {
+    throw new ContactServiceError("invalid", "On degerlendirme formunda telefon zorunludur.");
+  }
+
+  if (!mesaj && !konu) {
+    throw new ContactServiceError("invalid", "Lutfen kisa bir not veya konu girin.");
   }
 
   if (!payload.kvkkOnay) {
@@ -70,14 +93,17 @@ const validatePayload = (payload: ContactFormPayload) => {
 
   return {
     adsoyad,
-    email,
-    mesaj,
+    email: email || undefined,
+    telefon: telefon || undefined,
+    konu: konu || undefined,
+    mesaj: mesaj || undefined,
+    source: payload.source,
   };
 };
 
-export const submitContactForm = async (payload: ContactFormPayload) => {
+const submitInquiry = async (payload: InquiryPayload) => {
   const { endpoint, token } = getContactConfig();
-  const sanitized = validatePayload(payload);
+  const sanitized = validateInquiryPayload(payload);
 
   if (!endpoint) {
     throw new ContactServiceError(
@@ -94,19 +120,30 @@ export const submitContactForm = async (payload: ContactFormPayload) => {
     },
     body: JSON.stringify({
       ...sanitized,
-      source: "website-contact-form",
       submittedAt: new Date().toISOString(),
       pageUrl: typeof window !== "undefined" ? window.location.href : undefined,
     }),
   });
 
   if (!response.ok) {
-    const payload = (await response.json().catch(() => null)) as { message?: string } | null;
+    const responsePayload = (await response.json().catch(() => null)) as { message?: string } | null;
     throw new ContactServiceError(
       "request_failed",
-      payload?.message ?? "Mesaj gonderilemedi. Lutfen daha sonra tekrar deneyin.",
+      responsePayload?.message ?? "Mesaj gonderilemedi. Lutfen daha sonra tekrar deneyin.",
     );
   }
 
   markSubmittedNow();
 };
+
+export const submitContactForm = async (payload: ContactFormPayload) =>
+  submitInquiry({
+    ...payload,
+    source: "website-contact-form",
+  });
+
+export const submitCallbackRequest = async (payload: CallbackRequestPayload) =>
+  submitInquiry({
+    ...payload,
+    source: "website-callback-form",
+  });

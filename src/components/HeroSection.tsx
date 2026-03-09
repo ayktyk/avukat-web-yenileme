@@ -1,19 +1,51 @@
 import { motion } from "framer-motion";
-import { Scale, Check, Calendar, ArrowRight } from "lucide-react";
+import { ArrowRight, Calendar, Check, Scale } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { toast } from "@/components/ui/use-toast";
 import heroBg from "@/assets/hero-bg-1.jpg";
+import { submitCallbackRequest } from "@/lib/contact-service";
+import { ContactServiceError } from "@/types/contact";
+
+const initialFormState = { ad: "", tel: "", konu: "", mesaj: "", kvkkOnay: false, website: "" };
 
 const HeroSection = () => {
-  const [formData, setFormData] = useState({ ad: "", tel: "", konu: "", mesaj: "" });
-  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState(initialFormState);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ ad: "", tel: "", konu: "", mesaj: "" });
-    }, 2500);
+    setSubmitting(true);
+
+    try {
+      await submitCallbackRequest({
+        adsoyad: formData.ad,
+        telefon: formData.tel,
+        konu: formData.konu,
+        mesaj: formData.mesaj,
+        kvkkOnay: formData.kvkkOnay,
+        website: formData.website,
+      });
+
+      setFormData(initialFormState);
+      toast({
+        title: "Talep alindi",
+        description: "On degerlendirme talebiniz iletildi. En kisa surede aranacaksiniz.",
+      });
+    } catch (error) {
+      const message =
+        error instanceof ContactServiceError
+          ? error.message
+          : "Talep gonderilemedi. Lutfen daha sonra tekrar deneyin.";
+
+      toast({
+        title: "Talep gonderilemedi",
+        description: message,
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const scrollTo = (href: string) => {
@@ -25,16 +57,19 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="ana-sayfa" className="relative min-h-screen flex items-center pt-[120px] pb-20 overflow-hidden">
-      {/* Background */}
+    <section id="ana-sayfa" className="relative flex min-h-screen items-center overflow-hidden pt-[120px] pb-20">
       <div className="absolute inset-0 z-0">
-        <img src={heroBg} alt="" className="w-full h-full object-cover" />
+        <img src={heroBg} alt="" className="h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/85 via-background/50 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
       </div>
 
-      {/* Decorative lines */}
-      <svg className="absolute inset-0 z-[1] opacity-20 pointer-events-none" viewBox="0 0 1200 800" fill="none" preserveAspectRatio="xMidYMid slice">
+      <svg
+        className="pointer-events-none absolute inset-0 z-[1] opacity-20"
+        viewBox="0 0 1200 800"
+        fill="none"
+        preserveAspectRatio="xMidYMid slice"
+      >
         <line x1="100" y1="0" x2="100" y2="800" stroke="hsl(var(--primary))" strokeWidth=".3" opacity=".12" />
         <line x1="300" y1="0" x2="300" y2="800" stroke="hsl(var(--primary))" strokeWidth=".3" opacity=".08" />
         <line x1="700" y1="0" x2="700" y2="800" stroke="hsl(var(--accent))" strokeWidth=".3" opacity=".06" />
@@ -42,48 +77,48 @@ const HeroSection = () => {
         <circle cx="900" cy="600" r="80" stroke="hsl(var(--accent))" strokeWidth=".4" opacity=".08" />
       </svg>
 
-      <div className="section-container relative z-10 grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
-        {/* Left */}
+      <div className="section-container relative z-10 grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
         <div>
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex gap-2.5 items-center px-4 py-2 rounded-full bg-accent-pale text-primary-deep font-semibold text-[13px] tracking-wider uppercase border border-accent/20"
+            className="inline-flex items-center gap-2.5 rounded-full border border-accent/20 bg-accent-pale px-4 py-2 text-[13px] font-semibold uppercase tracking-wider text-primary-deep"
           >
-            <Scale className="w-4 h-4 text-accent" />
-            Hukuk • Danışmanlık • Arabuluculuk
+            <Scale className="h-4 w-4 text-accent" />
+            Hukuk � Danismanlik � Arabuluculuk
           </motion.span>
 
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="font-display text-[clamp(38px,5vw,62px)] font-bold leading-[1.08] mt-6 mb-5 text-primary-deep"
+            className="mt-6 mb-5 font-display text-[clamp(38px,5vw,62px)] font-bold leading-[1.08] text-primary-deep"
           >
-            Stratejik, hızlı ve
+            Stratejik, hizli ve
             <br />
-            güvenilir <em className="italic text-accent">hukuki çözüm.</em>
+            guvenilir <em className="text-accent italic">hukuki cozum.</em>
           </motion.h2>
 
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-[17px] leading-[1.7] text-muted-foreground max-w-[54ch]"
+            className="max-w-[54ch] text-[17px] leading-[1.7] text-muted-foreground"
           >
-            Vega Hukuk & Danışmanlık Arabuluculuk; iş hukuku, ceza hukuku, sözleşmeler, kira, gayrimenkul, miras, tüketici ve sigorta hukuku alanlarında sonuç odaklı dava, danışmanlık ve arabuluculuk hizmeti sunar.
+            Vega Hukuk & Danismanlik Arabuluculuk; is hukuku, ceza hukuku, sozlesmeler, kira, gayrimenkul, miras,
+            tuketici ve sigorta hukuku alanlarinda sonuc odakli dava, danismanlik ve arabuluculuk hizmeti sunar.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex gap-6 mt-7 flex-wrap"
+            className="mt-7 flex flex-wrap gap-6"
           >
-            {["Şeffaf süreç", "Güncel içtihat", "Etkin iletişim"].map((text) => (
-              <span key={text} className="flex items-center gap-2 text-muted-foreground text-sm font-medium">
-                <Check className="w-4 h-4 text-accent" />
+            {["Seffaf surec", "Guncel ictihat", "Etkin iletisim"].map((text) => (
+              <span key={text} className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                <Check className="h-4 w-4 text-accent" />
                 {text}
               </span>
             ))}
@@ -93,88 +128,119 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex gap-3.5 mt-9 flex-wrap"
+            className="mt-9 flex flex-wrap gap-3.5"
           >
             <button
               onClick={() => scrollTo("#iletisim")}
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-primary text-primary-foreground font-semibold text-[15px] hover:bg-primary-deep hover:-translate-y-0.5 hover:shadow-elegant-lg transition-all duration-300"
+              className="inline-flex items-center gap-2.5 rounded-xl bg-primary px-8 py-4 text-[15px] font-semibold text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-deep hover:shadow-elegant-lg"
             >
-              <Calendar className="w-4 h-4" /> Randevu Al
+              <Calendar className="h-4 w-4" /> Randevu Al
             </button>
             <button
               onClick={() => scrollTo("#calisma-alanlari")}
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-transparent text-primary font-semibold text-[15px] border-[1.5px] border-border hover:border-primary hover:bg-primary/[0.03] hover:-translate-y-0.5 transition-all duration-300"
+              className="inline-flex items-center gap-2.5 rounded-xl border-[1.5px] border-border bg-transparent px-8 py-4 text-[15px] font-semibold text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:bg-primary/[0.03]"
             >
-              Çalışma Alanları <ArrowRight className="w-4 h-4" />
+              Calisma Alanlari <ArrowRight className="h-4 w-4" />
             </button>
           </motion.div>
         </div>
 
-        {/* Right - Form Card */}
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="bg-card border border-border rounded-2xl p-8 shadow-elegant-lg relative"
+          className="relative rounded-2xl border border-border bg-card p-8 shadow-elegant-lg"
         >
           <div className="absolute -top-px left-6 right-6 h-[3px] rounded-b gradient-gold-accent" />
-          <h3 className="font-display text-2xl font-bold text-primary-deep">Ücretsiz Ön Değerlendirme</h3>
-          <p className="text-muted-foreground text-sm mt-1">Kısa not bırakın; sizi arayalım.</p>
+          <h3 className="font-display text-2xl font-bold text-primary-deep">Ucretsiz On Degerlendirme</h3>
+          <p className="mt-1 text-sm text-muted-foreground">Kisa not birakin; sizi arayalim.</p>
 
           <form onSubmit={handleSubmit} className="mt-5 space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input
+              type="text"
+              name="website"
+              value={formData.website}
+              onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+              autoComplete="off"
+              tabIndex={-1}
+              className="hidden"
+              aria-hidden="true"
+            />
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold text-foreground tracking-wide">Ad Soyad</label>
+                <label className="text-[13px] font-semibold tracking-wide text-foreground">Ad Soyad</label>
                 <input
-                  className="w-full px-4 py-3 border-[1.5px] border-border rounded-[10px] text-sm bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
-                  placeholder="Adınız Soyadınız"
+                  className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  placeholder="Adiniz Soyadiniz"
                   value={formData.ad}
                   onChange={(e) => setFormData({ ...formData, ad: e.target.value })}
                   required
+                  disabled={submitting}
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold text-foreground tracking-wide">Telefon</label>
+                <label className="text-[13px] font-semibold tracking-wide text-foreground">Telefon</label>
                 <input
-                  className="w-full px-4 py-3 border-[1.5px] border-border rounded-[10px] text-sm bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
+                  className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
                   placeholder="05xx xxx xx xx"
                   value={formData.tel}
                   onChange={(e) => setFormData({ ...formData, tel: e.target.value })}
                   required
+                  disabled={submitting}
                 />
               </div>
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-[13px] font-semibold text-foreground tracking-wide">Konu</label>
+              <label className="text-[13px] font-semibold tracking-wide text-foreground">Konu</label>
               <input
-                className="w-full px-4 py-3 border-[1.5px] border-border rounded-[10px] text-sm bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
-                placeholder="Örn. İşe iade, kira, alacak"
+                className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
+                placeholder="Orn. Ise iade, kira, alacak"
                 value={formData.konu}
                 onChange={(e) => setFormData({ ...formData, konu: e.target.value })}
+                disabled={submitting}
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-[13px] font-semibold text-foreground tracking-wide">Mesajınız</label>
+              <label className="text-[13px] font-semibold tracking-wide text-foreground">Mesajiniz</label>
               <textarea
-                className="w-full px-4 py-3 border-[1.5px] border-border rounded-[10px] text-sm bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all resize-y min-h-[80px]"
-                placeholder="Kısaca notunuzu iletin"
+                className="min-h-[80px] w-full resize-y rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
+                placeholder="Kisaca notunuzu iletin"
                 rows={3}
                 value={formData.mesaj}
                 onChange={(e) => setFormData({ ...formData, mesaj: e.target.value })}
+                disabled={submitting}
               />
             </div>
+            <label className="flex items-start gap-3 rounded-xl border border-border bg-background/70 p-3 text-sm text-muted-foreground">
+              <input
+                type="checkbox"
+                checked={formData.kvkkOnay}
+                onChange={(e) => setFormData({ ...formData, kvkkOnay: e.target.checked })}
+                className="mt-1 h-4 w-4 rounded border-border"
+                disabled={submitting}
+              />
+              <span>
+                On degerlendirme talebim kapsaminda ilettigim verilerin benimle iletisime gecilmesi amaciyla islenmesini
+                kabul ediyorum. Ayrintilar icin{" "}
+                <Link to="/kvkk-aydinlatma" className="font-semibold text-primary underline-offset-4 hover:underline">
+                  KVKK aydinlatma metni
+                </Link>
+                .
+              </span>
+            </label>
             <div className="flex items-center gap-3.5 pt-2">
               <button
                 type="submit"
-                className={`px-7 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
-                  submitted
-                    ? "bg-green-600 text-primary-foreground"
-                    : "bg-primary text-primary-foreground hover:bg-primary-deep hover:-translate-y-0.5 hover:shadow-elegant"
+                disabled={submitting}
+                className={`rounded-xl px-7 py-3 text-sm font-semibold transition-all duration-300 ${
+                  submitting
+                    ? "cursor-not-allowed bg-primary/70 text-primary-foreground"
+                    : "bg-primary text-primary-foreground hover:-translate-y-0.5 hover:bg-primary-deep hover:shadow-elegant"
                 }`}
               >
-                {submitted ? "✓ Gönderildi!" : "Gönder"}
+                {submitting ? "Gonderiliyor..." : "Gonder"}
               </button>
-              <small className="text-muted-foreground text-xs">Yanıt: aynı iş günü</small>
+              <small className="text-xs text-muted-foreground">Yan�t: ayni is gunu</small>
             </div>
           </form>
         </motion.div>

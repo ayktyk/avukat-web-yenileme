@@ -6,6 +6,26 @@ export type ContactFormPayload = {
   website?: string;
 };
 
+export type CallbackRequestPayload = {
+  adsoyad: string;
+  telefon: string;
+  konu?: string;
+  mesaj?: string;
+  kvkkOnay: boolean;
+  website?: string;
+};
+
+export type InquiryPayload = {
+  adsoyad: string;
+  email?: string;
+  telefon?: string;
+  konu?: string;
+  mesaj?: string;
+  kvkkOnay: boolean;
+  website?: string;
+  source: "website-contact-form" | "website-callback-form";
+};
+
 export type ContactServiceErrorCode =
   | "invalid"
   | "consent_required"

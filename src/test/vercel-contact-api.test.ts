@@ -43,6 +43,42 @@ describe("vercel contact api", () => {
     expect(body.code).toBe("not_configured");
   });
 
+  it("accepts callback requests with phone and topic", async () => {
+    process.env.RESEND_API_KEY = "re_test";
+    process.env.CONTACT_TO_EMAIL = "office@example.com";
+    process.env.CONTACT_FROM_EMAIL = "Vega Hukuk <onboarding@resend.dev>";
+    process.env.CONTACT_ALLOWED_ORIGINS = "https://vegahukuk.com";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ id: "email_123" }),
+      }),
+    );
+
+    const request = new Request("https://vegahukuk.com/api/contact", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: "https://vegahukuk.com",
+        "x-forwarded-for": "203.0.113.15",
+      },
+      body: JSON.stringify({
+        adsoyad: "Ada Lovelace",
+        telefon: "05551234567",
+        konu: "Ise iade",
+        mesaj: "Mumkunse bugun aranmak istiyorum.",
+        source: "website-callback-form",
+      }),
+    });
+
+    const response = await POST(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.ok).toBe(true);
+  });
+
   it("sends email via resend when env is configured", async () => {
     process.env.RESEND_API_KEY = "re_test";
     process.env.CONTACT_TO_EMAIL = "office@example.com";
