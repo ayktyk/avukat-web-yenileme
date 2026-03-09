@@ -14,14 +14,21 @@ describe("cms oauth api", () => {
     process.env = originalEnv;
   });
 
-  it("redirects to GitHub authorize from the auth endpoint", async () => {
+  it("redirects to GitHub authorize from the auth endpoint and stores the opener origin", async () => {
     process.env.GITHUB_CLIENT_ID = "github_client_id";
 
-    const response = await getAuth(new Request("https://vegahukukistanbul.com/api/cms/auth"));
+    const response = await getAuth(
+      new Request("https://vegahukukistanbul.com/api/cms/auth", {
+        headers: {
+          referer: "https://www.vegahukukistanbul.com/admin/#/",
+        },
+      }),
+    );
 
     expect(response.status).toBe(302);
     expect(response.headers.get("location")).toContain("https://github.com/login/oauth/authorize");
     expect(response.headers.get("set-cookie")).toContain("cms_oauth_state=");
+    expect(response.headers.get("set-cookie")).toContain("cms_oauth_origin=https%3A%2F%2Fwww.vegahukukistanbul.com");
   });
 
   it("returns a success message page after exchanging the GitHub code", async () => {
@@ -38,7 +45,7 @@ describe("cms oauth api", () => {
     const response = await getCallback(
       new Request("https://vegahukukistanbul.com/api/cms/callback?code=test-code&state=test-state", {
         headers: {
-          cookie: "cms_oauth_state=test-state",
+          cookie: "cms_oauth_state=test-state; cms_oauth_origin=https%3A%2F%2Fwww.vegahukukistanbul.com",
         },
       }),
     );
@@ -49,5 +56,6 @@ describe("cms oauth api", () => {
     expect(body).toContain("authorizing:github");
     expect(body).toContain("authorization:github:success");
     expect(body).toContain("github_access_token");
+    expect(body).toContain("https://www.vegahukukistanbul.com");
   });
 });

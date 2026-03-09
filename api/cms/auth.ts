@@ -13,7 +13,25 @@ const getOrigin = (request: Request) => new URL(request.url).origin;
 
 const buildCookie = (name: string, value: string, maxAge: number) => {
   const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
-  return `${name}=${value}; HttpOnly; Max-Age=${maxAge}; Path=/; SameSite=Lax${secure}`;
+  return `${name}=${encodeURIComponent(value)}; HttpOnly; Max-Age=${maxAge}; Path=/; SameSite=Lax${secure}`;
+};
+
+const getRequestOrigin = (request: Request) => {
+  const headerOrigin = request.headers.get("origin")?.trim();
+  if (headerOrigin) {
+    return headerOrigin;
+  }
+
+  const referer = request.headers.get("referer");
+  if (referer) {
+    try {
+      return new URL(referer).origin;
+    } catch {
+      return getOrigin(request);
+    }
+  }
+
+  return getOrigin(request);
 };
 
 export async function GET(request: Request) {
@@ -26,6 +44,7 @@ export async function GET(request: Request) {
   const state = crypto.randomUUID().replaceAll("-", "");
   const redirectUri = `${getOrigin(request)}/api/cms/callback`;
   const authorizeUrl = new URL("https://github.com/login/oauth/authorize");
+  const openerOrigin = getRequestOrigin(request);
 
   authorizeUrl.searchParams.set("client_id", clientId);
   authorizeUrl.searchParams.set("redirect_uri", redirectUri);
@@ -36,7 +55,7 @@ export async function GET(request: Request) {
     status: 302,
     headers: {
       location: authorizeUrl.toString(),
-      "set-cookie": buildCookie("cms_oauth_state", state, 600),
+      "set-cookie": [buildCookie("cms_oauth_state", state, 600), buildCookie("cms_oauth_origin", openerOrigin, 600)].join(", "),
     },
   });
 }
