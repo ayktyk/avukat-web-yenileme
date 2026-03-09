@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+﻿import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { getBlogPostBySlug, listBlogPosts, resetBlogRepositoryCache } from "@/lib/blog-repository";
 
 describe("blog repository", () => {
@@ -104,6 +104,7 @@ describe("blog repository", () => {
   it("finds a post by slug", async () => {
     const post = await getBlogPostBySlug("menfi-tespit-davasinda-ispat-yuku");
 
-    expect(post?.title).toBe("Menfi Tespit Davasinda Ispat Yuku");
+    expect(post?.title).toBe("Menfi Tespit Davasında İspat Yükü");
   });
 });
+

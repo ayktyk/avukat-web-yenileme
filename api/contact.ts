@@ -1,4 +1,4 @@
-const RATE_LIMIT_WINDOW_MS = 60_000;
+﻿const RATE_LIMIT_WINDOW_MS = 60_000;
 const MAX_MESSAGE_LENGTH = 4_000;
 const requestLog = new Map<string, number>();
 
@@ -35,6 +35,7 @@ const json = (body: Record<string, unknown>, status = 200) =>
 const error = (status: number, code: ErrorCode, message: string) => json({ ok: false, code, message }, status);
 
 const normalize = (value: unknown) => (typeof value === "string" ? value.trim() : "");
+const normalizeOrigin = (value: string) => value.trim().replace(/\/+$/, "");
 
 const escapeHtml = (value: string) =>
   value
@@ -47,10 +48,10 @@ const escapeHtml = (value: string) =>
 const getAllowedOrigins = (requestUrl: string) => {
   const configured = getEnv("CONTACT_ALLOWED_ORIGINS")
     .split(",")
-    .map((item) => item.trim())
+    .map(normalizeOrigin)
     .filter(Boolean);
 
-  return configured.length > 0 ? configured : [new URL(requestUrl).origin];
+  return Array.from(new Set([...configured, new URL(requestUrl).origin]));
 };
 
 const isAllowedOrigin = (origin: string | null, requestUrl: string) => {
@@ -59,7 +60,7 @@ const isAllowedOrigin = (origin: string | null, requestUrl: string) => {
   }
 
   const allowedOrigins = getAllowedOrigins(requestUrl);
-  return allowedOrigins.includes(origin);
+  return allowedOrigins.includes(normalizeOrigin(origin));
 };
 
 const getClientIp = (request: Request) => {
@@ -71,13 +72,13 @@ const getClientIp = (request: Request) => {
   return request.headers.get("x-real-ip")?.trim() ?? "unknown";
 };
 
-const assertRateLimit = (request: Request) => {
-  const key = getClientIp(request);
+const assertRateLimit = (request: Request, source: string) => {
+  const key = `${getClientIp(request)}:${source}`;
   const now = Date.now();
   const lastSeen = requestLog.get(key) ?? 0;
 
   if (now - lastSeen < RATE_LIMIT_WINDOW_MS) {
-    throw error(429, "rate_limit", "Lutfen kisa bir sure sonra tekrar deneyin.");
+    throw error(429, "rate_limit", "Lütfen kısa bir süre sonra tekrar deneyin.");
   }
 
   requestLog.set(key, now);
@@ -96,15 +97,15 @@ const validateBody = (body: ContactRequestBody) => {
   }
 
   if (!email && !telefon) {
-    throw error(400, "invalid_payload", "En az bir iletisim bilgisi gereklidir.");
+    throw error(400, "invalid_payload", "En az bir iletişim bilgisi gereklidir.");
   }
 
   if (source === "website-contact-form" && !email) {
-    throw error(400, "invalid_payload", "Iletisim formunda e-posta zorunludur.");
+    throw error(400, "invalid_payload", "İletişim formunda e-posta zorunludur.");
   }
 
   if (source === "website-callback-form" && !telefon) {
-    throw error(400, "invalid_payload", "On degerlendirme formunda telefon zorunludur.");
+    throw error(400, "invalid_payload", "Ön değerlendirme formunda telefon zorunludur.");
   }
 
   if (!mesaj && !konu) {
@@ -112,7 +113,7 @@ const validateBody = (body: ContactRequestBody) => {
   }
 
   if (mesaj.length > MAX_MESSAGE_LENGTH) {
-    throw error(400, "invalid_payload", "Mesaj cok uzun.");
+    throw error(400, "invalid_payload", "Mesaj çok uzun.");
   }
 
   return {
@@ -127,7 +128,7 @@ const validateBody = (body: ContactRequestBody) => {
   };
 };
 
-const sourceTitle = (source: string) => (source === "website-callback-form" ? "On degerlendirme talebi" : "Iletisim formu mesaji");
+const sourceTitle = (source: string) => (source === "website-callback-form" ? "Ön değerlendirme talebi" : "İletişim formu mesajı");
 
 const sendWithResend = async (body: ReturnType<typeof validateBody>) => {
   const apiKey = getEnv("RESEND_API_KEY");
@@ -138,7 +139,7 @@ const sendWithResend = async (body: ReturnType<typeof validateBody>) => {
     throw error(
       503,
       "not_configured",
-      "Mail ayarlari eksik. RESEND_API_KEY, CONTACT_TO_EMAIL ve CONTACT_FROM_EMAIL tanimlanmali.",
+      "Mail ayarları eksik. RESEND_API_KEY, CONTACT_TO_EMAIL ve CONTACT_FROM_EMAIL tanımlanmalı.",
     );
   }
 
@@ -151,10 +152,10 @@ const sendWithResend = async (body: ReturnType<typeof validateBody>) => {
     <p><strong>Telefon:</strong> ${escapeHtml(body.telefon || "Belirtilmedi")}</p>
     <p><strong>Konu:</strong> ${escapeHtml(body.konu || "Belirtilmedi")}</p>
     <p><strong>Kaynak:</strong> ${escapeHtml(body.source)}</p>
-    <p><strong>Gonderim Zamani:</strong> ${escapeHtml(body.submittedAt)}</p>
+    <p><strong>Gönderim Zamanı:</strong> ${escapeHtml(body.submittedAt)}</p>
     <p><strong>Sayfa:</strong> ${escapeHtml(body.pageUrl || "Belirtilmedi")}</p>
     <hr />
-    <p>${escapeHtml(body.mesaj || "Mesaj birakilmadi.").replaceAll("\n", "<br />")}</p>
+    <p>${escapeHtml(body.mesaj || "Mesaj bırakılmadı.").replaceAll("\n", "<br />")}</p>
   `;
 
   const response = await fetch("https://api.resend.com/emails", {
@@ -175,10 +176,10 @@ const sendWithResend = async (body: ReturnType<typeof validateBody>) => {
         `Telefon: ${body.telefon || "Belirtilmedi"}`,
         `Konu: ${body.konu || "Belirtilmedi"}`,
         `Kaynak: ${body.source}`,
-        `Gonderim Zamani: ${body.submittedAt}`,
+        `Gönderim Zamanı: ${body.submittedAt}`,
         `Sayfa: ${body.pageUrl || "Belirtilmedi"}`,
         "",
-        body.mesaj || "Mesaj birakilmadi.",
+        body.mesaj || "Mesaj bırakılmadı.",
       ].join("\n"),
     }),
   });
@@ -186,7 +187,7 @@ const sendWithResend = async (body: ReturnType<typeof validateBody>) => {
   if (!response.ok) {
     const details = await response.text();
     console.error("Resend request failed", details);
-    throw error(502, "mail_failed", "Mesaj iletilemedi. Lutfen daha sonra tekrar deneyin.");
+    throw error(502, "mail_failed", "Mesaj iletilemedi. Lütfen daha sonra tekrar deneyin.");
   }
 
   return response.json();
@@ -198,8 +199,8 @@ export async function POST(request: Request) {
   }
 
   try {
-    assertRateLimit(request);
     const body = validateBody((await request.json()) as ContactRequestBody);
+    assertRateLimit(request, body.source);
     const result = await sendWithResend(body);
 
     return json({ ok: true, result });
@@ -209,7 +210,7 @@ export async function POST(request: Request) {
     }
 
     console.error("Contact API failed", responseOrError);
-    return error(500, "mail_failed", "Mesaj iletilemedi. Lutfen daha sonra tekrar deneyin.");
+    return error(500, "mail_failed", "Mesaj iletilemedi. Lütfen daha sonra tekrar deneyin.");
   }
 }
 

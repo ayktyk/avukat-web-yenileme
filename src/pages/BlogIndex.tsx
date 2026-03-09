@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, CalendarDays } from "lucide-react";
 import { useSeo } from "@/hooks/use-seo";
@@ -12,7 +12,7 @@ const BlogIndex = () => {
 
   useSeo({
     title: "Blog | Vega Hukuk",
-    description: "Vega Hukuk blog yazilari: is hukuku, icra, kira ve guncel hukuki degerlendirmeler.",
+    description: "Vega Hukuk blog yazıları: iş hukuku, icra, kira ve güncel hukuki değerlendirmeler.",
     canonicalPath: "/blog",
   });
 
@@ -38,20 +38,20 @@ const BlogIndex = () => {
     <main className="min-h-screen bg-background">
       <section className="section-container pt-24 pb-6">
         <Link to="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-          Ana sayfaya don
+          Ana sayfaya dön
         </Link>
         <h1 className="mt-4 font-display text-[clamp(34px,5vw,54px)] font-bold leading-[1.1] text-primary-deep">
-          Blog Yazilari
+          Blog Yazıları
         </h1>
         <p className="mt-3 max-w-[70ch] text-base text-muted-foreground">
-          Haftalik yayinlanan hukuki iceriklerimizle dava sureci, risk yonetimi ve uygulamaya donuk pratik notlari
-          paylasiyoruz.
+          Haftalık yayınlanan hukuki içeriklerimizle dava süreci, risk yönetimi ve uygulamaya dönük pratik notları
+          paylaşıyoruz.
         </p>
       </section>
 
       <section className="section-container pb-16">
         {loading ? (
-          <p className="text-muted-foreground">Yazilar yukleniyor...</p>
+          <p className="text-muted-foreground">Yazılar yükleniyor...</p>
         ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {posts.map((post) => (
@@ -79,7 +79,7 @@ const BlogIndex = () => {
                   to={`/blog/${post.slug}`}
                   className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-all hover:gap-2.5"
                 >
-                  Yaziyi oku <ArrowRight className="h-3.5 w-3.5" />
+                  Yazıyı oku <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </article>
             ))}

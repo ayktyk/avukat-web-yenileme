@@ -1,29 +1,29 @@
-import LegalPageLayout from "@/components/LegalPageLayout";
+﻿import LegalPageLayout from "@/components/LegalPageLayout";
 
 const KvkkAydinlatma = () => (
   <LegalPageLayout
-    title="KVKK Aydinlatma Metni"
-    description="Vega Hukuk web sitesi uzerinden iletilen temel iletisim verileri icin taslak aydinlatma yapisi."
+    title="KVKK Aydınlatma Metni"
+    description="Vega Hukuk web sitesi üzerinden iletilen temel iletişim verileri için taslak aydınlatma yapısı."
     canonicalPath="/kvkk-aydinlatma"
     sections={[
       {
-        heading: "Yayin Durumu",
+        heading: "Yayın Durumu",
         paragraphs: [
-          "Bu icerik su anda canli oncesi taslak iskelet olarak tutulmaktadir.",
-          "Nihai KVKK metni, veri sorumlusu bilgileri ve guncel isleme senaryolari netlestikten sonra yayinlanacaktir.",
+          "Bu içerik şu anda canlı öncesi taslak iskelet olarak tutulmaktadır.",
+          "Nihai KVKK metni, veri sorumlusu bilgileri ve güncel işleme senaryoları netleştikten sonra yayınlanacaktır.",
         ],
       },
       {
-        heading: "Hazirlanacak Kapsam",
+        heading: "Hazırlanacak Kapsam",
         paragraphs: [
-          "Nihai metinde form uzerinden alinan kimlik, iletisim ve mesaj verilerinin islenme amaci acikca listelenecektir.",
-          "Ayrica saklama suresi, aktarim yapilan hizmet saglayicilar ve ilgili kisi haklari son metinde detaylandirilacaktir.",
+          "Nihai metinde form üzerinden alınan kimlik, iletişim ve mesaj verilerinin işlenme amacı açıkça listelenecektir.",
+          "Ayrıca saklama süresi, aktarım yapılan hizmet sağlayıcılar ve ilgili kişi hakları son metinde detaylandırılacaktır.",
         ],
       },
       {
-        heading: "Gecici Not",
+        heading: "Geçici Not",
         paragraphs: [
-          "Bu sayfa kullaniciyi bos bir baglantiya dusurmemek icin olusturulmustur; yayin oncesi son metinle degistirilmelidir.",
+          "Bu sayfa kullanıcıyı boş bir bağlantıya düşürmemek için oluşturulmuştur; yayın öncesi son metinle değiştirilmelidir.",
         ],
       },
     ]}

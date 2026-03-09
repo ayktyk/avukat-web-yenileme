@@ -80,7 +80,7 @@ describe("contact service", () => {
     );
   });
 
-  it("rate limits repeated submissions for 60 seconds", async () => {
+  it("rate limits repeated submissions for the same form for 60 seconds", async () => {
     vi.stubEnv("VITE_CONTACT_FORM_ENDPOINT", "https://api.example.test/contact");
     vi.stubGlobal(
       "fetch",
@@ -94,5 +94,20 @@ describe("contact service", () => {
     await expect(submitContactForm(validPayload)).rejects.toMatchObject<ContactServiceError>({
       code: "rate_limit",
     });
+  });
+
+  it("does not share browser cooldown between contact and callback forms", async () => {
+    vi.stubEnv("VITE_CONTACT_FORM_ENDPOINT", "https://api.example.test/contact");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+      }),
+    );
+
+    await submitContactForm(validPayload);
+    await submitCallbackRequest(validCallbackPayload);
+
+    expect(fetch).toHaveBeenCalledTimes(2);
   });
 });

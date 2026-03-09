@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { useSeo } from "@/hooks/use-seo";
@@ -30,11 +30,9 @@ const BlogPost = () => {
   }, [slug]);
 
   useSeo({
-    title: post?.seoTitle ?? `${post?.title ?? "Yazi"} | Vega Hukuk`,
+    title: post?.seoTitle ?? `${post?.title ?? "Yazı"} | Vega Hukuk`,
     description:
-      post?.seoDescription ??
-      post?.excerpt ??
-      "Vega Hukuk blog yazisi: hukuki surecler ve uygulamaya donuk degerlendirmeler.",
+      post?.seoDescription ?? post?.excerpt ?? "Vega Hukuk blog yazısı: hukuki süreçler ve uygulamaya dönük değerlendirmeler.",
     canonicalPath: `/blog/${slug}`,
     image: post?.coverImage,
     type: "article",
@@ -66,7 +64,7 @@ const BlogPost = () => {
     return (
       <main className="min-h-screen bg-background">
         <section className="section-container py-24">
-          <p className="text-muted-foreground">Yazi yukleniyor...</p>
+          <p className="text-muted-foreground">Yazı yükleniyor...</p>
         </section>
       </main>
     );
@@ -76,12 +74,12 @@ const BlogPost = () => {
     return (
       <main className="min-h-screen bg-background">
         <section className="section-container py-24">
-          <h1 className="font-display text-4xl font-bold text-primary-deep">Yazi bulunamadi</h1>
+          <h1 className="font-display text-4xl font-bold text-primary-deep">Yazı bulunamadı</h1>
           <p className="mt-3 text-muted-foreground">
-            Istediginiz blog yazisi kaldirilmis olabilir veya baglanti yanlis olabilir.
+            İstediğiniz blog yazısı kaldırılmış olabilir veya bağlantı yanlış olabilir.
           </p>
           <Link to="/blog" className="mt-6 inline-flex items-center gap-2 font-semibold text-primary">
-            <ArrowLeft className="h-4 w-4" /> Blog listesine don
+            <ArrowLeft className="h-4 w-4" /> Blog listesine dön
           </Link>
         </section>
       </main>
@@ -95,7 +93,7 @@ const BlogPost = () => {
           to="/blog"
           className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary"
         >
-          <ArrowLeft className="h-4 w-4" /> Blog listesine don
+          <ArrowLeft className="h-4 w-4" /> Blog listesine dön
         </Link>
 
         <div className="mt-6">
@@ -129,8 +127,8 @@ const BlogPost = () => {
 
         <div className="mt-12 rounded-xl border border-border bg-card p-5">
           <p className="text-sm text-muted-foreground">
-            Bu yazi genel bilgilendirme amaciyla hazirlanmistir. Somut uyusmazliklar icin dosya bazli hukuki
-            degerlendirme alinmasi gerekir.
+            Bu yazı genel bilgilendirme amacıyla hazırlanmıştır. Somut uyuşmazlıklar için dosya bazlı hukuki
+            değerlendirme alınması gerekir.
           </p>
         </div>
       </article>

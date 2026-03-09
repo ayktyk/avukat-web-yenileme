@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { ArrowRight, Calendar, Check, Scale } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -29,17 +29,15 @@ const HeroSection = () => {
 
       setFormData(initialFormState);
       toast({
-        title: "Talep alindi",
-        description: "On degerlendirme talebiniz iletildi. En kisa surede aranacaksiniz.",
+        title: "Talep alındı",
+        description: "Ön değerlendirme talebiniz iletildi. En kısa sürede aranacaksınız.",
       });
     } catch (error) {
       const message =
-        error instanceof ContactServiceError
-          ? error.message
-          : "Talep gonderilemedi. Lutfen daha sonra tekrar deneyin.";
+        error instanceof ContactServiceError ? error.message : "Talep gönderilemedi. Lütfen daha sonra tekrar deneyin.";
 
       toast({
-        title: "Talep gonderilemedi",
+        title: "Talep gönderilemedi",
         description: message,
         variant: "destructive",
       });
@@ -86,7 +84,7 @@ const HeroSection = () => {
             className="inline-flex items-center gap-2.5 rounded-full border border-accent/20 bg-accent-pale px-4 py-2 text-[13px] font-semibold uppercase tracking-wider text-primary-deep"
           >
             <Scale className="h-4 w-4 text-accent" />
-            Hukuk � Danismanlik � Arabuluculuk
+            Hukuk • Danışmanlık • Arabuluculuk
           </motion.span>
 
           <motion.h2
@@ -95,9 +93,9 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="mt-6 mb-5 font-display text-[clamp(38px,5vw,62px)] font-bold leading-[1.08] text-primary-deep"
           >
-            Stratejik, hizli ve
+            Stratejik, hızlı ve
             <br />
-            guvenilir <em className="text-accent italic">hukuki cozum.</em>
+            güvenilir <em className="text-accent italic">hukuki çözüm.</em>
           </motion.h2>
 
           <motion.p
@@ -106,8 +104,8 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="max-w-[54ch] text-[17px] leading-[1.7] text-muted-foreground"
           >
-            Vega Hukuk & Danismanlik Arabuluculuk; is hukuku, ceza hukuku, sozlesmeler, kira, gayrimenkul, miras,
-            tuketici ve sigorta hukuku alanlarinda sonuc odakli dava, danismanlik ve arabuluculuk hizmeti sunar.
+            Vega Hukuk & Danışmanlık Arabuluculuk; iş hukuku, ceza hukuku, sözleşmeler, kira, gayrimenkul, miras,
+            tüketici ve sigorta hukuku alanlarında sonuç odaklı dava, danışmanlık ve arabuluculuk hizmeti sunar.
           </motion.p>
 
           <motion.div
@@ -116,7 +114,7 @@ const HeroSection = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mt-7 flex flex-wrap gap-6"
           >
-            {["Seffaf surec", "Guncel ictihat", "Etkin iletisim"].map((text) => (
+            {["Şeffaf süreç", "Güncel içtihat", "Etkin iletişim"].map((text) => (
               <span key={text} className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                 <Check className="h-4 w-4 text-accent" />
                 {text}
@@ -140,7 +138,7 @@ const HeroSection = () => {
               onClick={() => scrollTo("#calisma-alanlari")}
               className="inline-flex items-center gap-2.5 rounded-xl border-[1.5px] border-border bg-transparent px-8 py-4 text-[15px] font-semibold text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:bg-primary/[0.03]"
             >
-              Calisma Alanlari <ArrowRight className="h-4 w-4" />
+              Çalışma Alanları <ArrowRight className="h-4 w-4" />
             </button>
           </motion.div>
         </div>
@@ -152,8 +150,8 @@ const HeroSection = () => {
           className="relative rounded-2xl border border-border bg-card p-8 shadow-elegant-lg"
         >
           <div className="absolute -top-px left-6 right-6 h-[3px] rounded-b gradient-gold-accent" />
-          <h3 className="font-display text-2xl font-bold text-primary-deep">Ucretsiz On Degerlendirme</h3>
-          <p className="mt-1 text-sm text-muted-foreground">Kisa not birakin; sizi arayalim.</p>
+          <h3 className="font-display text-2xl font-bold text-primary-deep">Ücretsiz Ön Değerlendirme</h3>
+          <p className="mt-1 text-sm text-muted-foreground">Kısa not bırakın; sizi arayalım.</p>
 
           <form onSubmit={handleSubmit} className="mt-5 space-y-3">
             <input
@@ -171,7 +169,7 @@ const HeroSection = () => {
                 <label className="text-[13px] font-semibold tracking-wide text-foreground">Ad Soyad</label>
                 <input
                   className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
-                  placeholder="Adiniz Soyadiniz"
+                  placeholder="Adınız Soyadınız"
                   value={formData.ad}
                   onChange={(e) => setFormData({ ...formData, ad: e.target.value })}
                   required
@@ -194,17 +192,17 @@ const HeroSection = () => {
               <label className="text-[13px] font-semibold tracking-wide text-foreground">Konu</label>
               <input
                 className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
-                placeholder="Orn. Ise iade, kira, alacak"
+                placeholder="Örn. İşe iade, kira, alacak"
                 value={formData.konu}
                 onChange={(e) => setFormData({ ...formData, konu: e.target.value })}
                 disabled={submitting}
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-[13px] font-semibold tracking-wide text-foreground">Mesajiniz</label>
+              <label className="text-[13px] font-semibold tracking-wide text-foreground">Mesajınız</label>
               <textarea
                 className="min-h-[80px] w-full resize-y rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
-                placeholder="Kisaca notunuzu iletin"
+                placeholder="Kısaca notunuzu iletin"
                 rows={3}
                 value={formData.mesaj}
                 onChange={(e) => setFormData({ ...formData, mesaj: e.target.value })}
@@ -220,10 +218,10 @@ const HeroSection = () => {
                 disabled={submitting}
               />
               <span>
-                On degerlendirme talebim kapsaminda ilettigim verilerin benimle iletisime gecilmesi amaciyla islenmesini
-                kabul ediyorum. Ayrintilar icin{" "}
+                Ön değerlendirme talebim kapsamında ilettiğim verilerin benimle iletişime geçilmesi amacıyla işlenmesini
+                kabul ediyorum. Ayrıntılar için{" "}
                 <Link to="/kvkk-aydinlatma" className="font-semibold text-primary underline-offset-4 hover:underline">
-                  KVKK aydinlatma metni
+                  KVKK aydınlatma metni
                 </Link>
                 .
               </span>
@@ -238,9 +236,9 @@ const HeroSection = () => {
                     : "bg-primary text-primary-foreground hover:-translate-y-0.5 hover:bg-primary-deep hover:shadow-elegant"
                 }`}
               >
-                {submitting ? "Gonderiliyor..." : "Gonder"}
+                {submitting ? "Gönderiliyor..." : "Gönder"}
               </button>
-              <small className="text-xs text-muted-foreground">Yan�t: ayni is gunu</small>
+              <small className="text-xs text-muted-foreground">Yanıt: aynı iş günü</small>
             </div>
           </form>
         </motion.div>

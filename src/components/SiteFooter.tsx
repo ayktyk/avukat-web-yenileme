@@ -1,4 +1,4 @@
-import { Scale } from "lucide-react";
+﻿import { Scale } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const scrollTo = (href: string) => {
@@ -23,24 +23,24 @@ const SiteFooter = () => {
             <div>
               <strong className="block font-display text-lg text-primary-foreground">Vega Hukuk</strong>
               <small className="text-[11px] uppercase tracking-[2px] text-primary-foreground/35">
-                Danismanlik & Arabuluculuk
+                Danışmanlık & Arabuluculuk
               </small>
             </div>
           </div>
           <p className="max-w-[38ch] text-sm leading-relaxed">
-            Avukatlik Kanunu ve meslek kurallarina uygun olarak hizmet veririz. Bilgilendirme niteligindedir; hukuki
-            danismanlik degildir.
+            Avukatlık Kanunu ve meslek kurallarına uygun olarak hizmet veririz. Bilgilendirme niteliğindedir; hukuki
+            danışmanlık değildir.
           </p>
         </div>
 
         <div>
-          <h5 className="mb-4 font-display text-base font-bold tracking-wide text-primary-foreground">Baglantilar</h5>
+          <h5 className="mb-4 font-display text-base font-bold tracking-wide text-primary-foreground">Bağlantılar</h5>
           <ul className="space-y-2.5">
             {[
-              { label: "Hakkimizda", href: "#hakkimizda" },
-              { label: "Calisma Alanlari", href: "#calisma-alanlari" },
-              { label: "Yayinlar", href: "#yayinlar" },
-              { label: "Iletisim", href: "#iletisim" },
+              { label: "Hakkımızda", href: "#hakkimizda" },
+              { label: "Çalışma Alanları", href: "#calisma-alanlari" },
+              { label: "Yayınlar", href: "#yayinlar" },
+              { label: "İletişim", href: "#iletisim" },
             ].map((link) => (
               <li key={link.href}>
                 <a
@@ -63,17 +63,17 @@ const SiteFooter = () => {
           <ul className="space-y-2.5">
             <li>
               <Link to="/kvkk-aydinlatma" className="text-sm transition-colors hover:text-accent-light">
-                KVKK Aydinlatma Metni
+                KVKK Aydınlatma Metni
               </Link>
             </li>
             <li>
               <Link to="/cerez-politikasi" className="text-sm transition-colors hover:text-accent-light">
-                Cerez Politikasi
+                Çerez Politikası
               </Link>
             </li>
             <li>
               <Link to="/hukuki-uyari" className="text-sm transition-colors hover:text-accent-light">
-                Hukuki Uyari
+                Hukuki Uyarı
               </Link>
             </li>
           </ul>
@@ -81,7 +81,7 @@ const SiteFooter = () => {
       </div>
 
       <div className="section-container mt-10 border-t border-primary-foreground/[0.08] py-5 text-center text-[13px] text-primary-foreground/35">
-        &copy; {new Date().getFullYear()} Vega Hukuk & Danismanlik Arabuluculuk. Tum haklari saklidir.
+        &copy; {new Date().getFullYear()} Vega Hukuk & Danışmanlık Arabuluculuk. Tüm hakları saklıdır.
       </div>
     </footer>
   );

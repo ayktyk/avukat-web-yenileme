@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -26,17 +26,17 @@ const ContactSection = () => {
       await submitContactForm(formData);
       setFormData(initialFormState);
       toast({
-        title: "Mesaj alindi",
-        description: "Talebiniz basariyla iletildi. En kisa surede donus yapilacak.",
+        title: "Mesaj alındı",
+        description: "Talebiniz başarıyla iletildi. En kısa sürede dönüş yapılacak.",
       });
     } catch (error) {
       const message =
         error instanceof ContactServiceError
           ? error.message
-          : "Beklenmeyen bir hata olustu. Lutfen daha sonra tekrar deneyin.";
+          : "Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.";
 
       toast({
-        title: "Mesaj gonderilemedi",
+        title: "Mesaj gönderilemedi",
         description: message,
         variant: "destructive",
       });
@@ -55,7 +55,7 @@ const ContactSection = () => {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[2.5px] text-accent before:h-[1.5px] before:w-6 before:bg-accent before:content-['']"
           >
-            Iletisim
+            İletişim
           </motion.span>
           <motion.h3
             initial={{ opacity: 0, y: 20 }}
@@ -64,7 +64,7 @@ const ContactSection = () => {
             transition={{ delay: 0.1 }}
             className="mt-3 font-display text-[clamp(30px,4vw,42px)] font-bold leading-[1.15] text-primary-deep"
           >
-            Bize Ulasin
+            Bize Ulaşın
           </motion.h3>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -73,7 +73,7 @@ const ContactSection = () => {
             transition={{ delay: 0.2 }}
             className="mt-4 text-base leading-relaxed text-muted-foreground"
           >
-            Randevu ve on degerlendirme icin iletisime gecin.
+            Randevu ve ön değerlendirme için iletişime geçin.
           </motion.p>
         </div>
 
@@ -84,7 +84,7 @@ const ContactSection = () => {
             viewport={{ once: true }}
             className="gradient-navy rounded-2xl p-9 text-primary-foreground"
           >
-            <h4 className="font-display text-[22px] font-bold text-accent-light">Iletisim Bilgileri</h4>
+            <h4 className="font-display text-[22px] font-bold text-accent-light">İletişim Bilgileri</h4>
             <div
               className="gold-line mt-2 mb-6"
               style={{ background: "linear-gradient(90deg, hsl(var(--accent-light)), transparent)" }}
@@ -96,9 +96,9 @@ const ContactSection = () => {
                 <div>
                   <strong className="mb-1 block text-[13px] uppercase tracking-wider text-primary-foreground">Adres</strong>
                   <p className="text-[15px] leading-relaxed text-primary-foreground/75">
-                    Osmanaga Mahallesi, Karadut Sokak
+                    Osmanağa Mahallesi, Karadut Sokak
                     <br />
-                    No:14/10, Kadikoy/Istanbul
+                    No:14/10, Kadıköy/İstanbul
                   </p>
                 </div>
               </div>
@@ -153,7 +153,7 @@ const ContactSection = () => {
 
             <div className="mt-5 overflow-hidden rounded-[14px] border border-primary-foreground/10">
               <iframe
-                src="https://www.google.com/maps?q=Osmanaga%20Mahallesi%20Karadut%20Sokak%20No%2014%2F10%20Kadikoy%20Istanbul&output=embed"
+                src="https://www.google.com/maps?q=Osmana%C4%9Fa%20Mahallesi%20Karadut%20Sokak%20No%2014%2F10%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul&output=embed"
                 width="100%"
                 height="200"
                 style={{ border: 0, display: "block", borderRadius: "14px" }}
@@ -172,7 +172,7 @@ const ContactSection = () => {
             transition={{ delay: 0.2 }}
             className="rounded-2xl border border-border bg-card p-9"
           >
-            <h4 className="font-display text-[22px] font-bold text-primary-deep">Mesaj Gonder</h4>
+            <h4 className="font-display text-[22px] font-bold text-primary-deep">Mesaj Gönder</h4>
             <div className="gold-line mt-2 mb-6" />
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -190,7 +190,7 @@ const ContactSection = () => {
                 <label className="text-[13px] font-semibold tracking-wide text-foreground">Ad Soyad</label>
                 <input
                   className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
-                  placeholder="Adiniz Soyadiniz"
+                  placeholder="Adınız Soyadınız"
                   value={formData.adsoyad}
                   onChange={(e) => setFormData({ ...formData, adsoyad: e.target.value })}
                   required
@@ -210,10 +210,10 @@ const ContactSection = () => {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold tracking-wide text-foreground">Mesajiniz</label>
+                <label className="text-[13px] font-semibold tracking-wide text-foreground">Mesajınız</label>
                 <textarea
                   className="min-h-[120px] w-full resize-y rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
-                  placeholder="Konu ve mesajinizi yazin..."
+                  placeholder="Konu ve mesajınızı yazın..."
                   rows={5}
                   value={formData.mesaj}
                   onChange={(e) => setFormData({ ...formData, mesaj: e.target.value })}
@@ -230,9 +230,10 @@ const ContactSection = () => {
                   disabled={submitting}
                 />
                 <span>
-                  Iletisim formu kapsaminda ilettigim verilerin talebime donus saglanmasi amaciyla islenmesini kabul ediyorum. Ayrintilar icin{" "}
+                  İletişim formu kapsamında ilettiğim verilerin talebime dönüş sağlanması amacıyla işlenmesini kabul
+                  ediyorum. Ayrıntılar için{" "}
                   <Link to="/kvkk-aydinlatma" className="font-semibold text-primary underline-offset-4 hover:underline">
-                    KVKK aydinlatma metni
+                    KVKK aydınlatma metni
                   </Link>
                   .
                 </span>
@@ -247,10 +248,10 @@ const ContactSection = () => {
                       : "bg-primary text-primary-foreground hover:-translate-y-0.5 hover:bg-primary-deep hover:shadow-elegant"
                   }`}
                 >
-                  <Send className="h-4 w-4" /> {submitting ? "Gonderiliyor..." : "Gonder"}
+                  <Send className="h-4 w-4" /> {submitting ? "Gönderiliyor..." : "Gönder"}
                 </button>
                 <small className="text-xs text-muted-foreground">
-                  Endpoint tanimli degilse sistem sizi telefon, e-posta veya WhatsApp kanalina yonlendirir.
+                  Endpoint tanımlı değilse sistem sizi telefon, e-posta veya WhatsApp kanalına yönlendirir.
                 </small>
               </div>
             </form>

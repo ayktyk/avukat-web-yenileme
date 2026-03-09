@@ -1,62 +1,61 @@
-import type { BlogPost } from "@/types/blog";
+﻿import type { BlogPost } from "@/types/blog";
 
 export const blogPosts: BlogPost[] = [
   {
     slug: "ise-iade-arabuluculukta-kritik-noktalar",
-    title: "Ise Iade Arabuluculukta Kritik Noktalar",
+    title: "İşe İade Arabuluculukta Kritik Noktalar",
     excerpt:
-      "Ise iade surecinde arabuluculuk asamasinda sik yapilan hatalari ve dava oncesi hazirlik adimlarini ozetliyoruz.",
+      "İşe iade sürecinde arabuluculuk aşamasında sık yapılan hataları ve dava öncesi hazırlık adımlarını özetliyoruz.",
     content: [
-      "Ise iade uyusmazliklarinda arabuluculuk asamasi, davanin sonucunu dogrudan etkileyebilen kritik bir esiktir.",
-      "Bu asamada talep kalemlerinin net ve delil destekli sekilde ortaya konmasi, sonraki yargi surecinde ciddi avantaj saglar.",
-      "Ozellikle calisma suresi, ucret kalemleri ve fesih bildirimi tarihi gibi teknik detaylarda tutarlilik korunmalidir.",
-      "Sureci profesyonel yonetmek, zaman kaybini ve usuli riskleri azaltir.",
+      "İşe iade uyuşmazlıklarında arabuluculuk aşaması, davanın sonucunu doğrudan etkileyebilen kritik bir eşiktir.",
+      "Bu aşamada talep kalemlerinin net ve delil destekli şekilde ortaya konması, sonraki yargı sürecinde ciddi avantaj sağlar.",
+      "Özellikle çalışma süresi, ücret kalemleri ve fesih bildirimi tarihi gibi teknik detaylarda tutarlılık korunmalıdır.",
+      "Süreci profesyonel yönetmek, zaman kaybını ve usuli riskleri azaltır.",
     ],
-    category: "Is Hukuku",
+    category: "İş Hukuku",
     author: "Vega Hukuk",
     publishedAt: "2026-03-04",
-    seoTitle: "Ise Iade Arabuluculukta Kritik Noktalar | Vega Hukuk",
+    seoTitle: "İşe İade Arabuluculukta Kritik Noktalar | Vega Hukuk",
     seoDescription:
-      "Ise iade arabuluculuk surecinde delil, talep kalemi ve sure yonetimi icin pratik bir yol haritasi.",
+      "İşe iade arabuluculuk sürecinde delil, talep kalemi ve süre yönetimi için pratik bir yol haritası.",
     coverClass: "from-primary/[0.08] to-primary/[0.03]",
   },
   {
     slug: "menfi-tespit-davasinda-ispat-yuku",
-    title: "Menfi Tespit Davasinda Ispat Yuku",
+    title: "Menfi Tespit Davasında İspat Yükü",
     excerpt:
-      "Menfi tespit davalarinda ispat yukunun nasil dagildigini ve uygulamada dikkat edilmesi gereken pratik noktalarini anlatiyoruz.",
+      "Menfi tespit davalarında ispat yükünün nasıl dağıldığını ve uygulamada dikkat edilmesi gereken pratik noktaları anlatıyoruz.",
     content: [
-      "Menfi tespit davasinda temel soru, borcun varliginin hangi delillerle dogrulanacagidir.",
-      "Takip dosyasindaki belgeler, taraflarin yazismalari ve odeme kayitlari birlikte degerlendirilmelidir.",
-      "Delil stratejisi dava acilmadan once netlestirilirse, ihtiyati tedbir ve takip baskisi gibi riskler daha kontrollu yonetilebilir.",
-      "Her dosyada ispat yuku dagilimi somut olaya gore degisir; bu nedenle standart bir sablon yerine dosya odakli hazirlik gerekir.",
+      "Menfi tespit davasında temel soru, borcun varlığının hangi delillerle doğrulanacağıdır.",
+      "Takip dosyasındaki belgeler, tarafların yazışmaları ve ödeme kayıtları birlikte değerlendirilmelidir.",
+      "Delil stratejisi dava açılmadan önce netleştirilirse, ihtiyati tedbir ve takip baskısı gibi riskler daha kontrollü yönetilebilir.",
+      "Her dosyada ispat yükü dağılımı somut olaya göre değişir; bu nedenle standart bir şablon yerine dosya odaklı hazırlık gerekir.",
     ],
-    category: "Icra ve Iflas",
+    category: "İcra ve İflas",
     author: "Vega Hukuk",
     publishedAt: "2026-02-25",
-    seoTitle: "Menfi Tespit Davasinda Ispat Yuku | Vega Hukuk",
+    seoTitle: "Menfi Tespit Davasında İspat Yükü | Vega Hukuk",
     seoDescription:
-      "Menfi tespit davalarinda ispat yuku, delil stratejisi ve takip risklerinin yonetimi hakkinda ozet rehber.",
+      "Menfi tespit davalarında ispat yükü, delil stratejisi ve takip risklerinin yönetimi hakkında özet rehber.",
     coverClass: "from-accent/[0.15] to-accent/[0.05]",
   },
   {
     slug: "kira-uyarlama-davasi-yol-haritasi",
-    title: "Kira Uyarlama Davasi Icin Yol Haritasi",
+    title: "Kira Uyarlama Davası İçin Yol Haritası",
     excerpt:
-      "Kira uyarlama taleplerinde ekonomik kosullar, delil seti ve bilirkisi surecine hazirlik icin temel adimlari paylasiyoruz.",
+      "Kira uyarlama taleplerinde ekonomik koşullar, delil seti ve bilirkişi sürecine hazırlık için temel adımları paylaşıyoruz.",
     content: [
-      "Kira uyarlama davalarinda mahkeme, sozlesme dengesi ve degisen kosullarin agirligini birlikte inceler.",
-      "Taraflarin ekonomik verileri, rayic bedeller ve emsal kira bilgileri sistematik sekilde dosyaya sunulmalidir.",
-      "Bilirkisi incelemesine hazirlik, davanin teknik kalitesini belirleyen en onemli basliklardan biridir.",
-      "Dogru zamanlama ve belge disiplini ile surecin ongorulebilirligi artar.",
+      "Kira uyarlama davalarında mahkeme, sözleşme dengesi ve değişen koşulların ağırlığını birlikte inceler.",
+      "Tarafların ekonomik verileri, rayiç bedeller ve emsal kira bilgileri sistematik şekilde dosyaya sunulmalıdır.",
+      "Bilirkişi incelemesine hazırlık, davanın teknik kalitesini belirleyen en önemli başlıklardan biridir.",
+      "Doğru zamanlama ve belge disiplini ile sürecin öngörülebilirliği artar.",
     ],
     category: "Kira Hukuku",
     author: "Vega Hukuk",
     publishedAt: "2026-02-18",
-    seoTitle: "Kira Uyarlama Davasi Icin Yol Haritasi | Vega Hukuk",
+    seoTitle: "Kira Uyarlama Davası İçin Yol Haritası | Vega Hukuk",
     seoDescription:
-      "Kira uyarlama davasi oncesi delil hazirligi, bilirkisi sureci ve talep kurgusu icin temel rehber.",
+      "Kira uyarlama davası öncesi delil hazırlığı, bilirkişi süreci ve talep kurgusu için temel rehber.",
     coverClass: "from-muted/80 to-muted/40",
   },
 ];
-

@@ -1,12 +1,12 @@
-import { AnimatePresence, motion } from "framer-motion";
+﻿import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Scale, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const navLinks = [
-  { label: "Hakkimizda", href: "#hakkimizda" },
-  { label: "Calisma Alanlari", href: "#calisma-alanlari" },
+  { label: "Hakkımızda", href: "#hakkimizda" },
+  { label: "Çalışma Alanları", href: "#calisma-alanlari" },
   { label: "Ekibimiz", href: "#ekibimiz" },
-  { label: "Yayinlar", href: "#yayinlar" },
+  { label: "Yayınlar", href: "#yayinlar" },
   { label: "SSS", href: "#sss" },
 ];
 
@@ -55,7 +55,7 @@ const SiteHeader = () => {
                 Vega Hukuk
               </span>
               <span className="text-[11px] font-semibold uppercase tracking-[3px] text-accent">
-                Danismanlik & Arabuluculuk
+                Danışmanlık & Arabuluculuk
               </span>
             </div>
           </a>
@@ -83,14 +83,14 @@ const SiteHeader = () => {
               }}
               className="ml-2 rounded-[10px] border border-primary bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-deep hover:shadow-elegant"
             >
-              Iletisim
+              İletişim
             </a>
           </nav>
 
           <button
             className="rounded-lg border border-border p-2 transition-colors hover:bg-cream lg:hidden"
             onClick={() => setMobileOpen(true)}
-            aria-label="Menuyu ac"
+            aria-label="Menüyü aç"
           >
             <Menu className="h-5 w-5" />
           </button>
@@ -129,7 +129,7 @@ const SiteHeader = () => {
               }}
               className="rounded-xl px-6 py-3 font-display text-[28px] font-semibold text-foreground transition-all hover:bg-primary/[0.05] hover:text-primary"
             >
-              Iletisim
+              İletişim
             </a>
           </motion.div>
         )}
