@@ -1,73 +1,74 @@
-# Welcome to your Lovable project
+# Vega Hukuk Web
 
-## Project info
+Kurumsal hukuk sitesi (Vite + React + TypeScript + Tailwind).
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Gereksinimler
+- Node.js 20+
+- npm 10+
+- Vercel uzerinde deploy edilecekse bir Vercel hesabi
+- Form mailleri icin Resend hesabi veya ayni REST sozlesmesini saglayan baska bir servis
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## Lokal Gelistirme
+```bash
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Varsayilan gelistirme adresi: `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Vercel API ile Lokal Test
+Frontend `npm run dev` ile calisir; ancak `api/contact` route'u Vite dev server tarafindan servis edilmez.
+Vercel function'larini da lokal test etmek icin Vercel CLI ile su akisi kullanilabilir:
 
-**Use GitHub Codespaces**
+```bash
+npx vercel dev
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Build ve Onizleme
+```bash
+npm run build
+npm run preview
+```
 
-## What technologies are used for this project?
+## Blog Veri Kaynagi
+- Varsayilan kaynak: `src/data/blog-posts.ts`
+- Harici API kullanmak icin `.env.local` veya `.env` icine `VITE_BLOG_API_URL=https://...` eklenebilir.
+- Gerekirse Bearer token icin `VITE_BLOG_API_TOKEN=...` kullanilabilir.
+- API yaniti dogrudan `BlogPost[]` olabilir.
+- Alternatif olarak post dizisi icin `VITE_BLOG_ITEMS_PATH=data.items` gibi bir yol verilebilir.
+- Alan isimleri farkliysa `.env.example` icindeki `VITE_BLOG_FIELD_*` degiskenleriyle esleme yapilabilir.
 
-This project is built with:
+## Iletisim Formu
+- Browser tarafinda endpoint icin `VITE_CONTACT_FORM_ENDPOINT=/api/contact` kullanilabilir.
+- Vercel deploy'unda bu endpoint, custom env verilmemisse production ortaminda otomatik olarak `/api/contact` kabul edilir.
+- Serverless function dosyasi: `api/contact.ts`
+- Sunucu tarafinda Resend entegrasyonu icin su env'ler tanimlanmalidir:
+  - `RESEND_API_KEY`
+  - `CONTACT_TO_EMAIL`
+  - `CONTACT_FROM_EMAIL`
+  - `CONTACT_ALLOWED_ORIGINS`
+- Istemci tarafinda KVKK onayi, honeypot alan ve 60 saniyelik temel rate limit bulunur.
+- Sunucu tarafinda origin kontrolu ve temel IP bazli rate limit bulunur.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Vercel Deploy Notlari
+- `vercel.json` icinde SPA rewrite tanimlandi; React Router route'lari refresh durumunda da `index.html` uzerinden acilir.
+- `api/contact.ts` Vercel Functions uzerinde calisacak sekilde eklendi.
+- Vercel dashboard icinde Production env'lerine `.env.example` dosyasindaki ilgili degiskenleri girin.
+- Resend tarafinda `CONTACT_FROM_EMAIL` icin dogrulanmis bir domain veya test gondericisi kullanin.
 
-## How can I deploy this project?
+## Test ve Lint
+```bash
+npm run test
+npm run lint
+```
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Klasorler
+- `src/pages`: sayfalar
+- `src/components`: UI bolumleri
+- `public`: statik dosyalar
+- `api`: Vercel serverless function'lari
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Yayin (Bagimsiz)
+- Proje Vercel uzerinde static frontend + serverless function olarak yayinlanabilir.
+- Build cikti klasoru: `dist/`
+- Domain, DNS ve SSL ayarlari deploy sonrasi Vercel veya registrar uzerinden yonetilir.

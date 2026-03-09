@@ -1,91 +1,159 @@
 import { motion } from "framer-motion";
-import { MapPin, Phone, Mail, Send } from "lucide-react";
+import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { toast } from "@/components/ui/use-toast";
+import { submitContactForm } from "@/lib/contact-service";
+import { ContactServiceError } from "@/types/contact";
+
+const initialFormState = {
+  adsoyad: "",
+  email: "",
+  mesaj: "",
+  kvkkOnay: false,
+  website: "",
+};
 
 const ContactSection = () => {
-  const [formData, setFormData] = useState({ adsoyad: "", email: "", mesaj: "" });
-  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState(initialFormState);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ adsoyad: "", email: "", mesaj: "" });
-    }, 2500);
+    setSubmitting(true);
+
+    try {
+      await submitContactForm(formData);
+      setFormData(initialFormState);
+      toast({
+        title: "Mesaj alindi",
+        description: "Talebiniz basariyla iletildi. En kisa surede donus yapilacak.",
+      });
+    } catch (error) {
+      const message =
+        error instanceof ContactServiceError
+          ? error.message
+          : "Beklenmeyen bir hata olustu. Lutfen daha sonra tekrar deneyin.";
+
+      toast({
+        title: "Mesaj gonderilemedi",
+        description: message,
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <section id="iletisim" className="py-20 bg-background">
+    <section id="iletisim" className="bg-background py-20">
       <div className="section-container">
         <div className="mb-10">
-          <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            className="inline-flex items-center gap-2 text-xs font-bold tracking-[2.5px] uppercase text-accent before:content-[''] before:w-6 before:h-[1.5px] before:bg-accent">
-            İletişim
+          <motion.span
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[2.5px] text-accent before:h-[1.5px] before:w-6 before:bg-accent before:content-['']"
+          >
+            Iletisim
           </motion.span>
-          <motion.h3 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
-            className="font-display text-[clamp(30px,4vw,42px)] font-bold leading-[1.15] text-primary-deep mt-3">
-            Bize Ulaşın
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="mt-3 font-display text-[clamp(30px,4vw,42px)] font-bold leading-[1.15] text-primary-deep"
+          >
+            Bize Ulasin
           </motion.h3>
-          <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
-            className="text-base leading-relaxed text-muted-foreground mt-4">
-            Randevu ve ön değerlendirme için iletişime geçin.
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="mt-4 text-base leading-relaxed text-muted-foreground"
+          >
+            Randevu ve on degerlendirme icin iletisime gecin.
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Info Card */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="gradient-navy text-primary-foreground rounded-2xl p-9"
+            className="gradient-navy rounded-2xl p-9 text-primary-foreground"
           >
-            <h4 className="font-display text-[22px] font-bold text-accent-light">İletişim Bilgileri</h4>
-            <div className="gold-line mt-2 mb-6" style={{ background: "linear-gradient(90deg, hsl(var(--accent-light)), transparent)" }} />
+            <h4 className="font-display text-[22px] font-bold text-accent-light">Iletisim Bilgileri</h4>
+            <div
+              className="gold-line mt-2 mb-6"
+              style={{ background: "linear-gradient(90deg, hsl(var(--accent-light)), transparent)" }}
+            />
 
             <div className="space-y-5">
               <div className="flex items-start gap-3.5">
-                <MapPin className="w-4 h-4 text-accent mt-1 flex-shrink-0" />
+                <MapPin className="mt-1 h-4 w-4 flex-shrink-0 text-accent" />
                 <div>
-                  <strong className="block text-primary-foreground text-[13px] tracking-wider uppercase mb-1">Adres</strong>
-                  <p className="text-primary-foreground/75 text-[15px] leading-relaxed">Osmanağa Mahallesi, Karadut Sokak<br />No:14/10, Kadıköy/İstanbul</p>
+                  <strong className="mb-1 block text-[13px] uppercase tracking-wider text-primary-foreground">Adres</strong>
+                  <p className="text-[15px] leading-relaxed text-primary-foreground/75">
+                    Osmanaga Mahallesi, Karadut Sokak
+                    <br />
+                    No:14/10, Kadikoy/Istanbul
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-3.5">
-                <Phone className="w-4 h-4 text-accent mt-1 flex-shrink-0" />
+                <Phone className="mt-1 h-4 w-4 flex-shrink-0 text-accent" />
                 <div>
-                  <strong className="block text-primary-foreground text-[13px] tracking-wider uppercase mb-1">Telefon</strong>
-                  <a href="tel:+905519814937" className="text-primary-foreground/75 text-[15px] hover:text-accent-light transition-colors">0551 981 49 37</a>
+                  <strong className="mb-1 block text-[13px] uppercase tracking-wider text-primary-foreground">Telefon</strong>
+                  <a
+                    href="tel:+905519814937"
+                    className="text-[15px] text-primary-foreground/75 transition-colors hover:text-accent-light"
+                  >
+                    0551 981 49 37
+                  </a>
                 </div>
               </div>
               <div className="flex items-start gap-3.5">
-                <Mail className="w-4 h-4 text-accent mt-1 flex-shrink-0" />
+                <Mail className="mt-1 h-4 w-4 flex-shrink-0 text-accent" />
                 <div>
-                  <strong className="block text-primary-foreground text-[13px] tracking-wider uppercase mb-1">E-posta</strong>
-                  <a href="mailto:vegalaw.contact@gmail.com" className="text-primary-foreground/75 text-[15px] hover:text-accent-light transition-colors">vegalaw.contact@gmail.com</a>
+                  <strong className="mb-1 block text-[13px] uppercase tracking-wider text-primary-foreground">E-posta</strong>
+                  <a
+                    href="mailto:vegalaw.contact@gmail.com"
+                    className="text-[15px] text-primary-foreground/75 transition-colors hover:text-accent-light"
+                  >
+                    vegalaw.contact@gmail.com
+                  </a>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2.5 mt-7">
-              <a href="https://wa.me/905519814937" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-[13px] font-semibold text-primary-foreground border border-primary-foreground/15 hover:bg-primary-foreground/10 hover:border-accent transition-all">
-                📱 WhatsApp
+            <div className="mt-7 flex flex-wrap gap-2.5">
+              <a
+                href="https://wa.me/905519814937"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/15 px-4 py-2.5 text-[13px] font-semibold text-primary-foreground transition-all hover:border-accent hover:bg-primary-foreground/10"
+              >
+                WhatsApp
               </a>
-              <a href="mailto:vegalaw.contact@gmail.com"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-[13px] font-semibold text-primary-foreground border border-primary-foreground/15 hover:bg-primary-foreground/10 hover:border-accent transition-all">
-                ✉️ E-posta
+              <a
+                href="mailto:vegalaw.contact@gmail.com"
+                className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/15 px-4 py-2.5 text-[13px] font-semibold text-primary-foreground transition-all hover:border-accent hover:bg-primary-foreground/10"
+              >
+                E-posta
               </a>
-              <a href="tel:+905519814937"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-[13px] font-semibold text-primary-foreground border border-primary-foreground/15 hover:bg-primary-foreground/10 hover:border-accent transition-all">
-                📞 Ara
+              <a
+                href="tel:+905519814937"
+                className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/15 px-4 py-2.5 text-[13px] font-semibold text-primary-foreground transition-all hover:border-accent hover:bg-primary-foreground/10"
+              >
+                Ara
               </a>
             </div>
 
-            <div className="mt-5 rounded-[14px] overflow-hidden border border-primary-foreground/10">
+            <div className="mt-5 overflow-hidden rounded-[14px] border border-primary-foreground/10">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.6!2d29.028!3d40.9903!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab868f38e3a21%3A0x0!2sOsmanağa%2C+Karadut+Sk.+No%3A14%2C+Kadıköy%2Fİstanbul!5e0!3m2!1str!2str!4v1700000000000"
+                src="https://www.google.com/maps?q=Osmanaga%20Mahallesi%20Karadut%20Sokak%20No%2014%2F10%20Kadikoy%20Istanbul&output=embed"
                 width="100%"
                 height="200"
                 style={{ border: 0, display: "block", borderRadius: "14px" }}
@@ -97,61 +165,93 @@ const ContactSection = () => {
             </div>
           </motion.div>
 
-          {/* Form Card */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="bg-card border border-border rounded-2xl p-9"
+            className="rounded-2xl border border-border bg-card p-9"
           >
-            <h4 className="font-display text-[22px] font-bold text-primary-deep">Mesaj Gönder</h4>
+            <h4 className="font-display text-[22px] font-bold text-primary-deep">Mesaj Gonder</h4>
             <div className="gold-line mt-2 mb-6" />
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                type="text"
+                name="website"
+                value={formData.website}
+                onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                autoComplete="off"
+                tabIndex={-1}
+                className="hidden"
+                aria-hidden="true"
+              />
               <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold text-foreground tracking-wide">Ad Soyad</label>
+                <label className="text-[13px] font-semibold tracking-wide text-foreground">Ad Soyad</label>
                 <input
-                  className="w-full px-4 py-3 border-[1.5px] border-border rounded-[10px] text-sm bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
-                  placeholder="Adınız Soyadınız"
+                  className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  placeholder="Adiniz Soyadiniz"
                   value={formData.adsoyad}
                   onChange={(e) => setFormData({ ...formData, adsoyad: e.target.value })}
                   required
+                  disabled={submitting}
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold text-foreground tracking-wide">E-posta</label>
+                <label className="text-[13px] font-semibold tracking-wide text-foreground">E-posta</label>
                 <input
                   type="email"
-                  className="w-full px-4 py-3 border-[1.5px] border-border rounded-[10px] text-sm bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
+                  className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
                   placeholder="ornek@email.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
+                  disabled={submitting}
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold text-foreground tracking-wide">Mesajınız</label>
+                <label className="text-[13px] font-semibold tracking-wide text-foreground">Mesajiniz</label>
                 <textarea
-                  className="w-full px-4 py-3 border-[1.5px] border-border rounded-[10px] text-sm bg-background focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all resize-y min-h-[100px]"
-                  placeholder="Konu ve mesajınızı yazın..."
-                  rows={4}
+                  className="min-h-[120px] w-full resize-y rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  placeholder="Konu ve mesajinizi yazin..."
+                  rows={5}
                   value={formData.mesaj}
                   onChange={(e) => setFormData({ ...formData, mesaj: e.target.value })}
+                  required
+                  disabled={submitting}
                 />
               </div>
+              <label className="flex items-start gap-3 rounded-xl border border-border bg-background/70 p-3 text-sm text-muted-foreground">
+                <input
+                  type="checkbox"
+                  checked={formData.kvkkOnay}
+                  onChange={(e) => setFormData({ ...formData, kvkkOnay: e.target.checked })}
+                  className="mt-1 h-4 w-4 rounded border-border"
+                  disabled={submitting}
+                />
+                <span>
+                  Iletisim formu kapsaminda ilettigim verilerin talebime donus saglanmasi amaciyla islenmesini kabul ediyorum. Ayrintilar icin{" "}
+                  <Link to="/kvkk-aydinlatma" className="font-semibold text-primary underline-offset-4 hover:underline">
+                    KVKK aydinlatma metni
+                  </Link>
+                  .
+                </span>
+              </label>
               <div className="flex items-center gap-3.5 pt-1">
                 <button
                   type="submit"
-                  className={`inline-flex items-center gap-2 px-7 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
-                    submitted
-                      ? "bg-green-600 text-primary-foreground"
-                      : "bg-primary text-primary-foreground hover:bg-primary-deep hover:-translate-y-0.5 hover:shadow-elegant"
+                  disabled={submitting}
+                  className={`inline-flex items-center gap-2 rounded-xl px-7 py-3 text-sm font-semibold transition-all duration-300 ${
+                    submitting
+                      ? "cursor-not-allowed bg-primary/70 text-primary-foreground"
+                      : "bg-primary text-primary-foreground hover:-translate-y-0.5 hover:bg-primary-deep hover:shadow-elegant"
                   }`}
                 >
-                  {submitted ? "✓ Gönderildi!" : <><Send className="w-4 h-4" /> Gönder</>}
+                  <Send className="h-4 w-4" /> {submitting ? "Gonderiliyor..." : "Gonder"}
                 </button>
-                <small className="text-muted-foreground text-xs">KVKK aydınlatma metni kabul edilir.</small>
+                <small className="text-xs text-muted-foreground">
+                  Endpoint tanimli degilse sistem sizi telefon, e-posta veya WhatsApp kanalina yonlendirir.
+                </small>
               </div>
             </form>
           </motion.div>

@@ -2,8 +2,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import BlogIndex from "./pages/BlogIndex";
+import BlogPost from "./pages/BlogPost";
+import CerezPolitikasi from "./pages/CerezPolitikasi";
+import HukukiUyari from "./pages/HukukiUyari";
 import Index from "./pages/Index";
+import KvkkAydinlatma from "./pages/KvkkAydinlatma";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -16,7 +21,11 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/blog" element={<BlogIndex />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/kvkk-aydinlatma" element={<KvkkAydinlatma />} />
+          <Route path="/cerez-politikasi" element={<CerezPolitikasi />} />
+          <Route path="/hukuki-uyari" element={<HukukiUyari />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
