@@ -3,73 +3,86 @@ import { Star } from "lucide-react";
 
 const TeamSection = () => {
   return (
-    <section id="ekibimiz" className="py-20 bg-cream">
+    <section id="ekibimiz" className="bg-cream py-20">
       <div className="section-container">
         <div className="mb-10">
-          <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            className="inline-flex items-center gap-2 text-xs font-bold tracking-[2.5px] uppercase text-accent before:content-[''] before:w-6 before:h-[1.5px] before:bg-accent">
+          <motion.span
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[2.5px] text-accent before:h-[1.5px] before:w-6 before:bg-accent before:content-['']"
+          >
             Ekip
           </motion.span>
-          <motion.h3 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
-            className="font-display text-[clamp(30px,4vw,42px)] font-bold leading-[1.15] text-primary-deep mt-3">
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="mt-3 font-display text-[clamp(30px,4vw,42px)] font-bold leading-[1.15] text-primary-deep"
+          >
             Ekibimiz
           </motion.h3>
-          <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
-            className="text-base leading-relaxed text-muted-foreground max-w-[56ch] mt-4">
-            Ã–zel hukuk, ceza hukuku ve sÃ¶zleÅŸmeler alanÄ±nda 3 avukat ile sonuÃ§ odaklÄ± Ã§Ã¶zÃ¼mler.
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="mt-4 max-w-[56ch] text-base leading-relaxed text-muted-foreground"
+          >
+            Vega Hukuk İstanbul ekibi; Av. Aykut Yeşilkaya, Av. Mücahit İslam Keskün ve Av. Büşra Yeşilkaya ile sonuç
+            odaklı hukuki danışmanlık sunar.
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {/* Main team card */}
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           <motion.article
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="md:col-span-2 gradient-navy text-primary-foreground rounded-2xl p-8 relative overflow-hidden"
+            className="relative overflow-hidden rounded-2xl gradient-navy p-8 text-primary-foreground md:col-span-2"
           >
-            <div className="w-20 h-20 rounded-full bg-primary-foreground/10 border-2 border-accent/25 flex items-center justify-center font-display text-[28px] font-bold text-accent-light mb-5 relative">
+            <div className="relative mb-5 flex h-20 w-20 items-center justify-center rounded-full border-2 border-accent/25 bg-primary-foreground/10 font-display text-[28px] font-bold text-accent-light">
               AY
-              <span className="absolute -bottom-0.5 -right-0.5 w-[22px] h-[22px] rounded-full bg-accent flex items-center justify-center">
-                <Star className="w-[10px] h-[10px] text-primary-foreground" />
+              <span className="absolute -right-0.5 -bottom-0.5 flex h-[22px] w-[22px] items-center justify-center rounded-full bg-accent">
+                <Star className="h-[10px] w-[10px] text-primary-foreground" />
               </span>
             </div>
-            <h4 className="font-display text-[22px] font-bold text-accent-light">Av. Aykut YeÅŸilkaya</h4>
-            <p className="text-primary-foreground/75 mt-1">Kurucu Avukat â€¢ Arabulucu â€¢ Ã–zel Hukuk</p>
+            <h4 className="font-display text-[22px] font-bold text-accent-light">Av. Aykut Yeşilkaya</h4>
+            <p className="mt-1 text-primary-foreground/75">Kurucu Avukat • Arabulucu • Özel Hukuk</p>
 
-            <div className="relative pl-7 mt-5">
+            <div className="relative mt-5 pl-7">
               <div className="absolute left-[10px] top-1.5 bottom-1.5 w-[1.5px] bg-accent/30" />
               {[
-                { title: "Ä°ÅŸ Hukuku:", desc: "Ä°ÅŸe iade, tazminat, fazla mesai, mobbing" },
-                { title: "Kira & Gayrimenkul:", desc: "Tahliye, uyarlama, tapu iptal" },
-                { title: "Miras & Aile:", desc: "Tereke, tenkis, nafaka, velayet" },
-                { title: "TÃ¼ketici & Sigorta:", desc: "AyÄ±plÄ± mal, poliÃ§e, tazminat" },
+                { title: "İş Hukuku:", desc: "İşe iade, tazminat, fazla mesai ve mobbing süreçleri" },
+                { title: "Kira ve Gayrimenkul:", desc: "Tahliye, uyarlama, tapu iptal ve kira uyuşmazlıkları" },
+                { title: "Miras ve Aile:", desc: "Tereke, tenkis, nafaka ve velayet dosyaları" },
+                { title: "Tüketici ve Sigorta:", desc: "Ayıplı mal, poliçe ve tazminat talepleri" },
               ].map((step) => (
                 <div key={step.title} className="relative my-4 text-[14.5px] leading-relaxed text-primary-foreground/75">
-                  <span className="absolute -left-[20px] top-2 w-2 h-2 rounded-full bg-accent shadow-[0_0_0_3px_rgba(185,151,91,0.2)]" />
+                  <span className="absolute -left-[20px] top-2 h-2 w-2 rounded-full bg-accent shadow-[0_0_0_3px_rgba(185,151,91,0.2)]" />
                   <strong className="text-primary-foreground">{step.title}</strong> {step.desc}
                 </div>
               ))}
             </div>
           </motion.article>
 
-          {/* Other team members */}
           <div className="space-y-5">
             <motion.article
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="bg-card border border-border rounded-2xl p-7 hover:-translate-y-1 hover:shadow-elegant-lg transition-all duration-400"
+              className="rounded-2xl border border-border bg-card p-7 transition-all duration-400 hover:-translate-y-1 hover:shadow-elegant-lg"
             >
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/[0.08] to-primary/[0.03] border-2 border-primary/10 flex items-center justify-center font-display text-[28px] font-bold text-primary mb-4">
+              <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full border-2 border-primary/10 bg-gradient-to-br from-primary/[0.08] to-primary/[0.03] font-display text-[28px] font-bold text-primary">
                 MK
               </div>
-              <h4 className="font-display text-xl font-bold text-primary-deep">Av. MÃ¼cahit Ä°slam KeskÃ¼n</h4>
+              <h4 className="font-display text-xl font-bold text-primary-deep">Av. Mücahit İslam Keskün</h4>
               <div className="gold-line my-3" />
-              <p className="text-primary font-semibold mb-2">Kurucu Avukat Â· Ceza Hukuku</p>
+              <p className="mb-2 font-semibold text-primary">Kurucu Avukat · Ceza Hukuku</p>
               <p className="text-[14.5px] leading-relaxed text-muted-foreground">
-                Ceza davalarÄ±nda savunma, soruÅŸturma ve kovuÅŸturma sÃ¼reÃ§lerinde etkin temsil ve stratejik savunma hizmeti sunar.
+                Ceza davalarında savunma, soruşturma ve kovuşturma süreçlerinde etkin temsil ve stratejik savunma hizmeti sunar.
               </p>
             </motion.article>
 
@@ -78,16 +91,16 @@ const TeamSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="bg-card border border-border rounded-2xl p-7 hover:-translate-y-1 hover:shadow-elegant-lg transition-all duration-400"
+              className="rounded-2xl border border-border bg-card p-7 transition-all duration-400 hover:-translate-y-1 hover:shadow-elegant-lg"
             >
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-accent/15 to-accent/5 border-2 border-accent/20 flex items-center justify-center font-display text-[28px] font-bold text-accent mb-4">
+              <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full border-2 border-accent/20 bg-gradient-to-br from-accent/15 to-accent/5 font-display text-[28px] font-bold text-accent">
                 BY
               </div>
-              <h4 className="font-display text-xl font-bold text-primary-deep">Av. BÃ¼ÅŸra YeÅŸilkaya</h4>
+              <h4 className="font-display text-xl font-bold text-primary-deep">Av. Büşra Yeşilkaya</h4>
               <div className="gold-line my-3" />
-              <p className="text-primary font-semibold mb-2">SÃ¶zleÅŸmeler Hukuku</p>
+              <p className="mb-2 font-semibold text-primary">Sözleşmeler Hukuku</p>
               <p className="text-[14.5px] leading-relaxed text-muted-foreground">
-                SÃ¶zleÅŸme tasarÄ±mÄ±, mÃ¼zakeresi ve uyuÅŸmazlÄ±k Ã§Ã¶zÃ¼mÃ¼nde titiz ve detay odaklÄ± hukuki destek saÄŸlar.
+                Sözleşme tasarımı, müzakeresi ve uyuşmazlık çözümünde titiz ve detay odaklı hukuki destek sağlar.
               </p>
             </motion.article>
           </div>
