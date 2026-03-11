@@ -37,6 +37,36 @@ const LegalUpdatePost = () => {
     canonicalPath: `/guncel-hukuk-gundemi/${slug}`,
     image: item?.coverImage,
     type: "article",
+    structuredData: item
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: item.title,
+            description: item.seoDescription ?? item.excerpt,
+            datePublished: item.publishedAt,
+            dateModified: item.updatedAt ?? item.publishedAt,
+            publisher: {
+              "@type": "LegalService",
+              name: "Vega Hukuk",
+              url: window.location.origin,
+            },
+            image: item.coverImage
+              ? `${window.location.origin}${item.coverImage}`
+              : `${window.location.origin}/og-image.svg`,
+            mainEntityOfPage: `${window.location.origin}/guncel-hukuk-gundemi/${item.slug}`,
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: window.location.origin },
+              { "@type": "ListItem", position: 2, name: "Güncel Hukuk Gündemi", item: `${window.location.origin}/guncel-hukuk-gundemi` },
+              { "@type": "ListItem", position: 3, name: item.title },
+            ],
+          },
+        ]
+      : undefined,
   });
 
   if (loading) {

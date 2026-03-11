@@ -39,26 +39,38 @@ const BlogPost = () => {
     image: post?.coverImage,
     type: "article",
     structuredData: post
-      ? {
-          "@context": "https://schema.org",
-          "@type": "Article",
-          headline: post.title,
-          description: post.seoDescription ?? post.excerpt,
-          datePublished: post.publishedAt,
-          dateModified: post.updatedAt ?? post.publishedAt,
-          author: {
-            "@type": "Organization",
-            name: post.author,
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: post.title,
+            description: post.seoDescription ?? post.excerpt,
+            datePublished: post.publishedAt,
+            dateModified: post.updatedAt ?? post.publishedAt,
+            author: {
+              "@type": "Organization",
+              name: post.author,
+            },
+            publisher: {
+              "@type": "LegalService",
+              name: "Vega Hukuk",
+              url: window.location.origin,
+            },
+            image: post.coverImage
+              ? `${window.location.origin}${post.coverImage}`
+              : `${window.location.origin}/og-image.svg`,
+            mainEntityOfPage: `${window.location.origin}/blog/${post.slug}`,
           },
-          publisher: {
-            "@type": "LegalService",
-            name: "Vega Hukuk",
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: window.location.origin },
+              { "@type": "ListItem", position: 2, name: "Blog", item: `${window.location.origin}/blog` },
+              { "@type": "ListItem", position: 3, name: post.title },
+            ],
           },
-          image: post.coverImage
-            ? `${window.location.origin}${post.coverImage}`
-            : `${window.location.origin}/og-image.svg`,
-          mainEntityOfPage: `${window.location.origin}/blog/${post.slug}`,
-        }
+        ]
       : undefined,
   });
 
