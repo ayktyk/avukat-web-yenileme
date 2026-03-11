@@ -76,7 +76,9 @@ const LegalUpdatesIndex = () => {
                   <CalendarDays className="h-3.5 w-3.5" />
                   {formatDateTr(item.publishedAt)}
                 </div>
-                <h2 className="font-display text-[28px] font-bold leading-[1.2] text-primary-deep">{item.title}</h2>
+                <Link to={`/guncel-hukuk-gundemi/${item.slug}`} className="block">
+                  <h2 className="font-display text-[28px] font-bold leading-[1.2] text-primary-deep transition-colors hover:text-primary">{item.title}</h2>
+                </Link>
                 <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">{item.excerpt}</p>
                 <div className="mt-5 flex items-center gap-2">
                   <span className="text-xs font-semibold uppercase tracking-[1.3px] text-accent">{item.category}</span>

@@ -74,15 +74,26 @@ const ArticlesSection = () => {
                 transition={{ delay: i * 0.1 }}
                 className="group rounded-2xl border border-border bg-card p-7 transition-all duration-400 hover:-translate-y-1 hover:border-accent/25 hover:shadow-elegant-lg"
               >
-                <div
-                  className={`relative mb-4 flex aspect-video w-full items-center justify-center overflow-hidden rounded-[10px] bg-gradient-to-br ${
-                    post.coverClass ?? "from-primary/[0.08] to-primary/[0.03]"
-                  }`}
-                />
+                {post.coverImage ? (
+                  <img
+                    src={post.coverImage}
+                    alt={post.title}
+                    className="mb-4 aspect-video w-full rounded-[10px] object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div
+                    className={`relative mb-4 flex aspect-video w-full items-center justify-center overflow-hidden rounded-[10px] bg-gradient-to-br ${
+                      post.coverClass ?? "from-primary/[0.08] to-primary/[0.03]"
+                    }`}
+                  />
+                )}
                 <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-[1.5px] text-accent">
                   {post.category}
                 </span>
-                <h4 className="mb-2 font-display text-xl font-bold text-primary-deep">{post.title}</h4>
+                <Link to={`/blog/${post.slug}`} className="block">
+                  <h4 className="mb-2 font-display text-xl font-bold text-primary-deep transition-colors hover:text-primary">{post.title}</h4>
+                </Link>
                 <p className="text-[14.5px] leading-relaxed text-muted-foreground">{post.excerpt}</p>
                 <div className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                   <CalendarDays className="h-3.5 w-3.5" />

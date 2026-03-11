@@ -94,7 +94,9 @@ const LegalUpdatesSection = () => {
                   <CalendarDays className="h-3.5 w-3.5" />
                   {formatDateTr(item.publishedAt)}
                 </div>
-                <h4 className="font-display text-2xl font-bold text-primary-deep">{item.title}</h4>
+                <Link to={`/guncel-hukuk-gundemi/${item.slug}`} className="block">
+                  <h4 className="font-display text-2xl font-bold text-primary-deep transition-colors hover:text-primary">{item.title}</h4>
+                </Link>
                 <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">{item.excerpt}</p>
                 <div className="mt-5 flex items-center gap-2">
                   <span className="text-xs font-semibold uppercase tracking-[1.3px] text-accent">{item.category}</span>
