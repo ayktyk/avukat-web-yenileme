@@ -1,7 +1,72 @@
-﻿import { motion } from "framer-motion";
+﻿import { useEffect } from "react";
+import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
+const teamMembers = [
+  {
+    name: "Av. Aykut Yeşilkaya",
+    jobTitle: "Kurucu Avukat",
+    description:
+      "İş hukuku, kira ve gayrimenkul, miras ve aile hukuku, tüketici ve sigorta alanlarında hukuki danışmanlık ve dava takibi.",
+    knowsAbout: ["İş Hukuku", "Kira Hukuku", "Gayrimenkul Hukuku", "Miras Hukuku", "Aile Hukuku", "Tüketici Hukuku", "Sigorta Hukuku", "Arabuluculuk"],
+  },
+  {
+    name: "Av. Mücahit İslam Keskün",
+    jobTitle: "Kurucu Avukat",
+    description:
+      "Ceza davalarında savunma, soruşturma ve kovuşturma süreçlerinde etkin temsil ve stratejik savunma hizmeti.",
+    knowsAbout: ["Ceza Hukuku", "Ceza Davası", "Soruşturma", "Kovuşturma", "Savunma"],
+  },
+  {
+    name: "Av. Büşra Yeşilkaya",
+    jobTitle: "Avukat",
+    description:
+      "Sözleşme tasarımı, müzakeresi ve uyuşmazlık çözümünde titiz ve detay odaklı hukuki destek.",
+    knowsAbout: ["Sözleşmeler Hukuku", "Sözleşme Tasarımı", "Uyuşmazlık Çözümü"],
+  },
+];
+
+const personSchemaList = teamMembers.map((member) => ({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: member.name,
+  jobTitle: member.jobTitle,
+  description: member.description,
+  knowsAbout: member.knowsAbout,
+  worksFor: {
+    "@type": "LegalService",
+    name: "Vega Hukuk İstanbul",
+    url: "https://vegahukukistanbul.com",
+  },
+  workLocation: {
+    "@type": "Place",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Kadıköy",
+      addressRegion: "İstanbul",
+      addressCountry: "TR",
+    },
+  },
+}));
+
 const TeamSection = () => {
+  useEffect(() => {
+    const id = "team-structured-data";
+    let script = document.getElementById(id) as HTMLScriptElement | null;
+
+    if (!script) {
+      script = document.createElement("script");
+      script.id = id;
+      script.type = "application/ld+json";
+      document.head.appendChild(script);
+    }
+
+    script.textContent = JSON.stringify(personSchemaList);
+
+    return () => {
+      script?.remove();
+    };
+  }, []);
   return (
     <section id="ekibimiz" className="bg-cream py-20">
       <div className="section-container">
