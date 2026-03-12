@@ -1,6 +1,5 @@
 ---
-title: "IBAN Kullandırma ve Nitelikli Dolandırıcılık Suçu: Güncel Yargıtay
-  Yaklaşımı (2024-2026)"
+title: "IBAN Kullandırma ve Nitelikli Dolandırıcılık Suçu:Güncel Yargıtay Yaklaşımı "
 slug: nitelikli-dolandiricilik-iban-kullandirma-yargitay-kararlari
 excerpt: Bilişim sistemleri ve banka aracılığıyla işlenen nitelikli
   dolandırıcılık dosyalarında, sadece hesap sahibi olmanın mahkûmiyet için
@@ -13,7 +12,7 @@ seoTitle: IBAN Kullandırma Suç mu? TCK 158/1-f Güncel Yargıtay Kararları
 seoDescription: Hesap veya IBAN numarasını başkasına kullandıran kişinin cezai
   sorumluluğu nedir? TCK 158/1-f kapsamında nitelikli dolandırıcılık suçu ve
   2025 yılı güncel beraat kriterleri.
-coverImage: /uploads/blog/chatgpt-image-13-mar-2026-02_13_48.png
+coverImage: /uploads/blog/1.png
 ---
 
 
