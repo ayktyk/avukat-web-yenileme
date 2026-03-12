@@ -12,12 +12,9 @@ seoDescription: Tahliye taahhüdü nedir, nasıl geçerli olur? TBK 352/1 kapsam
   hakkında detaylı rehber.
 coverImage: /uploads/blog/chatgpt-image-12-mar-2026-18_00_10.png
 ---
-
-
-
 ## Tahliye Taahhüdüyle İlgili Mutlaka Bilinmesi Gerekenler
 
-Bu rapor, Türk Borçlar Kanunu (TBK) ve güncel Yargıtay içtihatları ışığında tahliye taahhüdünün geçerlilik şartlarını ve dikkat edilmesi gereken kritik hususları özetlemektedir.
+Bu yazı, Türk Borçlar Kanunu (TBK) ve güncel Yargıtay içtihatları ışığında tahliye taahhüdünün geçerlilik şartlarını ve dikkat edilmesi gereken kritik hususları özetlemektedir.
 
 ### 1. Geçerlilik Şartları (TBK 352/1)
 
