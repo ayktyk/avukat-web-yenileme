@@ -12,7 +12,7 @@ seoTitle: IBAN Kullandırma Suç mu? TCK 158/1-f Güncel Yargıtay Kararları
 seoDescription: Hesap veya IBAN numarasını başkasına kullandıran kişinin cezai
   sorumluluğu nedir? TCK 158/1-f kapsamında nitelikli dolandırıcılık suçu ve
   2025 yılı güncel beraat kriterleri.
-coverImage: /uploads/blog/2.png
+coverImage: /uploads/blog/3.png
 ---
 
 
