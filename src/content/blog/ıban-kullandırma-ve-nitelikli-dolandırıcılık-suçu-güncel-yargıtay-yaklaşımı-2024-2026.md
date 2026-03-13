@@ -14,12 +14,9 @@ seoDescription: Hesap veya IBAN numarasını başkasına kullandıran kişinin c
   2025 yılı güncel beraat kriterleri.
 coverImage: /uploads/blog/3.png
 ---
+## Nitelikli Dolandırıcılık (TCK 158/1-f) ve IBAN Kullanımı
 
-
-
-## Nitelikli Dolandırıcılık (TCK 158/1-f) ve IBAN Kullanımı 
-
-Günümüz yargı pratiğinde, bilişim sistemleri ve banka araçları kullanılarak işlenen nitelikli dolandırıcılık suçlarında, özellikle "hesap kullandırma" eylemlerine ilişkin yaklaşımın köklü bir değişim geçirdiği gözlemlenmektedir. Bu rapor, hesap sahibi (sanık) ile asıl fail arasındaki ilişkiyi ve kusur sorumluluğunu güncel içtihatlar çerçevesinde ele almaktadır.
+Günümüz yargı pratiğinde, bilişim sistemleri ve banka araçları kullanılarak işlenen nitelikli dolandırıcılık suçlarında, özellikle "hesap kullandırma" eylemlerine ilişkin yaklaşımın köklü bir değişim geçirdiği gözlemlenmektedir. Bu yazı, hesap sahibi (sanık) ile asıl fail arasındaki ilişkiyi ve kusur sorumluluğunu güncel içtihatlar çerçevesinde ele almaktadır.
 
 ### 1. Yasal Çerçeve ve Maddi Unsur
 
@@ -46,8 +43,6 @@ Nitelikli dolandırıcılık dosyalarında sanık müdafii tarafından öne çı
 2. Güven İlişkisinin Varlığı: Hesabın paylaşıldığı kişiyle olan yakınlık (akrabalık, uzun süreli arkadaşlık) belgelenmelidir. Bu durum, "hesabın kötü niyetle verilmediği" karinesini güçlendirir.
 3. Hileli Davranış Eksikliği: Sanığın mağdurla hiçbir temasının olmadığı, mağduru aldatmaya yönelik bir eylemde bulunmadığı ve asıl failin hileli planına dahil olmadığı vurgulanmalıdır.
 
-
-
 **Karar Künyesi                                        Merci / Daire                           Temel Gerekçe**\
 2024/24160 E. 2025/3482K.      Yargıtay 8. CD (30.04.2025)     Paranın suçtan geldiğine dair "kesin ve inandırıcı delil  
 
@@ -57,7 +52,7 @@ Nitelikli dolandırıcılık dosyalarında sanık müdafii tarafından öne çı
 
 \    kullandırılmasının hayatın olağan akışına uygunluğu.      
 
-\    
+\\
 2023/3901 E. 2024/5939 K.        Yargıtay 11. CD (06.05.2024)   Eylemin cezai bir suçtan ziyade "hukuki ihtilaf" (ticari                                                                           
 
 \    uyuşmazlık) niteliğinde kalması.
