@@ -1,4 +1,5 @@
-﻿import type { LegalUpdate } from "@/types/legal-update";
+import { parseMarkdownDocument } from "@/lib/markdown-frontmatter";
+import type { LegalUpdate } from "@/types/legal-update";
 
 type MarkdownModuleMap = Record<string, string>;
 type LegalUpdateFrontmatter = Partial<LegalUpdate> & { slug?: string };
@@ -33,51 +34,8 @@ const toOptionalString = (value: unknown): string | undefined => {
 
 const toSlugFromPath = (path: string) => path.split("/").pop()?.replace(/\.md$/, "") ?? path;
 
-const stripMatchingQuotes = (value: string) => {
-  if (
-    (value.startsWith('"') && value.endsWith('"')) ||
-    (value.startsWith("'") && value.endsWith("'"))
-  ) {
-    return value.slice(1, -1);
-  }
-
-  return value;
-};
-
-const parseMarkdownDocument = (raw: string) => {
-  const normalizedRaw = raw.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
-
-  if (!normalizedRaw.startsWith("---\n")) {
-    return { data: {} as LegalUpdateFrontmatter, content: normalizedRaw.trim() };
-  }
-
-  const endIndex = normalizedRaw.indexOf("\n---\n", 4);
-  if (endIndex === -1) {
-    return { data: {} as LegalUpdateFrontmatter, content: normalizedRaw.trim() };
-  }
-
-  const frontmatterBlock = normalizedRaw.slice(4, endIndex);
-  const content = normalizedRaw.slice(endIndex + 5).trim();
-  const data = frontmatterBlock.split("\n").reduce<LegalUpdateFrontmatter>((acc, line) => {
-    const separatorIndex = line.indexOf(":");
-    if (separatorIndex === -1) {
-      return acc;
-    }
-
-    const key = line.slice(0, separatorIndex).trim() as keyof LegalUpdateFrontmatter;
-    const value = stripMatchingQuotes(line.slice(separatorIndex + 1).trim());
-    if (value.length > 0) {
-      acc[key] = value as never;
-    }
-
-    return acc;
-  }, {} as LegalUpdateFrontmatter);
-
-  return { data, content };
-};
-
 const parseLegalUpdate = (path: string, raw: string): LegalUpdate | null => {
-  const { data, content } = parseMarkdownDocument(raw);
+  const { data, content } = parseMarkdownDocument<LegalUpdateFrontmatter>(raw);
   const slug = toOptionalString(data.slug) || toSlugFromPath(path);
   const title = toOptionalString(data.title);
   const excerpt = toOptionalString(data.excerpt);

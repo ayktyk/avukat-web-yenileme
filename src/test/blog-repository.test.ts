@@ -18,11 +18,13 @@ describe("blog repository", () => {
 
     const posts = await listBlogPosts();
 
-    expect(posts).toHaveLength(3);
-    expect(posts[0]?.slug).toBe("ise-iade-arabuluculukta-kritik-noktalar");
-    expect(posts[1]?.slug).toBe("menfi-tespit-davasinda-ispat-yuku");
-    expect(posts[2]?.slug).toBe("kira-uyarlama-davasi-yol-haritasi");
-    expect(posts[0]?.content).toContain("Arabuluculuk başvurusu");
+    expect(posts).toHaveLength(5);
+    expect(posts.map((post) => post.slug)).toContain("ise-iade-arabuluculukta-kritik-noktalar");
+    expect(posts.map((post) => post.slug)).toContain("menfi-tespit-davasinda-ispat-yuku");
+    expect(posts.map((post) => post.slug)).toContain("kira-uyarlama-davasi-yol-haritasi");
+    expect(posts.find((post) => post.slug === "ise-iade-arabuluculukta-kritik-noktalar")?.content).toContain(
+      "Arabuluculuk başvurusu",
+    );
   });
 
   it("maps nested CMS payloads with env-based field paths", async () => {
@@ -99,7 +101,8 @@ describe("blog repository", () => {
 
     const posts = await listBlogPosts();
 
-    expect(posts[0]?.slug).toBe("ise-iade-arabuluculukta-kritik-noktalar");
+    expect(posts).toHaveLength(5);
+    expect(posts[0]?.slug).toBe("nitelikli-dolandiricilik-iban-kullandirma-yargitay-kararlari");
   });
 
   it("finds a post by slug", async () => {

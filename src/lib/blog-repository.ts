@@ -1,4 +1,5 @@
-﻿import type { BlogPost } from "@/types/blog";
+import { parseMarkdownDocument } from "@/lib/markdown-frontmatter";
+import type { BlogPost } from "@/types/blog";
 
 type RemoteBlogPayload = BlogPost[] | Record<string, unknown>;
 
@@ -228,52 +229,8 @@ const parseRemotePayload = (payload: RemoteBlogPayload, fieldMap: BlogFieldMap):
 
 const toSlugFromPath = (path: string) => path.split("/").pop()?.replace(/\.md$/, "") ?? path;
 
-const stripMatchingQuotes = (value: string) => {
-  if (
-    (value.startsWith('"') && value.endsWith('"')) ||
-    (value.startsWith("'") && value.endsWith("'"))
-  ) {
-    return value.slice(1, -1);
-  }
-
-  return value;
-};
-
-const parseMarkdownDocument = (raw: string) => {
-  const normalizedRaw = raw.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
-
-  if (!normalizedRaw.startsWith("---\n")) {
-    return { data: {} as MarkdownFrontmatter, content: normalizedRaw.trim() };
-  }
-
-  const endIndex = normalizedRaw.indexOf("\n---\n", 4);
-  if (endIndex === -1) {
-    return { data: {} as MarkdownFrontmatter, content: normalizedRaw.trim() };
-  }
-
-  const frontmatterBlock = normalizedRaw.slice(4, endIndex);
-  const content = normalizedRaw.slice(endIndex + 5).trim();
-  const data = frontmatterBlock.split(/\r?\n/).reduce<MarkdownFrontmatter>((acc, line) => {
-    const separatorIndex = line.indexOf(":");
-    if (separatorIndex === -1) {
-      return acc;
-    }
-
-    const key = line.slice(0, separatorIndex).trim() as keyof MarkdownFrontmatter;
-    const value = stripMatchingQuotes(line.slice(separatorIndex + 1).trim());
-
-    if (value.length > 0) {
-      acc[key] = value as never;
-    }
-
-    return acc;
-  }, {} as MarkdownFrontmatter);
-
-  return { data, content };
-};
-
 const parseMarkdownPost = (path: string, raw: string): BlogPost | null => {
-  const { data, content } = parseMarkdownDocument(raw);
+  const { data, content } = parseMarkdownDocument<MarkdownFrontmatter>(raw);
   const frontmatter = data as MarkdownFrontmatter;
   const slug = toOptionalString(frontmatter.slug) || toSlugFromPath(path);
   const title = toOptionalString(frontmatter.title);
@@ -357,4 +314,3 @@ export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> 
 export const resetBlogRepositoryCache = () => {
   postsPromise = null;
 };
-
