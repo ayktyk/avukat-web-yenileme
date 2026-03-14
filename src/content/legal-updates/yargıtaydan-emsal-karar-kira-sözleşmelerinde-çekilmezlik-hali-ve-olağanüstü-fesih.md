@@ -1,5 +1,5 @@
 ---
-title: "Yargıtay'dan Emsal Karar: Kira Sözleşmelerinde \"Çekilmezlik Hali\" ve
+title: "Yargıtay'dan Emsal Karar: Kira Sözleşmelerinde 'Çekilmezlik Hali' ve
   Olağanüstü Fesih"
 slug: yargitay-emsal-karar-kira-sozlesmesi-cekilmezlik-hali-olaganustu-fesih
 excerpt: >
