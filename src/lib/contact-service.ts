@@ -66,10 +66,6 @@ const validateInquiryPayload = (payload: InquiryPayload) => {
     throw new ContactServiceError("invalid", "En az bir iletişim bilgisi girin.");
   }
 
-  if (payload.source === "website-contact-form" && !email) {
-    throw new ContactServiceError("invalid", "İletişim formunda e-posta zorunludur.");
-  }
-
   if (payload.source === "website-callback-form" && !telefon) {
     throw new ContactServiceError("invalid", "Ön değerlendirme formunda telefon zorunludur.");
   }

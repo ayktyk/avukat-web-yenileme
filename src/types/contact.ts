@@ -1,6 +1,7 @@
 export type ContactFormPayload = {
   adsoyad: string;
-  email: string;
+  email?: string;
+  telefon?: string;
   mesaj: string;
   kvkkOnay: boolean;
   website?: string;

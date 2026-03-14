@@ -100,10 +100,6 @@ const validateBody = (body: ContactRequestBody) => {
     throw error(400, "invalid_payload", "En az bir iletişim bilgisi gereklidir.");
   }
 
-  if (source === "website-contact-form" && !email) {
-    throw error(400, "invalid_payload", "İletişim formunda e-posta zorunludur.");
-  }
-
   if (source === "website-callback-form" && !telefon) {
     throw error(400, "invalid_payload", "Ön değerlendirme formunda telefon zorunludur.");
   }

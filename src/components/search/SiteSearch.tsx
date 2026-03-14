@@ -1,6 +1,7 @@
 import { createContext, startTransition, useContext, useDeferredValue, useEffect, useState } from "react";
 import { FileText, HelpCircle, Scale, Search, Shield, Users } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { staticSearchDocuments } from "@/data/search-content";
 import {
   CommandDialog,
   CommandEmpty,
@@ -84,10 +85,9 @@ export const useSiteSearch = () => {
 type SearchTriggerProps = {
   className?: string;
   compact?: boolean;
-  showShortcut?: boolean;
 };
 
-export const SearchTrigger = ({ className, compact = false, showShortcut = false }: SearchTriggerProps) => {
+export const SearchTrigger = ({ className, compact = false }: SearchTriggerProps) => {
   const { openSearch } = useSiteSearch();
 
   return (
@@ -103,7 +103,6 @@ export const SearchTrigger = ({ className, compact = false, showShortcut = false
     >
       <Search className="h-4 w-4" />
       {!compact && <span>Ara</span>}
-      {!compact && showShortcut && <span className="text-xs text-muted-foreground">Ctrl K</span>}
     </button>
   );
 };
@@ -117,10 +116,7 @@ const SiteSearchFloatingButton = () => {
 
   return (
     <div className="fixed right-5 bottom-5 z-40">
-      <SearchTrigger
-        className="border-primary/10 bg-background/95 pr-3 shadow-elegant backdrop-blur-xl"
-        showShortcut
-      />
+      <SearchTrigger className="border-primary/10 bg-background/95 pr-3 shadow-elegant backdrop-blur-xl" />
     </div>
   );
 };
@@ -131,9 +127,8 @@ export const SiteSearchProvider = ({ children }: { children: React.ReactNode }) 
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
-  const [documents, setDocuments] = useState<SearchDocument[]>([]);
+  const [documents, setDocuments] = useState<SearchDocument[]>(staticSearchDocuments);
   const [results, setResults] = useState<SearchDocument[]>([]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -148,12 +143,11 @@ export const SiteSearchProvider = ({ children }: { children: React.ReactNode }) 
   }, []);
 
   useEffect(() => {
-    if (!open || documents.length > 0) {
+    if (documents.length > staticSearchDocuments.length) {
       return;
     }
 
     let active = true;
-    setLoading(true);
 
     void buildSiteSearchDocuments()
       .then((loadedDocuments) => {
@@ -165,17 +159,12 @@ export const SiteSearchProvider = ({ children }: { children: React.ReactNode }) 
       })
       .catch((error) => {
         console.error("Site arama verisi yuklenemedi.", error);
-      })
-      .finally(() => {
-        if (active) {
-          setLoading(false);
-        }
       });
 
     return () => {
       active = false;
     };
-  }, [documents.length, open]);
+  }, [documents.length]);
 
   useEffect(() => {
     if (!open) {
@@ -224,47 +213,41 @@ export const SiteSearchProvider = ({ children }: { children: React.ReactNode }) 
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput value={query} onValueChange={setQuery} placeholder="Blog, hukuk gündemi, ekip veya konu ara..." />
         <CommandList className="max-h-[420px]">
-          {loading ? (
-            <div className="px-4 py-8 text-sm text-muted-foreground">İçerikler hazırlanıyor...</div>
-          ) : (
-            <>
-              <CommandEmpty>Aramanızla eşleşen bir sonuç bulunamadı.</CommandEmpty>
-              {Object.entries(groupedResults).map(([groupLabel, items], index) => (
-                <div key={groupLabel}>
-                  {index > 0 && <CommandSeparator />}
-                  <CommandGroup heading={groupLabel}>
-                    {items.map((item) => {
-                      const Icon = resultIconMap[item.type];
+          <CommandEmpty>Aramanızla eşleşen bir sonuç bulunamadı.</CommandEmpty>
+          {Object.entries(groupedResults).map(([groupLabel, items], index) => (
+            <div key={groupLabel}>
+              {index > 0 && <CommandSeparator />}
+              <CommandGroup heading={groupLabel}>
+                {items.map((item) => {
+                  const Icon = resultIconMap[item.type];
 
-                      return (
-                        <CommandItem
-                          key={item.id}
-                          value={`${item.title} ${item.description} ${(item.keywords ?? []).join(" ")} ${item.searchText ?? ""}`}
-                          onSelect={() => handleSelect(item.href)}
-                          className="flex items-start gap-3 rounded-xl px-3 py-3.5"
-                        >
-                          <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-primary/[0.06] text-primary">
-                            <Icon className="h-4 w-4" />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-2">
-                              <span className="truncate font-semibold text-primary-deep">{item.title}</span>
-                              {item.badge && (
-                                <span className="rounded-full bg-accent-pale px-2 py-0.5 text-[10px] font-bold uppercase tracking-[1.1px] text-primary-deep">
-                                  {item.badge}
-                                </span>
-                              )}
-                            </div>
-                            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-                          </div>
-                        </CommandItem>
-                      );
-                    })}
-                  </CommandGroup>
-                </div>
-              ))}
-            </>
-          )}
+                  return (
+                    <CommandItem
+                      key={item.id}
+                      value={`${item.title} ${item.description} ${(item.keywords ?? []).join(" ")} ${item.searchText ?? ""}`}
+                      onSelect={() => handleSelect(item.href)}
+                      className="flex items-start gap-3 rounded-xl px-3 py-3.5"
+                    >
+                      <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-primary/[0.06] text-primary">
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="truncate font-semibold text-primary-deep">{item.title}</span>
+                          {item.badge && (
+                            <span className="rounded-full bg-accent-pale px-2 py-0.5 text-[10px] font-bold uppercase tracking-[1.1px] text-primary-deep">
+                              {item.badge}
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+                      </div>
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+            </div>
+          ))}
         </CommandList>
       </CommandDialog>
     </SearchContext.Provider>

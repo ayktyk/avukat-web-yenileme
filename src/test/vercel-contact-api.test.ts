@@ -114,6 +114,41 @@ describe("vercel contact api", () => {
     expect(body.ok).toBe(true);
   });
 
+  it("accepts contact form requests with only phone", async () => {
+    process.env.RESEND_API_KEY = "re_test";
+    process.env.CONTACT_TO_EMAIL = "office@example.com";
+    process.env.CONTACT_FROM_EMAIL = "Vega Hukuk <onboarding@resend.dev>";
+    process.env.CONTACT_ALLOWED_ORIGINS = "https://vegahukukistanbul.com";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ id: "email_phone_only" }),
+      }),
+    );
+
+    const request = new Request("https://vegahukukistanbul.com/api/contact", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: "https://vegahukukistanbul.com",
+        "x-forwarded-for": "203.0.113.18",
+      },
+      body: JSON.stringify({
+        adsoyad: "Ada Lovelace",
+        telefon: "05551234567",
+        mesaj: "Telefon ile donus rica ederim.",
+        source: "website-contact-form",
+      }),
+    });
+
+    const response = await POST(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.ok).toBe(true);
+  });
+
   it("allows one contact and one callback request from the same IP in the cooldown window", async () => {
     process.env.RESEND_API_KEY = "re_test";
     process.env.CONTACT_TO_EMAIL = "office@example.com";

@@ -9,6 +9,7 @@ import { ContactServiceError } from "@/types/contact";
 const initialFormState = {
   adsoyad: "",
   email: "",
+  telefon: "",
   mesaj: "",
   kvkkOnay: false,
   website: "",
@@ -197,18 +198,31 @@ const ContactSection = () => {
                   disabled={submitting}
                 />
               </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold tracking-wide text-foreground">E-posta</label>
-                <input
-                  type="email"
-                  className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
-                  placeholder="ornek@email.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                  disabled={submitting}
-                />
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[13px] font-semibold tracking-wide text-foreground">E-posta</label>
+                  <input
+                    type="email"
+                    className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    placeholder="ornek@email.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    disabled={submitting}
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[13px] font-semibold tracking-wide text-foreground">Telefon</label>
+                  <input
+                    type="tel"
+                    className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    placeholder="05xx xxx xx xx"
+                    value={formData.telefon}
+                    onChange={(e) => setFormData({ ...formData, telefon: e.target.value })}
+                    disabled={submitting}
+                  />
+                </div>
               </div>
+              <p className="text-xs text-muted-foreground">E-posta veya telefon bilgilerinden en az birini girin.</p>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[13px] font-semibold tracking-wide text-foreground">Mesajınız</label>
                 <textarea

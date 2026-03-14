@@ -5,6 +5,7 @@ import { ContactServiceError } from "@/types/contact";
 const validPayload = {
   adsoyad: "Ada Lovelace",
   email: "ada@example.com",
+  telefon: "",
   mesaj: "Iletisim formu test mesaji.",
   kvkkOnay: true,
   website: "",
@@ -57,6 +58,29 @@ describe("contact service", () => {
           "Content-Type": "application/json",
         }),
         body: expect.stringContaining('"source":"website-contact-form"'),
+      }),
+    );
+  });
+
+  it("accepts contact form submissions with only phone", async () => {
+    vi.stubEnv("VITE_CONTACT_FORM_ENDPOINT", "https://api.example.test/contact");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+      }),
+    );
+
+    await submitContactForm({
+      ...validPayload,
+      email: "",
+      telefon: "05551234567",
+    });
+
+    expect(fetch).toHaveBeenCalledWith(
+      "https://api.example.test/contact",
+      expect.objectContaining({
+        body: expect.stringContaining('"telefon":"05551234567"'),
       }),
     );
   });

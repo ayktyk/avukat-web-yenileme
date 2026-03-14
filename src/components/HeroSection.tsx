@@ -1,13 +1,6 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Calendar, Check, PhoneCall, Scale } from "lucide-react";
-
+import { ArrowRight, Calendar, Check, Scale } from "lucide-react";
 import heroBg from "@/assets/hero-bg-1.jpg";
-
-const quickNotes = [
-  "İş hukuku, ceza, sözleşmeler, kira ve gayrimenkul dosyalarında sonuç odaklı yaklaşım",
-  "Aynı iş günü içinde dönüş hedefi ve düzenli süreç bilgilendirmesi",
-  "Kadıköy merkezli yüz yüze görüşme, telefon ve WhatsApp üzerinden hızlı iletişim",
-];
 
 const HeroSection = () => {
   const scrollTo = (href: string) => {
@@ -39,7 +32,7 @@ const HeroSection = () => {
         <circle cx="900" cy="600" r="80" stroke="hsl(var(--accent))" strokeWidth=".4" opacity=".08" />
       </svg>
 
-      <div className="section-container relative z-10 grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
+      <div className="section-container relative z-10 max-w-4xl">
         <div>
           <motion.span
             initial={{ opacity: 0, y: 20 }}
@@ -106,49 +99,6 @@ const HeroSection = () => {
             </button>
           </motion.div>
         </div>
-
-        <motion.aside
-          initial={{ opacity: 0, y: 40, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="relative overflow-hidden rounded-2xl border border-border bg-card/95 p-8 shadow-elegant-lg backdrop-blur"
-        >
-          <div className="absolute -top-px left-6 right-6 h-[3px] rounded-b gradient-gold-accent" />
-          <span className="inline-flex items-center gap-2 rounded-full bg-accent-pale px-3 py-1 text-[11px] font-bold uppercase tracking-[1.5px] text-primary-deep">
-            Hızlı İletişim
-          </span>
-          <h3 className="mt-4 font-display text-2xl font-bold text-primary-deep">Tek form yeterli.</h3>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Tüm iletişim taleplerini sayfanın altındaki <strong className="text-primary-deep">Bize Ulaşın</strong> alanında topladık.
-            Böylece kullanıcı tek bir net başvuru noktası görüyor.
-          </p>
-
-          <div className="mt-6 space-y-3">
-            {quickNotes.map((note) => (
-              <div key={note} className="flex items-start gap-3 rounded-xl border border-border bg-background/70 p-4">
-                <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/[0.08] text-primary">
-                  <Check className="h-4 w-4" />
-                </div>
-                <p className="text-sm leading-relaxed text-muted-foreground">{note}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 flex flex-wrap gap-3">
-            <button
-              onClick={() => scrollTo("#iletisim")}
-              className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-primary-deep hover:shadow-elegant"
-            >
-              <PhoneCall className="h-4 w-4" /> Forma Git
-            </button>
-            <a
-              href="tel:+905519814937"
-              className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-semibold text-primary transition-all hover:-translate-y-0.5 hover:border-primary hover:bg-primary/[0.03]"
-            >
-              Hemen Ara
-            </a>
-          </div>
-        </motion.aside>
       </div>
     </section>
   );

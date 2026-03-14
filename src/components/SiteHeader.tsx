@@ -77,7 +77,7 @@ const SiteHeader = () => {
                 <span className="absolute bottom-1 left-1/2 right-1/2 h-[1.5px] bg-accent transition-all duration-300 group-hover:left-3.5 group-hover:right-3.5" />
               </a>
             ))}
-            <SearchTrigger className="ml-2 border-primary/10 bg-background/75" showShortcut />
+            <SearchTrigger className="ml-2 border-primary/10 bg-background/75" />
             <a
               href="#iletisim"
               onClick={(e) => {

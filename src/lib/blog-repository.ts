@@ -51,6 +51,7 @@ const DEFAULT_FIELD_MAP: BlogFieldMap = {
 };
 
 let postsPromise: Promise<BlogPost[]> | null = null;
+const REMOTE_BLOG_TIMEOUT_MS = 4000;
 
 const readEnv = (key: keyof ImportMetaEnv) => {
   const value = import.meta.env[key];
@@ -272,9 +273,21 @@ const loadRemotePosts = async (): Promise<BlogPost[]> => {
     return loadLocalPosts();
   }
 
-  const response = await fetch(url, {
-    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-  });
+  const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+  const timeoutId = controller ? globalThis.setTimeout(() => controller.abort(), REMOTE_BLOG_TIMEOUT_MS) : 0;
+
+  let response: Response;
+
+  try {
+    response = await fetch(url, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      signal: controller?.signal,
+    });
+  } finally {
+    if (controller) {
+      globalThis.clearTimeout(timeoutId);
+    }
+  }
 
   if (!response.ok) {
     throw new Error(`Blog API request failed with status ${response.status}`);
