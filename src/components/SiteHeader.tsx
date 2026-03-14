@@ -1,6 +1,7 @@
-﻿import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Scale, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { SearchTrigger } from "@/components/search/SiteSearch";
 
 const navLinks = [
   { label: "Hakkımızda", href: "#hakkimizda" },
@@ -76,6 +77,7 @@ const SiteHeader = () => {
                 <span className="absolute bottom-1 left-1/2 right-1/2 h-[1.5px] bg-accent transition-all duration-300 group-hover:left-3.5 group-hover:right-3.5" />
               </a>
             ))}
+            <SearchTrigger className="ml-2 border-primary/10 bg-background/75" showShortcut />
             <a
               href="#iletisim"
               onClick={(e) => {
@@ -88,13 +90,16 @@ const SiteHeader = () => {
             </a>
           </nav>
 
-          <button
-            className="rounded-lg border border-border p-2 transition-colors hover:bg-cream lg:hidden"
-            onClick={() => setMobileOpen(true)}
-            aria-label="Menüyü aç"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
+          <div className="flex items-center gap-2 lg:hidden">
+            <SearchTrigger compact className="border-border hover:bg-cream" />
+            <button
+              className="rounded-lg border border-border p-2 transition-colors hover:bg-cream"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Menüyü aç"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -109,6 +114,7 @@ const SiteHeader = () => {
             <button className="absolute top-5 right-6 p-2" onClick={() => setMobileOpen(false)} aria-label="Kapat">
               <X className="h-7 w-7" />
             </button>
+            <SearchTrigger className="mb-4 border-primary/10 bg-card/80 px-5 py-3 text-base" />
             {navLinks.map((link) => (
               <a
                 key={link.href}

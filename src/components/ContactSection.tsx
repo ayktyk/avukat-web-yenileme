@@ -172,7 +172,7 @@ const ContactSection = () => {
             transition={{ delay: 0.2 }}
             className="rounded-2xl border border-border bg-card p-9"
           >
-            <h4 className="font-display text-[22px] font-bold text-primary-deep">Mesaj Gönder</h4>
+            <h4 className="font-display text-[22px] font-bold text-primary-deep">Bize Ulaşın</h4>
             <div className="gold-line mt-2 mb-6" />
 
             <form onSubmit={handleSubmit} className="space-y-4">

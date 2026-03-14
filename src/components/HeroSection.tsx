@@ -1,51 +1,15 @@
-﻿import { motion } from "framer-motion";
-import { ArrowRight, Calendar, Check, Scale } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { toast } from "@/components/ui/use-toast";
-import heroBg from "@/assets/hero-bg-1.jpg";
-import { submitCallbackRequest } from "@/lib/contact-service";
-import { ContactServiceError } from "@/types/contact";
+import { motion } from "framer-motion";
+import { ArrowRight, Calendar, Check, PhoneCall, Scale } from "lucide-react";
 
-const initialFormState = { ad: "", tel: "", konu: "", mesaj: "", kvkkOnay: false, website: "" };
+import heroBg from "@/assets/hero-bg-1.jpg";
+
+const quickNotes = [
+  "İş hukuku, ceza, sözleşmeler, kira ve gayrimenkul dosyalarında sonuç odaklı yaklaşım",
+  "Aynı iş günü içinde dönüş hedefi ve düzenli süreç bilgilendirmesi",
+  "Kadıköy merkezli yüz yüze görüşme, telefon ve WhatsApp üzerinden hızlı iletişim",
+];
 
 const HeroSection = () => {
-  const [formData, setFormData] = useState(initialFormState);
-  const [submitting, setSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-
-    try {
-      await submitCallbackRequest({
-        adsoyad: formData.ad,
-        telefon: formData.tel,
-        konu: formData.konu,
-        mesaj: formData.mesaj,
-        kvkkOnay: formData.kvkkOnay,
-        website: formData.website,
-      });
-
-      setFormData(initialFormState);
-      toast({
-        title: "Talep alındı",
-        description: "Ön değerlendirme talebiniz iletildi. En kısa sürede aranacaksınız.",
-      });
-    } catch (error) {
-      const message =
-        error instanceof ContactServiceError ? error.message : "Talep gönderilemedi. Lütfen daha sonra tekrar deneyin.";
-
-      toast({
-        title: "Talep gönderilemedi",
-        description: message,
-        variant: "destructive",
-      });
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   const scrollTo = (href: string) => {
     const el = document.querySelector(href);
     if (el) {
@@ -132,7 +96,7 @@ const HeroSection = () => {
               onClick={() => scrollTo("#iletisim")}
               className="inline-flex items-center gap-2.5 rounded-xl bg-primary px-8 py-4 text-[15px] font-semibold text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-deep hover:shadow-elegant-lg"
             >
-              <Calendar className="h-4 w-4" /> Randevu Al
+              <Calendar className="h-4 w-4" /> Bize Ulaşın
             </button>
             <button
               onClick={() => scrollTo("#calisma-alanlari")}
@@ -143,105 +107,48 @@ const HeroSection = () => {
           </motion.div>
         </div>
 
-        <motion.div
+        <motion.aside
           initial={{ opacity: 0, y: 40, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="relative rounded-2xl border border-border bg-card p-8 shadow-elegant-lg"
+          className="relative overflow-hidden rounded-2xl border border-border bg-card/95 p-8 shadow-elegant-lg backdrop-blur"
         >
           <div className="absolute -top-px left-6 right-6 h-[3px] rounded-b gradient-gold-accent" />
-          <h3 className="font-display text-2xl font-bold text-primary-deep">Ücretsiz Ön Değerlendirme</h3>
-          <p className="mt-1 text-sm text-muted-foreground">Kısa not bırakın; sizi arayalım.</p>
+          <span className="inline-flex items-center gap-2 rounded-full bg-accent-pale px-3 py-1 text-[11px] font-bold uppercase tracking-[1.5px] text-primary-deep">
+            Hızlı İletişim
+          </span>
+          <h3 className="mt-4 font-display text-2xl font-bold text-primary-deep">Tek form yeterli.</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Tüm iletişim taleplerini sayfanın altındaki <strong className="text-primary-deep">Bize Ulaşın</strong> alanında topladık.
+            Böylece kullanıcı tek bir net başvuru noktası görüyor.
+          </p>
 
-          <form onSubmit={handleSubmit} className="mt-5 space-y-3">
-            <input
-              type="text"
-              name="website"
-              value={formData.website}
-              onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-              autoComplete="off"
-              tabIndex={-1}
-              className="hidden"
-              aria-hidden="true"
-            />
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold tracking-wide text-foreground">Ad Soyad</label>
-                <input
-                  className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
-                  placeholder="Adınız Soyadınız"
-                  value={formData.ad}
-                  onChange={(e) => setFormData({ ...formData, ad: e.target.value })}
-                  required
-                  disabled={submitting}
-                />
+          <div className="mt-6 space-y-3">
+            {quickNotes.map((note) => (
+              <div key={note} className="flex items-start gap-3 rounded-xl border border-border bg-background/70 p-4">
+                <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/[0.08] text-primary">
+                  <Check className="h-4 w-4" />
+                </div>
+                <p className="text-sm leading-relaxed text-muted-foreground">{note}</p>
               </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold tracking-wide text-foreground">Telefon</label>
-                <input
-                  className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
-                  placeholder="05xx xxx xx xx"
-                  value={formData.tel}
-                  onChange={(e) => setFormData({ ...formData, tel: e.target.value })}
-                  required
-                  disabled={submitting}
-                />
-              </div>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[13px] font-semibold tracking-wide text-foreground">Konu</label>
-              <input
-                className="w-full rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
-                placeholder="Örn. İşe iade, kira, alacak"
-                value={formData.konu}
-                onChange={(e) => setFormData({ ...formData, konu: e.target.value })}
-                disabled={submitting}
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[13px] font-semibold tracking-wide text-foreground">Mesajınız</label>
-              <textarea
-                className="min-h-[80px] w-full resize-y rounded-[10px] border-[1.5px] border-border bg-background px-4 py-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
-                placeholder="Kısaca notunuzu iletin"
-                rows={3}
-                value={formData.mesaj}
-                onChange={(e) => setFormData({ ...formData, mesaj: e.target.value })}
-                disabled={submitting}
-              />
-            </div>
-            <label className="flex items-start gap-3 rounded-xl border border-border bg-background/70 p-3 text-sm text-muted-foreground">
-              <input
-                type="checkbox"
-                checked={formData.kvkkOnay}
-                onChange={(e) => setFormData({ ...formData, kvkkOnay: e.target.checked })}
-                className="mt-1 h-4 w-4 rounded border-border"
-                disabled={submitting}
-              />
-              <span>
-                Ön değerlendirme talebim kapsamında ilettiğim verilerin benimle iletişime geçilmesi amacıyla işlenmesini
-                kabul ediyorum. Ayrıntılar için{" "}
-                <Link to="/kvkk-aydinlatma" className="font-semibold text-primary underline-offset-4 hover:underline">
-                  KVKK aydınlatma metni
-                </Link>
-                .
-              </span>
-            </label>
-            <div className="flex items-center gap-3.5 pt-2">
-              <button
-                type="submit"
-                disabled={submitting}
-                className={`rounded-xl px-7 py-3 text-sm font-semibold transition-all duration-300 ${
-                  submitting
-                    ? "cursor-not-allowed bg-primary/70 text-primary-foreground"
-                    : "bg-primary text-primary-foreground hover:-translate-y-0.5 hover:bg-primary-deep hover:shadow-elegant"
-                }`}
-              >
-                {submitting ? "Gönderiliyor..." : "Gönder"}
-              </button>
-              <small className="text-xs text-muted-foreground">Yanıt: aynı iş günü</small>
-            </div>
-          </form>
-        </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button
+              onClick={() => scrollTo("#iletisim")}
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-primary-deep hover:shadow-elegant"
+            >
+              <PhoneCall className="h-4 w-4" /> Forma Git
+            </button>
+            <a
+              href="tel:+905519814937"
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-semibold text-primary transition-all hover:-translate-y-0.5 hover:border-primary hover:bg-primary/[0.03]"
+            >
+              Hemen Ara
+            </a>
+          </div>
+        </motion.aside>
       </div>
     </section>
   );
