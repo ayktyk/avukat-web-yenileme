@@ -5,7 +5,7 @@ import { Star } from "lucide-react";
 const teamMembers = [
   {
     name: "Av. Aykut Yeşilkaya",
-    jobTitle: "Kurucu Avukat",
+    jobTitle: "Kurucu Avukat, Arabulucu",
     description:
       "İş hukuku, kira ve gayrimenkul, miras ve aile hukuku, tüketici ve sigorta alanlarında hukuki danışmanlık ve dava takibi.",
     knowsAbout: ["İş Hukuku", "Kira Hukuku", "Gayrimenkul Hukuku", "Miras Hukuku", "Aile Hukuku", "Tüketici Hukuku", "Sigorta Hukuku", "Arabuluculuk"],
@@ -113,8 +113,8 @@ const TeamSection = () => {
                 <Star className="h-[10px] w-[10px] text-primary-foreground" />
               </span>
             </div>
-            <h4 className="font-display text-[22px] font-bold text-accent-light">Av. Aykut Yeşilkaya</h4>
-            <p className="mt-1 text-primary-foreground/75">Kurucu Avukat • Arabulucu • Özel Hukuk</p>
+            <h4 className="font-display text-[22px] font-bold text-accent-light">Av. Aykut Yeşilkaya, Arb.</h4>
+            <p className="mt-1 text-primary-foreground/75">Kurucu Avukat • Arb. • Özel Hukuk</p>
 
             <div className="relative mt-5 pl-7">
               <div className="absolute left-[10px] top-1.5 bottom-1.5 w-[1.5px] bg-accent/30" />

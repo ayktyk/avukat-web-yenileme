@@ -133,7 +133,7 @@ const BlogPost = () => {
           <img
             src={post.coverImage}
             alt={post.title}
-            className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl object-cover"
+            className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl object-cover object-top"
             loading="eager"
           />
         ) : (
@@ -150,6 +150,7 @@ const BlogPost = () => {
             components={{
               h2: ({ node, ...props }) => <h2 className="mt-10 font-display text-3xl font-bold text-primary-deep" {...props} />,
               h3: ({ node, ...props }) => <h3 className="mt-8 font-display text-2xl font-bold text-primary-deep" {...props} />,
+              img: ({ node, ...props }) => <img className="mt-8 w-full rounded-2xl border border-border bg-card object-contain" {...props} />,
               p: ({ node, ...props }) => <p className="mt-5" {...props} />,
               ul: ({ node, ...props }) => <ul className="mt-5 list-disc space-y-2 pl-6" {...props} />,
               ol: ({ node, ...props }) => <ol className="mt-5 list-decimal space-y-2 pl-6" {...props} />,

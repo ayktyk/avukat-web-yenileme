@@ -60,4 +60,28 @@ describe("google reviews api", () => {
     expect(body.reviews[0].authorName).toBe("Ada Lovelace");
     expect(body.reviews[0].text).toBe("Çok memnun kaldık.");
   });
+
+  it("falls back to the configured public maps url when Google details omit a maps uri", async () => {
+    process.env.GOOGLE_MAPS_API_KEY = "google_test";
+    process.env.GOOGLE_PLACE_ID = "place_123";
+
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          displayName: { text: "Vega Hukuk İstanbul" },
+          rating: 4.9,
+          userRatingCount: 12,
+          reviews: [],
+        }),
+      }),
+    );
+
+    const response = await GET();
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.mapsUrl).toContain("google.com/maps/place/Vega+Hukuk");
+  });
 });

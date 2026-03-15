@@ -1,4 +1,5 @@
-const MAPS_PUBLIC_URL = "https://maps.app.goo.gl/neq87p2u2Jin2CPm8?g_st=iw";
+const MAPS_PUBLIC_URL =
+  "https://www.google.com/maps/place/Vega+Hukuk+%C4%B0stanbul/@40.9906768,29.0306268,17z/data=!3m1!4b1!4m6!3m5!1s0x14cab9eeccae6d3f:0x12e5898af266fb0d!8m2!3d40.9906768!4d29.0306268!16s%2Fg%2F11n9bmx32t!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D";
 const DEFAULT_PLACE_QUERY =
   "Vega Hukuk İstanbul Osmanağa Mahallesi Karadut Sokak No:14/10 Kadıköy İstanbul";
 

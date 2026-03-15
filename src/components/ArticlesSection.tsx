@@ -79,7 +79,7 @@ const ArticlesSection = () => {
                     <img
                       src={post.coverImage}
                       alt={post.title}
-                      className="mb-4 aspect-video w-full rounded-[10px] object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      className="mb-4 aspect-video w-full rounded-[10px] object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                       loading="lazy"
                     />
                   ) : (

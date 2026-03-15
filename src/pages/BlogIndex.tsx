@@ -64,7 +64,7 @@ const BlogIndex = () => {
                     <img
                       src={post.coverImage}
                       alt={post.title}
-                      className="mb-5 aspect-[16/8] w-full rounded-xl object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      className="mb-5 aspect-[16/8] w-full rounded-xl object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                       loading="lazy"
                     />
                   ) : (

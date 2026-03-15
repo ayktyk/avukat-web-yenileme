@@ -7,6 +7,7 @@ const navLinks = [
   { label: "Hakkımızda", href: "#hakkimizda" },
   { label: "Çalışma Alanları", href: "#calisma-alanlari" },
   { label: "Ekibimiz", href: "#ekibimiz" },
+  { label: "Yorumlar", href: "#muvekkil-gorusleri" },
   { label: "Yayınlar", href: "#yayinlar" },
   { label: "Hukuk Gündemi", href: "#hukuk-gundemi" },
   { label: "SSS", href: "#sss" },
@@ -111,7 +112,7 @@ const SiteHeader = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[99] flex flex-col items-center justify-center gap-2 bg-background/98 backdrop-blur-xl"
           >
-            <button className="absolute top-5 right-6 p-2" onClick={() => setMobileOpen(false)} aria-label="Kapat">
+            <button className="absolute right-6 top-5 p-2" onClick={() => setMobileOpen(false)} aria-label="Kapat">
               <X className="h-7 w-7" />
             </button>
             <SearchTrigger className="mb-4 border-primary/10 bg-card/80 px-5 py-3 text-base" />

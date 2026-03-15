@@ -244,4 +244,14 @@ export const staticSearchDocuments: SearchDocument[] = [
     badge: "Yasal",
     keywords: ["hukuki uyarı", "sorumluluk", "bilgilendirme"],
   },
+  {
+    id: "page-muvekkil-yorumlari",
+    title: "Müvekkil Yorumları",
+    description: "Google Haritalar işletme profilindeki müvekkil yorumları ve değerlendirme ortalaması.",
+    href: "/muvekkil-yorumlari",
+    type: "page",
+    badge: "Yorumlar",
+    keywords: ["google yorumları", "müvekkil yorumları", "değerlendirme", "google maps", "vega hukuk yorum"],
+    featured: true,
+  },
 ];

@@ -37,6 +37,34 @@ describe("app routing", () => {
     expect(await screen.findByRole("heading", { name: "Güncel Hukuk Gündemi" })).toBeInTheDocument();
   });
 
+  it("renders the client reviews route", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          ok: true,
+          placeName: "Vega Hukuk İstanbul",
+          mapsUrl: "https://www.google.com/maps/place/Vega+Hukuk+%C4%B0stanbul",
+          rating: 4.9,
+          userRatingCount: 12,
+          reviews: [
+            {
+              authorName: "Ada Lovelace",
+              rating: 5,
+              text: "Süreç boyunca çok ilgiliydiler.",
+            },
+          ],
+        }),
+      }),
+    );
+
+    renderAt("/muvekkil-yorumlari");
+
+    expect(await screen.findByRole("heading", { name: "Müvekkil Yorumları" })).toBeInTheDocument();
+    expect(await screen.findByText("Süreç boyunca çok ilgiliydiler.")).toBeInTheDocument();
+  });
+
   it("renders the kvkk legal page route", async () => {
     renderAt("/kvkk-aydinlatma");
 

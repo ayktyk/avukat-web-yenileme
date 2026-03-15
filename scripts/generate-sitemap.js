@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync, writeFileSync } from "fs";
-import { join, dirname } from "path";
+import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -87,7 +87,22 @@ const collectEntries = (dir, prefix, defaults) => {
 const staticPages = [
   { loc: `${SITE}/`, title: "Vega Hukuk İstanbul", description: "Ana sayfa", date: today, changefreq: "weekly", priority: "1.0" },
   { loc: `${SITE}/blog`, title: "Blog", description: "Hukuki blog yazıları", date: today, changefreq: "weekly", priority: "0.8" },
-  { loc: `${SITE}/guncel-hukuk-gundemi`, title: "Güncel Hukuk Gündemi", description: "Güncel hukuk içerikleri", date: today, changefreq: "daily", priority: "0.8" },
+  {
+    loc: `${SITE}/muvekkil-yorumlari`,
+    title: "Müvekkil Yorumları",
+    description: "Google yorumları ve değerlendirmeler",
+    date: today,
+    changefreq: "daily",
+    priority: "0.8",
+  },
+  {
+    loc: `${SITE}/guncel-hukuk-gundemi`,
+    title: "Güncel Hukuk Gündemi",
+    description: "Güncel hukuk içerikleri",
+    date: today,
+    changefreq: "daily",
+    priority: "0.8",
+  },
   { loc: `${SITE}/kvkk-aydinlatma`, title: "KVKK Aydınlatma", description: "KVKK aydınlatma metni", date: today, changefreq: "monthly", priority: "0.3" },
   { loc: `${SITE}/cerez-politikasi`, title: "Çerez Politikası", description: "Çerez politikası", date: today, changefreq: "monthly", priority: "0.3" },
   { loc: `${SITE}/hukuki-uyari`, title: "Hukuki Uyarı", description: "Hukuki uyarı", date: today, changefreq: "monthly", priority: "0.3" },
