@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "/admin/api/cms/:path*",
+      "destination": "/api/cms/:path*",
+      "permanent": false
+    },
+    {
       "source": "/config.yml",
       "destination": "/admin/config.yml",
       "permanent": false
