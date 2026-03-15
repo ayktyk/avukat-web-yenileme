@@ -83,6 +83,24 @@ const renderResultPage = (
             });
             return true;
           }
+
+          if (authPayload && authPayload.type === "vega-cms-auth" && authPayload.token) {
+            try {
+              window.localStorage.setItem(
+                "decap-cms-user",
+                JSON.stringify({
+                  backendName: "github",
+                  token: authPayload.token,
+                  provider: authPayload.provider || "github",
+                }),
+              );
+              window.location.replace("/admin/#/");
+              return true;
+            } catch (error) {
+              console.error("Direct CMS auth bridge failed.", error);
+            }
+          }
+
           return false;
         }
 

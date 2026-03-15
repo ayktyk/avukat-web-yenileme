@@ -10,6 +10,16 @@ const html = (content: string, status = 200, headers?: HeadersInit) =>
     },
   });
 
+const redirect = (location: string, headers?: HeadersInit) =>
+  new Response(null, {
+    status: 302,
+    headers: {
+      location,
+      "cache-control": "no-store",
+      ...headers,
+    },
+  });
+
 const json = (body: Record<string, unknown>, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
@@ -67,6 +77,8 @@ export async function GET(request: Request) {
   }
 
   const state = crypto.randomUUID().replaceAll("-", "");
+  const url = new URL(request.url);
+  const isDirectMode = url.searchParams.get("mode") === "direct";
   const redirectUri = `${getCmsOrigin()}/api/cms/callback`;
   const authorizeUrl = new URL("https://github.com/login/oauth/authorize");
 
@@ -78,6 +90,12 @@ export async function GET(request: Request) {
   const oauthContext = JSON.stringify({ state, origin: getCmsOrigin() });
   const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
   const cookie = `cms_oauth_context=${encodeURIComponent(oauthContext)}; HttpOnly; Max-Age=600; Path=/; SameSite=Lax${secure}`;
+
+  if (isDirectMode) {
+    return redirect(authorizeUrl.toString(), {
+      "set-cookie": cookie,
+    });
+  }
 
   return html(renderHandshakePage(authorizeUrl.toString()), 200, {
     "set-cookie": cookie,

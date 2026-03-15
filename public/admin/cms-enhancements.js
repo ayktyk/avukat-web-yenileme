@@ -591,6 +591,7 @@
 
   const initMutationObserver = () => {
     const observer = new MutationObserver(() => {
+      patchLoginButton();
       applyAutocompleteHints();
     });
 
@@ -609,6 +610,29 @@
     CMS.registerPreviewTemplate("legal_updates", renderPreviewTemplate("legal_updates"));
   };
 
+  const patchLoginButton = () => {
+    const loginButton = [...document.querySelectorAll("button")].find((button) =>
+      /GitHub ile Giriş/i.test(button.textContent || ""),
+    );
+
+    if (!loginButton || loginButton.dataset.vegaDirectAuth === "true") {
+      return;
+    }
+
+    loginButton.dataset.vegaDirectAuth = "true";
+    loginButton.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        window.location.assign(
+          `/api/cms/auth?provider=github&site_id=${encodeURIComponent(window.location.hostname)}&scope=repo&mode=direct`,
+        );
+      },
+      true,
+    );
+  };
+
   const initialize = async () => {
     try {
       const response = await fetch("/admin/link-targets.json", { cache: "no-store" });
@@ -620,6 +644,7 @@
     }
 
     registerPreviewTemplates();
+    patchLoginButton();
     applyAutocompleteHints();
     initMutationObserver();
   };
