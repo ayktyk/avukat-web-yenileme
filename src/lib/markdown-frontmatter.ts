@@ -32,7 +32,7 @@ const isQuotedValueClosed = (value: string) => {
 };
 
 const normalizeWrappedQuotedValue = (value: string) =>
-  stripMatchingQuotes(value.replace(/\n\s+/g, " ").trim()).trim();
+  stripMatchingQuotes(value.replace(/\s*\n\s*/g, " ").replace(/\s+/g, " ").trim()).trim();
 
 const foldBlockScalar = (lines: string[], mode: ">" | "|") => {
   const cleanedLines = lines.map((line) => line.replace(/^\s{2}/, ""));
@@ -62,6 +62,52 @@ const foldBlockScalar = (lines: string[], mode: ">" | "|") => {
   }
 
   return paragraphs.join("\n\n").trim();
+};
+
+const parseListBlock = (lines: string[]) => {
+  const items: Array<string | Record<string, string>> = [];
+  let currentObject: Record<string, string> | null = null;
+
+  for (const rawLine of lines) {
+    const line = rawLine.replace(/^\s{2}/, "");
+
+    if (!line.trim()) {
+      continue;
+    }
+
+    const listItemMatch = line.match(/^-\s+(.*)$/);
+    if (listItemMatch) {
+      const value = listItemMatch[1].trim();
+      const objectEntryMatch = value.match(/^([A-Za-z0-9_]+):(.*)$/);
+
+      if (objectEntryMatch) {
+        currentObject = {};
+        const nestedValue = stripMatchingQuotes(objectEntryMatch[2].trim());
+        if (nestedValue) {
+          currentObject[objectEntryMatch[1]] = nestedValue;
+        }
+        items.push(currentObject);
+        continue;
+      }
+
+      currentObject = null;
+      const normalizedValue = stripMatchingQuotes(value);
+      if (normalizedValue) {
+        items.push(normalizedValue);
+      }
+      continue;
+    }
+
+    const nestedMatch = line.match(/^\s+([A-Za-z0-9_]+):(.*)$/);
+    if (nestedMatch && currentObject) {
+      const nestedValue = stripMatchingQuotes(nestedMatch[2].trim());
+      if (nestedValue) {
+        currentObject[nestedMatch[1]] = nestedValue;
+      }
+    }
+  }
+
+  return items;
 };
 
 const parseFrontmatterBlock = <T extends Record<string, unknown>>(block: string): Partial<T> => {
@@ -111,6 +157,39 @@ const parseFrontmatterBlock = <T extends Record<string, unknown>>(block: string)
         data[key] = value as T[keyof T];
       }
       continue;
+    }
+
+    if (!initialValue) {
+      const listLines: string[] = [];
+      let lookaheadIndex = index + 1;
+
+      while (lookaheadIndex < lines.length) {
+        const currentLine = lines[lookaheadIndex];
+        if (!currentLine.trim()) {
+          listLines.push(currentLine);
+          lookaheadIndex += 1;
+          continue;
+        }
+
+        if (!/^\s/.test(currentLine) && isFrontmatterKeyLine(currentLine)) {
+          break;
+        }
+
+        if (/^\s/.test(currentLine)) {
+          listLines.push(currentLine);
+          lookaheadIndex += 1;
+          continue;
+        }
+
+        break;
+      }
+
+      const parsedList = parseListBlock(listLines);
+      if (parsedList.length > 0) {
+        data[key] = parsedList as T[keyof T];
+        index = lookaheadIndex;
+        continue;
+      }
     }
 
     if ((initialValue.startsWith('"') || initialValue.startsWith("'")) && !isQuotedValueClosed(initialValue)) {

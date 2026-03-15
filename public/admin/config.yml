@@ -39,6 +39,20 @@ collections:
       - { label: SEO Açıklaması, name: seoDescription, widget: text, required: false }
       - { label: Kapak Görseli, name: coverImage, widget: image, required: false }
       - { label: Kapak Gradient Sınıfı, name: coverClass, widget: string, required: false, hint: "Boş bırakırsan varsayılan görünüm kullanılır." }
+      - label: Öncelikli İç Link Hedefleri
+        name: internalLinkPriority
+        widget: list
+        required: false
+        hint: "Buraya slug veya tam site içi yol ekleyin. Örnek: kira-uyarlama-davasi-yol-haritasi veya /guncel-hukuk-gundemi/tahliye-taahhudu-gecerlilik-sartlari-yargitay-kararlari"
+        field: { label: Hedef, name: value, widget: string }
+      - label: Manuel İç Link Eşleşmeleri
+        name: internalLinkMatches
+        widget: list
+        required: false
+        hint: "Belirli bir ifadeyi belirli bir içeriğe zorunlu bağlamak için kullanın."
+        fields:
+          - { label: Anahtar İfade, name: phrase, widget: string }
+          - { label: Hedef, name: target, widget: string, hint: "Slug veya tam site içi yol girin." }
       - { label: İçerik, name: body, widget: markdown }
 
   - name: legal_updates
@@ -65,4 +79,17 @@ collections:
       - { label: SEO Açıklaması, name: seoDescription, widget: text, required: false }
       - { label: Kapak Görseli, name: coverImage, widget: image, required: false }
       - { label: Kapak Gradient Sınıfı, name: coverClass, widget: string, required: false }
+      - label: Öncelikli İç Link Hedefleri
+        name: internalLinkPriority
+        widget: list
+        required: false
+        hint: "Buraya slug veya tam site içi yol ekleyin."
+        field: { label: Hedef, name: value, widget: string }
+      - label: Manuel İç Link Eşleşmeleri
+        name: internalLinkMatches
+        widget: list
+        required: false
+        fields:
+          - { label: Anahtar İfade, name: phrase, widget: string }
+          - { label: Hedef, name: target, widget: string, hint: "Slug veya tam site içi yol girin." }
       - { label: İçerik, name: body, widget: markdown }

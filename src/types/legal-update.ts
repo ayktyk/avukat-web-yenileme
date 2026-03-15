@@ -1,4 +1,6 @@
-﻿export interface LegalUpdate {
+import type { InternalLinkRule } from "@/types/internal-links";
+
+export interface LegalUpdate {
   slug: string;
   title: string;
   excerpt: string;
@@ -10,4 +12,6 @@
   seoDescription?: string;
   coverClass?: string;
   coverImage?: string;
+  internalLinkPriority?: string[];
+  internalLinkMatches?: InternalLinkRule[];
 }

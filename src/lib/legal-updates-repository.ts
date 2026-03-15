@@ -1,5 +1,6 @@
 import { parseMarkdownDocument } from "@/lib/markdown-frontmatter";
 import type { LegalUpdate } from "@/types/legal-update";
+import type { InternalLinkRule } from "@/types/internal-links";
 
 type MarkdownModuleMap = Record<string, string>;
 type LegalUpdateFrontmatter = Partial<LegalUpdate> & { slug?: string };
@@ -32,6 +33,51 @@ const toOptionalString = (value: unknown): string | undefined => {
   return undefined;
 };
 
+const normalizeStringList = (value: unknown): string[] | undefined => {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  const items = value
+    .map((item) => {
+      if (item && typeof item === "object") {
+        const record = item as Record<string, unknown>;
+        return toOptionalString(record.value) ?? toOptionalString(record.item) ?? toOptionalString(record.label);
+      }
+
+      return toOptionalString(item);
+    })
+    .filter((item): item is string => Boolean(item));
+
+  return items.length > 0 ? items : undefined;
+};
+
+const normalizeInternalLinkRules = (value: unknown): InternalLinkRule[] | undefined => {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  const rules = value
+    .map((item) => {
+      if (!item || typeof item !== "object") {
+        return null;
+      }
+
+      const record = item as Record<string, unknown>;
+      const phrase = toOptionalString(record.phrase);
+      const target = toOptionalString(record.target);
+
+      if (!phrase || !target) {
+        return null;
+      }
+
+      return { phrase, target };
+    })
+    .filter((item): item is InternalLinkRule => item !== null);
+
+  return rules.length > 0 ? rules : undefined;
+};
+
 const toSlugFromPath = (path: string) => path.split("/").pop()?.replace(/\.md$/, "") ?? path;
 
 const parseLegalUpdate = (path: string, raw: string): LegalUpdate | null => {
@@ -57,6 +103,8 @@ const parseLegalUpdate = (path: string, raw: string): LegalUpdate | null => {
     seoDescription: toOptionalString(data.seoDescription),
     coverClass: toOptionalString(data.coverClass),
     coverImage: toOptionalString(data.coverImage),
+    internalLinkPriority: normalizeStringList(data.internalLinkPriority),
+    internalLinkMatches: normalizeInternalLinkRules(data.internalLinkMatches),
   };
 };
 

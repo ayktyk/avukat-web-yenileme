@@ -4,23 +4,55 @@ import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import ContentPageHeader from "@/components/ContentPageHeader";
+import RelatedContentBox from "@/components/RelatedContentBox";
 import { useSeo } from "@/hooks/use-seo";
 import { formatDateTr } from "@/lib/format-date";
-import { getBlogPostBySlug } from "@/lib/blog-repository";
+import { autoLinkRelatedContent, getRelatedContentSuggestions, type LinkableContent, type RelatedContentSuggestion } from "@/lib/internal-linking";
+import { getBlogPostBySlug, listBlogPosts } from "@/lib/blog-repository";
+import { listLegalUpdates } from "@/lib/legal-updates-repository";
 import type { BlogPost as BlogPostType } from "@/types/blog";
 
 const BlogPost = () => {
   const { slug = "" } = useParams();
   const [post, setPost] = useState<BlogPostType | null>(null);
+  const [linkedContent, setLinkedContent] = useState("");
+  const [relatedItems, setRelatedItems] = useState<RelatedContentSuggestion[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
 
     const loadPost = async () => {
-      const result = await getBlogPostBySlug(slug);
+      const [result, blogPosts, legalUpdates] = await Promise.all([
+        getBlogPostBySlug(slug),
+        listBlogPosts(),
+        listLegalUpdates(),
+      ]);
+
       if (mounted) {
         setPost(result);
+        if (result) {
+          const source: LinkableContent & { content: string } = {
+            ...result,
+            href: `/blog/${result.slug}`,
+          };
+          const candidates: LinkableContent[] = [
+            ...blogPosts.map((item) => ({
+              ...item,
+              href: `/blog/${item.slug}`,
+            })),
+            ...legalUpdates.map((item) => ({
+              ...item,
+              href: `/guncel-hukuk-gundemi/${item.slug}`,
+            })),
+          ];
+
+          setLinkedContent(autoLinkRelatedContent(source, candidates));
+          setRelatedItems(getRelatedContentSuggestions(source, candidates));
+        } else {
+          setLinkedContent("");
+          setRelatedItems([]);
+        }
         setLoading(false);
       }
     };
@@ -162,9 +194,11 @@ const BlogPost = () => {
               strong: ({ node, ...props }) => <strong className="font-semibold text-primary-deep" {...props} />,
             }}
           >
-            {post.content}
+            {linkedContent || post.content}
           </ReactMarkdown>
         </div>
+
+        <RelatedContentBox items={relatedItems} />
 
         <div className="mt-12 rounded-xl border border-border bg-card p-5">
           <p className="text-sm text-muted-foreground">

@@ -4,23 +4,55 @@ import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import ContentPageHeader from "@/components/ContentPageHeader";
+import RelatedContentBox from "@/components/RelatedContentBox";
 import { useSeo } from "@/hooks/use-seo";
 import { formatDateTr } from "@/lib/format-date";
-import { getLegalUpdateBySlug } from "@/lib/legal-updates-repository";
+import { autoLinkRelatedContent, getRelatedContentSuggestions, type LinkableContent, type RelatedContentSuggestion } from "@/lib/internal-linking";
+import { listBlogPosts } from "@/lib/blog-repository";
+import { getLegalUpdateBySlug, listLegalUpdates } from "@/lib/legal-updates-repository";
 import type { LegalUpdate } from "@/types/legal-update";
 
 const LegalUpdatePost = () => {
   const { slug = "" } = useParams();
   const [item, setItem] = useState<LegalUpdate | null>(null);
+  const [linkedContent, setLinkedContent] = useState("");
+  const [relatedItems, setRelatedItems] = useState<RelatedContentSuggestion[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
 
     const loadItem = async () => {
-      const result = await getLegalUpdateBySlug(slug);
+      const [result, legalUpdates, blogPosts] = await Promise.all([
+        getLegalUpdateBySlug(slug),
+        listLegalUpdates(),
+        listBlogPosts(),
+      ]);
+
       if (mounted) {
         setItem(result);
+        if (result) {
+          const source: LinkableContent & { content: string } = {
+            ...result,
+            href: `/guncel-hukuk-gundemi/${result.slug}`,
+          };
+          const candidates: LinkableContent[] = [
+            ...legalUpdates.map((entry) => ({
+              ...entry,
+              href: `/guncel-hukuk-gundemi/${entry.slug}`,
+            })),
+            ...blogPosts.map((entry) => ({
+              ...entry,
+              href: `/blog/${entry.slug}`,
+            })),
+          ];
+
+          setLinkedContent(autoLinkRelatedContent(source, candidates));
+          setRelatedItems(getRelatedContentSuggestions(source, candidates));
+        } else {
+          setLinkedContent("");
+          setRelatedItems([]);
+        }
         setLoading(false);
       }
     };
@@ -146,11 +178,14 @@ const LegalUpdatePost = () => {
               ul: ({ node, ...props }) => <ul className="mt-5 list-disc space-y-2 pl-6" {...props} />,
               ol: ({ node, ...props }) => <ol className="mt-5 list-decimal space-y-2 pl-6" {...props} />,
               li: ({ node, ...props }) => <li className="pl-1" {...props} />,
+              a: ({ node, ...props }) => <a className="font-semibold text-primary underline underline-offset-4" {...props} />,
             }}
           >
-            {item.content}
+            {linkedContent || item.content}
           </ReactMarkdown>
         </div>
+
+        <RelatedContentBox items={relatedItems} />
       </article>
     </main>
   );

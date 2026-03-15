@@ -1,5 +1,6 @@
 import { parseMarkdownDocument } from "@/lib/markdown-frontmatter";
 import type { BlogPost } from "@/types/blog";
+import type { InternalLinkRule } from "@/types/internal-links";
 
 type RemoteBlogPayload = BlogPost[] | Record<string, unknown>;
 
@@ -17,6 +18,8 @@ type BlogFieldMap = {
   seoDescription: string;
   coverClass: string;
   coverImage: string;
+  internalLinkPriority: string;
+  internalLinkMatches: string;
 };
 
 type MarkdownModuleMap = Record<string, string>;
@@ -48,6 +51,8 @@ const DEFAULT_FIELD_MAP: BlogFieldMap = {
   seoDescription: "seoDescription",
   coverClass: "coverClass",
   coverImage: "coverImage",
+  internalLinkPriority: "internalLinkPriority",
+  internalLinkMatches: "internalLinkMatches",
 };
 
 let postsPromise: Promise<BlogPost[]> | null = null;
@@ -77,6 +82,8 @@ const getFieldMap = (): BlogFieldMap => ({
   seoDescription: readEnv("VITE_BLOG_FIELD_SEO_DESCRIPTION") || DEFAULT_FIELD_MAP.seoDescription,
   coverClass: readEnv("VITE_BLOG_FIELD_COVER_CLASS") || DEFAULT_FIELD_MAP.coverClass,
   coverImage: readEnv("VITE_BLOG_FIELD_COVER_IMAGE") || DEFAULT_FIELD_MAP.coverImage,
+  internalLinkPriority: readEnv("VITE_BLOG_FIELD_INTERNAL_LINK_PRIORITY") || DEFAULT_FIELD_MAP.internalLinkPriority,
+  internalLinkMatches: readEnv("VITE_BLOG_FIELD_INTERNAL_LINK_MATCHES") || DEFAULT_FIELD_MAP.internalLinkMatches,
 });
 
 const getValueByPath = (source: unknown, path: string): unknown => {
@@ -143,6 +150,51 @@ const normalizeContent = (content: unknown): string => {
   return "";
 };
 
+const normalizeStringList = (value: unknown): string[] | undefined => {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  const items = value
+    .map((item) => {
+      if (item && typeof item === "object") {
+        const record = item as Record<string, unknown>;
+        return toOptionalString(record.value) ?? toOptionalString(record.item) ?? toOptionalString(record.label);
+      }
+
+      return toOptionalString(item);
+    })
+    .filter((item): item is string => Boolean(item));
+
+  return items.length > 0 ? items : undefined;
+};
+
+const normalizeInternalLinkRules = (value: unknown): InternalLinkRule[] | undefined => {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  const rules = value
+    .map((item) => {
+      if (!item || typeof item !== "object") {
+        return null;
+      }
+
+      const record = item as Record<string, unknown>;
+      const phrase = toOptionalString(record.phrase);
+      const target = toOptionalString(record.target);
+
+      if (!phrase || !target) {
+        return null;
+      }
+
+      return { phrase, target };
+    })
+    .filter((item): item is InternalLinkRule => item !== null);
+
+  return rules.length > 0 ? rules : undefined;
+};
+
 const mapRecordToBlogPost = (value: Record<string, unknown>, fieldMap: BlogFieldMap): BlogPost | null => {
   const slug = toOptionalString(getValueByPath(value, fieldMap.slug));
   const title = toOptionalString(getValueByPath(value, fieldMap.title));
@@ -168,6 +220,8 @@ const mapRecordToBlogPost = (value: Record<string, unknown>, fieldMap: BlogField
     seoDescription: toOptionalString(getValueByPath(value, fieldMap.seoDescription)),
     coverClass: toOptionalString(getValueByPath(value, fieldMap.coverClass)),
     coverImage: toOptionalString(getValueByPath(value, fieldMap.coverImage)),
+    internalLinkPriority: normalizeStringList(getValueByPath(value, fieldMap.internalLinkPriority)),
+    internalLinkMatches: normalizeInternalLinkRules(getValueByPath(value, fieldMap.internalLinkMatches)),
   };
 };
 
@@ -203,6 +257,8 @@ const normalizeBlogPost = (value: unknown, fieldMap: BlogFieldMap): BlogPost | n
       seoDescription: typeof post.seoDescription === "string" ? post.seoDescription : undefined,
       coverClass: typeof post.coverClass === "string" ? post.coverClass : undefined,
       coverImage: typeof post.coverImage === "string" ? post.coverImage : undefined,
+      internalLinkPriority: normalizeStringList(post.internalLinkPriority),
+      internalLinkMatches: normalizeInternalLinkRules(post.internalLinkMatches),
     };
   }
 
@@ -255,6 +311,8 @@ const parseMarkdownPost = (path: string, raw: string): BlogPost | null => {
     seoDescription: toOptionalString(frontmatter.seoDescription),
     coverClass: toOptionalString(frontmatter.coverClass),
     coverImage: toOptionalString(frontmatter.coverImage),
+    internalLinkPriority: normalizeStringList(frontmatter.internalLinkPriority),
+    internalLinkMatches: normalizeInternalLinkRules(frontmatter.internalLinkMatches),
   };
 };
 

@@ -18,7 +18,7 @@ describe("blog repository", () => {
 
     const posts = await listBlogPosts();
 
-    expect(posts).toHaveLength(5);
+    expect(posts).toHaveLength(6);
     expect(posts.map((post) => post.slug)).toContain("ise-iade-arabuluculukta-kritik-noktalar");
     expect(posts.map((post) => post.slug)).toContain("menfi-tespit-davasinda-ispat-yuku");
     expect(posts.map((post) => post.slug)).toContain("kira-uyarlama-davasi-yol-haritasi");
@@ -101,8 +101,8 @@ describe("blog repository", () => {
 
     const posts = await listBlogPosts();
 
-    expect(posts).toHaveLength(5);
-    expect(posts[0]?.slug).toBe("nitelikli-dolandiricilik-iban-kullandirma-yargitay-kararlari");
+    expect(posts).toHaveLength(6);
+    expect(posts[0]?.slug).toBe("arabuluculuk-nedir-zorunlu-arabuluculuk-hangi-davalarda");
   });
 
   it("finds a post by slug", async () => {
