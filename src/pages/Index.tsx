@@ -1,4 +1,4 @@
-﻿import SiteHeader from "@/components/SiteHeader";
+import SiteHeader from "@/components/SiteHeader";
 import HeroSection from "@/components/HeroSection";
 import StatsBar from "@/components/StatsBar";
 import AboutSection from "@/components/AboutSection";
@@ -24,13 +24,13 @@ const Index = () => {
       <hr className="h-px border-0 bg-gradient-to-r from-transparent via-border to-transparent" />
       <TeamSection />
       <hr className="h-px border-0 bg-gradient-to-r from-transparent via-border to-transparent" />
-      <ClientReviewsSection />
-      <hr className="h-px border-0 bg-gradient-to-r from-transparent via-border to-transparent" />
       <ArticlesSection />
       <hr className="h-px border-0 bg-gradient-to-r from-transparent via-border to-transparent" />
       <LegalUpdatesSection />
       <hr className="h-px border-0 bg-gradient-to-r from-transparent via-border to-transparent" />
       <FaqSection />
+      <hr className="h-px border-0 bg-gradient-to-r from-transparent via-border to-transparent" />
+      <ClientReviewsSection />
       <hr className="h-px border-0 bg-gradient-to-r from-transparent via-border to-transparent" />
       <ContactSection />
       <SiteFooter />
