@@ -74,20 +74,22 @@ const ArticlesSection = () => {
                 transition={{ delay: i * 0.1 }}
                 className="group rounded-2xl border border-border bg-card p-7 transition-all duration-400 hover:-translate-y-1 hover:border-accent/25 hover:shadow-elegant-lg"
               >
-                {post.coverImage ? (
-                  <img
-                    src={post.coverImage}
-                    alt={post.title}
-                    className="mb-4 aspect-video w-full rounded-[10px] object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div
-                    className={`relative mb-4 flex aspect-video w-full items-center justify-center overflow-hidden rounded-[10px] bg-gradient-to-br ${
-                      post.coverClass ?? "from-primary/[0.08] to-primary/[0.03]"
-                    }`}
-                  />
-                )}
+                <Link to={`/blog/${post.slug}`} className="block overflow-hidden rounded-[10px]">
+                  {post.coverImage ? (
+                    <img
+                      src={post.coverImage}
+                      alt={post.title}
+                      className="mb-4 aspect-video w-full rounded-[10px] object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div
+                      className={`relative mb-4 flex aspect-video w-full items-center justify-center overflow-hidden rounded-[10px] bg-gradient-to-br ${
+                        post.coverClass ?? "from-primary/[0.08] to-primary/[0.03]"
+                      }`}
+                    />
+                  )}
+                </Link>
                 <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-[1.5px] text-accent">
                   {post.category}
                 </span>

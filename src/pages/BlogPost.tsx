@@ -1,8 +1,9 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import ContentPageHeader from "@/components/ContentPageHeader";
 import { useSeo } from "@/hooks/use-seo";
 import { formatDateTr } from "@/lib/format-date";
 import { getBlogPostBySlug } from "@/lib/blog-repository";
@@ -77,7 +78,8 @@ const BlogPost = () => {
   if (loading) {
     return (
       <main className="min-h-screen bg-background">
-        <section className="section-container py-24">
+        <ContentPageHeader />
+        <section className="section-container py-32">
           <p className="text-muted-foreground">Yazı yükleniyor...</p>
         </section>
       </main>
@@ -87,7 +89,8 @@ const BlogPost = () => {
   if (!post) {
     return (
       <main className="min-h-screen bg-background">
-        <section className="section-container py-24">
+        <ContentPageHeader />
+        <section className="section-container py-32">
           <h1 className="font-display text-4xl font-bold text-primary-deep">Yazı bulunamadı</h1>
           <p className="mt-3 text-muted-foreground">
             İstediğiniz blog yazısı kaldırılmış olabilir veya bağlantı yanlış olabilir.
@@ -102,7 +105,8 @@ const BlogPost = () => {
 
   return (
     <main className="min-h-screen bg-background">
-      <article className="section-container max-w-[900px] pt-24 pb-16">
+      <ContentPageHeader />
+      <article className="section-container max-w-[900px] pt-32 pb-16">
         <Link
           to="/blog"
           className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary"

@@ -152,7 +152,14 @@ const ContactSection = () => {
               </a>
             </div>
 
-            <div className="mt-5 overflow-hidden rounded-[14px] border border-primary-foreground/10">
+            <div className="relative mt-5 overflow-hidden rounded-[14px] border border-primary-foreground/10">
+              <a
+                href="https://maps.app.goo.gl/neq87p2u2Jin2CPm8?g_st=iw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute inset-0 z-10"
+                aria-label="Google Haritalar'da aç"
+              />
               <iframe
                 src="https://www.google.com/maps?q=Osmana%C4%9Fa%20Mahallesi%20Karadut%20Sokak%20No%2014%2F10%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul&output=embed"
                 width="100%"
@@ -163,6 +170,9 @@ const ContactSection = () => {
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Vega Hukuk Konum"
               />
+              <div className="pointer-events-none absolute right-3 bottom-3 rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-primary shadow-sm">
+                Google Haritalar'da aç
+              </div>
             </div>
           </motion.div>
 

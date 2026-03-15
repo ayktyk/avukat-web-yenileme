@@ -4,6 +4,7 @@ import StatsBar from "@/components/StatsBar";
 import AboutSection from "@/components/AboutSection";
 import PracticeAreas from "@/components/PracticeAreas";
 import TeamSection from "@/components/TeamSection";
+import ClientReviewsSection from "@/components/ClientReviewsSection";
 import ArticlesSection from "@/components/ArticlesSection";
 import LegalUpdatesSection from "@/components/LegalUpdatesSection";
 import FaqSection from "@/components/FaqSection";
@@ -22,6 +23,8 @@ const Index = () => {
       <PracticeAreas />
       <hr className="h-px border-0 bg-gradient-to-r from-transparent via-border to-transparent" />
       <TeamSection />
+      <hr className="h-px border-0 bg-gradient-to-r from-transparent via-border to-transparent" />
+      <ClientReviewsSection />
       <hr className="h-px border-0 bg-gradient-to-r from-transparent via-border to-transparent" />
       <ArticlesSection />
       <hr className="h-px border-0 bg-gradient-to-r from-transparent via-border to-transparent" />

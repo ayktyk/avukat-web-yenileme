@@ -57,22 +57,24 @@ const BlogIndex = () => {
             {posts.map((post) => (
               <article
                 key={post.slug}
-                className="rounded-2xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/25 hover:shadow-elegant-lg"
+                className="group rounded-2xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/25 hover:shadow-elegant-lg"
               >
-                {post.coverImage ? (
-                  <img
-                    src={post.coverImage}
-                    alt={post.title}
-                    className="mb-5 aspect-[16/8] w-full rounded-xl object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div
-                    className={`mb-5 aspect-[16/8] w-full rounded-xl bg-gradient-to-br ${
-                      post.coverClass ?? "from-primary/[0.08] to-primary/[0.03]"
-                    }`}
-                  />
-                )}
+                <Link to={`/blog/${post.slug}`} className="block overflow-hidden rounded-xl">
+                  {post.coverImage ? (
+                    <img
+                      src={post.coverImage}
+                      alt={post.title}
+                      className="mb-5 aspect-[16/8] w-full rounded-xl object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div
+                      className={`mb-5 aspect-[16/8] w-full rounded-xl bg-gradient-to-br ${
+                        post.coverClass ?? "from-primary/[0.08] to-primary/[0.03]"
+                      }`}
+                    />
+                  )}
+                </Link>
                 <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-accent">
                   <CalendarDays className="h-3.5 w-3.5" />
                   {formatDateTr(post.publishedAt)}

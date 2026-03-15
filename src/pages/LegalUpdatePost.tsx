@@ -1,8 +1,9 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import ContentPageHeader from "@/components/ContentPageHeader";
 import { useSeo } from "@/hooks/use-seo";
 import { formatDateTr } from "@/lib/format-date";
 import { getLegalUpdateBySlug } from "@/lib/legal-updates-repository";
@@ -72,7 +73,8 @@ const LegalUpdatePost = () => {
   if (loading) {
     return (
       <main className="min-h-screen bg-background">
-        <section className="section-container py-24">
+        <ContentPageHeader />
+        <section className="section-container py-32">
           <p className="text-muted-foreground">İçerik yükleniyor...</p>
         </section>
       </main>
@@ -82,7 +84,8 @@ const LegalUpdatePost = () => {
   if (!item) {
     return (
       <main className="min-h-screen bg-background">
-        <section className="section-container py-24">
+        <ContentPageHeader />
+        <section className="section-container py-32">
           <h1 className="font-display text-4xl font-bold text-primary-deep">İçerik bulunamadı</h1>
           <p className="mt-3 text-muted-foreground">İlgili hukuk gündemi içeriği kaldırılmış olabilir veya bağlantı yanlış olabilir.</p>
           <Link to="/guncel-hukuk-gundemi" className="mt-6 inline-flex items-center gap-2 font-semibold text-primary">
@@ -95,7 +98,8 @@ const LegalUpdatePost = () => {
 
   return (
     <main className="min-h-screen bg-background">
-      <article className="section-container max-w-[900px] pt-24 pb-16">
+      <ContentPageHeader />
+      <article className="section-container max-w-[900px] pt-32 pb-16">
         <Link
           to="/guncel-hukuk-gundemi"
           className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary"
