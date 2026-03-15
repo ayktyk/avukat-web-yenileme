@@ -59,7 +59,7 @@ describe("cms oauth api", () => {
     expect(response.status).toBe(200);
     expect(body).toContain("authorization:github:success");
     expect(body).toContain("github_access_token");
-    expect(body).toContain('window.opener.postMessage(payload, targetOrigin);');
+    expect(body).toContain("targetOrigins.forEach");
     expect(body).toContain('"https://vegahukukistanbul.com"');
   });
 });

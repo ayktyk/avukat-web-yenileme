@@ -111,7 +111,7 @@ const GoogleReviewsPanel = ({
   const isMarquee = variant === "marquee";
   const loopedReviews = reviews.length > 1 ? [...reviews, ...reviews] : reviews;
   const mapsUrl = data?.mapsUrl ?? fallbackMapsUrl;
-  const marqueeAnimation = { x: ["0%", "-50%", "0%"] };
+  const marqueeAnimation = { x: ["-50%", "0%", "-50%"] };
   const fallbackCards = [
     "Google Haritalar yorumlarımız şu anda işletme profilimizde yayında.",
     "Canlı yorum akışı, production API ayarı tamamlandığında bu alanda otomatik görünecek.",

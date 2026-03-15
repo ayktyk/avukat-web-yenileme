@@ -13,6 +13,27 @@ const html = (content: string, status = 200, headers?: HeadersInit) =>
 const getOrigin = (request: Request) => new URL(request.url).origin;
 const getCmsOrigin = () => getEnv("CMS_SITE_URL") || "https://vegahukukistanbul.com";
 
+const getAllowedOrigins = (targetOrigin: string) => {
+  const origins = new Set<string>();
+
+  if (targetOrigin) {
+    origins.add(targetOrigin);
+  }
+
+  origins.add(getCmsOrigin());
+
+  for (const origin of [...origins]) {
+    if (origin === "https://vegahukukistanbul.com") {
+      origins.add("https://www.vegahukukistanbul.com");
+    }
+    if (origin === "https://www.vegahukukistanbul.com") {
+      origins.add("https://vegahukukistanbul.com");
+    }
+  }
+
+  return [...origins];
+};
+
 const buildCookie = (name: string, value: string, maxAge: number) => {
   const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
   return `${name}=${encodeURIComponent(value)}; HttpOnly; Max-Age=${maxAge}; Path=/; SameSite=Lax${secure}`;
@@ -56,15 +77,28 @@ const renderMessagePage = (message: string, targetOrigin: string) => `<!doctype 
     <script>
       (function () {
         var payload = ${JSON.stringify(message)};
-        var targetOrigin = ${JSON.stringify(targetOrigin || "*")};
+        var targetOrigins = ${JSON.stringify(getAllowedOrigins(targetOrigin))};
 
         if (window.opener) {
-          window.opener.postMessage(payload, targetOrigin);
-          window.close();
+          var attempts = 0;
+          var timer = window.setInterval(function () {
+            attempts += 1;
+
+            targetOrigins.forEach(function (origin) {
+              window.opener.postMessage(payload, origin);
+            });
+
+            if (attempts >= 6) {
+              window.clearInterval(timer);
+              window.setTimeout(function () {
+                window.close();
+              }, 120);
+            }
+          }, 120);
         }
       })();
     </script>
-    <p>Bu pencereyi kapatabilirsiniz.</p>
+    <p>Giris tamamlanıyor. Bu pencere kendiliginden kapanacaktır.</p>
   </body>
 </html>`;
 
