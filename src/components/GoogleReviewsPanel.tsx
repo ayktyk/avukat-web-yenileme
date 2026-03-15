@@ -14,6 +14,8 @@ type GoogleReviewsPanelProps = {
   className?: string;
 };
 
+const fallbackMapsUrl = "https://maps.app.goo.gl/neq87p2u2Jin2CPm8?g_st=iw";
+
 const renderStars = (rating: number, className = "h-4 w-4") =>
   Array.from({ length: 5 }, (_, index) => (
     <Star
@@ -64,6 +66,7 @@ const GoogleReviewsPanel = ({
 }: GoogleReviewsPanelProps) => {
   const [data, setData] = useState<GoogleReviewsPayload | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -72,15 +75,23 @@ const GoogleReviewsPanel = ({
       try {
         const response = await fetch("/api/google-reviews");
         if (!response.ok) {
+          const payload = (await response.json().catch(() => null)) as { message?: string } | null;
+          if (active) {
+            setLoadError(payload?.message ?? "Google yorumlari su an otomatik olarak yuklenemiyor.");
+          }
           return;
         }
 
         const payload = (await response.json()) as GoogleReviewsPayload;
         if (active) {
           setData(payload);
+          setLoadError(null);
         }
       } catch (error) {
         console.error("Google yorumları yüklenemedi.", error);
+        if (active) {
+          setLoadError("Google yorumlari su an otomatik olarak yuklenemiyor.");
+        }
       } finally {
         if (active) {
           setLoading(false);
@@ -95,14 +106,17 @@ const GoogleReviewsPanel = ({
     };
   }, []);
 
-  if (!loading && (!data || data.reviews.length === 0)) {
-    return null;
-  }
-
   const reviews = limit ? data?.reviews.slice(0, limit) ?? [] : data?.reviews ?? [];
   const isPage = variant === "page";
   const isMarquee = variant === "marquee";
   const loopedReviews = reviews.length > 1 ? [...reviews, ...reviews] : reviews;
+  const mapsUrl = data?.mapsUrl ?? fallbackMapsUrl;
+
+  const fallbackCards = [
+    "Google Haritalar yorumlarimiz su anda isletme profilimizde yayinda.",
+    "Canli yorum akisi, production API anahtari tanimlandiginda bu alanda otomatik gorunecek.",
+    "Tum degerlendirmeleri simdiden Google Haritalar uzerinden inceleyebilirsiniz.",
+  ];
 
   if (isMarquee) {
     return (
@@ -118,7 +132,7 @@ const GoogleReviewsPanel = ({
                   <div className="flex items-center gap-1.5">{renderStars(data?.rating ?? 0, "h-4 w-4")}</div>
                   <strong className="font-display text-[28px] leading-none">{(data?.rating ?? 0).toFixed(1)}</strong>
                   <span className="text-sm text-muted-foreground">
-                    {data?.placeName} için {data?.userRatingCount ?? 0} Google değerlendirmesi
+                    {(data?.placeName ?? "Vega Hukuk İstanbul")} için {data?.userRatingCount ?? 0} Google değerlendirmesi
                   </span>
                 </div>
               </div>
@@ -130,21 +144,41 @@ const GoogleReviewsPanel = ({
                 >
                   <MessageSquareQuote className="h-3.5 w-3.5" /> Tüm yorumları incele
                 </Link>
-                {data?.mapsUrl && (
-                  <a
-                    href={data.mapsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent-pale px-4 py-2 text-[13px] font-semibold text-primary-deep transition-all hover:bg-accent/20"
-                  >
-                    <ExternalLink className="h-3.5 w-3.5" /> Google Haritalar'da aç
-                  </a>
-                )}
+                <a
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent-pale px-4 py-2 text-[13px] font-semibold text-primary-deep transition-all hover:bg-accent/20"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" /> Google Haritalar'da aç
+                </a>
               </div>
             </div>
 
             {loading ? (
               <p className="text-muted-foreground">Yorumlar yükleniyor...</p>
+            ) : !data || reviews.length === 0 ? (
+              <div className="relative overflow-hidden">
+                <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#f8f4ec] to-transparent" />
+                <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#eef3fb] to-transparent" />
+                <motion.div
+                  initial={false}
+                  animate={{ x: ["0%", "-50%"] }}
+                  transition={{ duration: 18, ease: "linear", repeat: Infinity }}
+                  className="flex w-max gap-5 pr-5"
+                >
+                  {[...fallbackCards, ...fallbackCards].map((item, index) => (
+                    <article
+                      key={`${item}-${index}`}
+                      className="min-w-[320px] max-w-[320px] rounded-[28px] border border-white/70 bg-white/88 p-6 shadow-[0_20px_60px_rgba(15,43,86,0.08)] backdrop-blur md:min-w-[360px] md:max-w-[360px]"
+                    >
+                      <p className="text-xs font-semibold uppercase tracking-[1.6px] text-accent">Google Haritalar</p>
+                      <p className="mt-4 text-[15px] leading-7 text-muted-foreground">{item}</p>
+                    </article>
+                  ))}
+                </motion.div>
+                {loadError ? <p className="mt-5 text-sm text-muted-foreground">{loadError}</p> : null}
+              </div>
             ) : (
               <div className="relative overflow-hidden">
                 <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#f8f4ec] to-transparent" />
@@ -216,16 +250,14 @@ const GoogleReviewsPanel = ({
                 <MessageSquareQuote className="h-3.5 w-3.5" /> Tümünü sitede gör
               </Link>
             )}
-            {data?.mapsUrl && (
-              <a
-                href={data.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-accent/15 bg-accent-pale px-4 py-2 text-[13px] font-semibold text-primary-deep transition-all hover:bg-accent/20"
-              >
-                <ExternalLink className="h-3.5 w-3.5" /> Google Haritalar'da aç
-              </a>
-            )}
+            <a
+              href={mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-accent/15 bg-accent-pale px-4 py-2 text-[13px] font-semibold text-primary-deep transition-all hover:bg-accent/20"
+            >
+              <ExternalLink className="h-3.5 w-3.5" /> Google Haritalar'da aç
+            </a>
           </div>
         </div>
 
@@ -253,6 +285,12 @@ const GoogleReviewsPanel = ({
               ))}
             </div>
           </>
+        ) : !loading ? (
+          <div className="rounded-2xl border border-border bg-card p-7">
+            <p className="text-base text-muted-foreground">
+              {loadError ?? "Google yorumlari su an otomatik olarak yuklenemiyor."}
+            </p>
+          </div>
         ) : (
           <p className="text-muted-foreground">Yorumlar yükleniyor...</p>
         )}
