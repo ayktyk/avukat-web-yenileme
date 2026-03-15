@@ -10,25 +10,17 @@ const html = (content: string, status = 200, headers?: HeadersInit) =>
     },
   });
 
-const getOrigin = (request: Request) => new URL(request.url).origin;
 const getCmsOrigin = () => getEnv("CMS_SITE_URL") || "https://vegahukukistanbul.com";
 
-const getAllowedOrigins = (targetOrigin: string) => {
-  const origins = new Set<string>();
+const getAllowedOrigins = () => {
+  const base = getCmsOrigin();
+  const origins = new Set<string>([base]);
 
-  if (targetOrigin) {
-    origins.add(targetOrigin);
+  if (base === "https://vegahukukistanbul.com") {
+    origins.add("https://www.vegahukukistanbul.com");
   }
-
-  origins.add(getCmsOrigin());
-
-  for (const origin of [...origins]) {
-    if (origin === "https://vegahukukistanbul.com") {
-      origins.add("https://www.vegahukukistanbul.com");
-    }
-    if (origin === "https://www.vegahukukistanbul.com") {
-      origins.add("https://vegahukukistanbul.com");
-    }
+  if (base === "https://www.vegahukukistanbul.com") {
+    origins.add("https://vegahukukistanbul.com");
   }
 
   return [...origins];
@@ -49,65 +41,57 @@ const readCookie = (request: Request, name: string) => {
   return pair ? decodeURIComponent(pair.split("=").slice(1).join("=")) : "";
 };
 
-const readOauthContext = (request: Request) => {
-  const raw = readCookie(request, "cms_oauth_context");
-  if (!raw) {
-    return { state: "", origin: getOrigin(request) };
-  }
+const clearCookie = buildCookie("cms_oauth_context", "", 0);
 
-  try {
-    const parsed = JSON.parse(raw) as { state?: string; origin?: string };
-    return {
-      state: typeof parsed.state === "string" ? parsed.state : "",
-      origin: typeof parsed.origin === "string" ? parsed.origin : getOrigin(request),
-    };
-  } catch {
-    return { state: "", origin: getOrigin(request) };
-  }
-};
-
-const renderMessagePage = (message: string, targetOrigin: string) => `<!doctype html>
+const renderResultPage = (payload: string, isError: boolean, errorDetail?: string) => `<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
     <meta name="robots" content="noindex" />
     <title>CMS Auth</title>
+    <style>
+      body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #f5f1ea; color: #1d2830; }
+      .box { text-align: center; padding: 32px; }
+      .error { color: #b91c1c; }
+      .detail { margin-top: 12px; font-size: 13px; color: #6a7680; }
+    </style>
   </head>
   <body>
+    <div class="box">
+      <p>${isError ? '<span class="error">Giris basarisiz.</span>' : 'Giris tamamlaniyor...'}</p>
+      ${errorDetail ? `<p class="detail">${errorDetail}</p>` : ""}
+      ${isError ? '<p class="detail"><a href="/admin/">Admin paneline don</a></p>' : ""}
+    </div>
     <script>
       (function () {
-        var payload = ${JSON.stringify(message)};
-        var targetOrigins = ${JSON.stringify(getAllowedOrigins(targetOrigin))};
+        var payload = ${JSON.stringify(payload)};
+        var origins = ${JSON.stringify(getAllowedOrigins())};
 
-        if (window.opener) {
-          var attempts = 0;
-          var timer = window.setInterval(function () {
-            attempts += 1;
-
-            targetOrigins.forEach(function (origin) {
+        function send() {
+          if (window.opener) {
+            origins.forEach(function (origin) {
               window.opener.postMessage(payload, origin);
             });
-
-            if (attempts >= 6) {
-              window.clearInterval(timer);
-              window.setTimeout(function () {
-                window.close();
-              }, 120);
-            }
-          }, 120);
+            return true;
+          }
+          return false;
         }
+
+        var attempts = 0;
+        var timer = setInterval(function () {
+          attempts++;
+          send();
+          if (attempts >= 10) {
+            clearInterval(timer);
+            if (!${JSON.stringify(isError)}) {
+              setTimeout(function () { window.close(); }, 200);
+            }
+          }
+        }, 150);
       })();
     </script>
-    <p>Giris tamamlanıyor. Bu pencere kendiliginden kapanacaktır.</p>
   </body>
 </html>`;
-
-const clearCookie = buildCookie("cms_oauth_context", "", 0);
-
-const renderError = (message: string, targetOrigin: string, status = 400) =>
-  html(renderMessagePage(`authorization:github:error:${JSON.stringify({ message })}`, targetOrigin), status, {
-    "set-cookie": clearCookie,
-  });
 
 export async function GET(request: Request) {
   const clientId = getEnv("GITHUB_CLIENT_ID");
@@ -115,15 +99,42 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code") ?? "";
   const state = url.searchParams.get("state") ?? "";
-  const oauthContext = readOauthContext(request);
-  const targetOrigin = oauthContext.origin || getOrigin(request);
 
   if (!clientId || !clientSecret) {
-    return renderError("GitHub OAuth ayarlari eksik.", targetOrigin, 500);
+    return html(
+      renderResultPage("authorization:github:error:{}", true, "GITHUB_CLIENT_ID veya GITHUB_CLIENT_SECRET tanimli degil."),
+      500,
+      { "set-cookie": clearCookie },
+    );
   }
 
-  if (!code || !state || !oauthContext.state || state !== oauthContext.state) {
-    return renderError("GitHub dogrulama durumu eslesmedi.", targetOrigin, 400);
+  if (!code) {
+    return html(
+      renderResultPage("authorization:github:error:{}", true, "GitHub dogrulama kodu eksik."),
+      400,
+      { "set-cookie": clearCookie },
+    );
+  }
+
+  // State doğrulama: cookie varsa kontrol et, yoksa devam et (incognito uyumu)
+  const rawCookie = readCookie(request, "cms_oauth_context");
+  if (rawCookie) {
+    try {
+      const ctx = JSON.parse(rawCookie) as { state?: string };
+      if (ctx.state && state && ctx.state !== state) {
+        return html(
+          renderResultPage(
+            `authorization:github:error:${JSON.stringify({ message: "State eslesmedi." })}`,
+            true,
+            "Dogrulama durumu eslesmedi. Tekrar deneyin.",
+          ),
+          400,
+          { "set-cookie": clearCookie },
+        );
+      }
+    } catch {
+      // Cookie parse hatası — devam et
+    }
   }
 
   const response = await fetch("https://github.com/login/oauth/access_token", {
@@ -137,30 +148,46 @@ export async function GET(request: Request) {
       client_secret: clientSecret,
       code,
       redirect_uri: `${getCmsOrigin()}/api/cms/callback`,
-      state,
     }),
   });
 
   if (!response.ok) {
-    return renderError("GitHub erisim anahtari alinamadi.", targetOrigin, 502);
+    return html(
+      renderResultPage(
+        `authorization:github:error:${JSON.stringify({ message: "Token alinamadi." })}`,
+        true,
+        `GitHub API yanit kodu: ${response.status}`,
+      ),
+      502,
+      { "set-cookie": clearCookie },
+    );
   }
 
-  const payload = (await response.json()) as {
+  const data = (await response.json()) as {
     access_token?: string;
     error?: string;
     error_description?: string;
   };
 
-  if (!payload.access_token) {
-    return renderError(payload.error_description || payload.error || "GitHub erisim anahtari alinamadi.", targetOrigin, 502);
+  if (!data.access_token) {
+    const msg = data.error_description || data.error || "Token alinamadi.";
+    return html(
+      renderResultPage(
+        `authorization:github:error:${JSON.stringify({ message: msg })}`,
+        true,
+        msg,
+      ),
+      502,
+      { "set-cookie": clearCookie },
+    );
   }
 
-  const successMessage = `authorization:github:success:${JSON.stringify({
-    token: payload.access_token,
+  const successPayload = `authorization:github:success:${JSON.stringify({
+    token: data.access_token,
     provider: "github",
   })}`;
 
-  return html(renderMessagePage(successMessage, targetOrigin), 200, {
+  return html(renderResultPage(successPayload, false), 200, {
     "set-cookie": clearCookie,
   });
 }

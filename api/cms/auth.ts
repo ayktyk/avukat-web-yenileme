@@ -21,30 +21,7 @@ const json = (body: Record<string, unknown>, status = 200) =>
 
 const getCmsOrigin = () => getEnv("CMS_SITE_URL") || "https://vegahukukistanbul.com";
 
-const getRequestOrigin = (request: Request) => {
-  const headerOrigin = request.headers.get("origin")?.trim();
-  if (headerOrigin) {
-    return headerOrigin;
-  }
-
-  const referer = request.headers.get("referer")?.trim();
-  if (referer) {
-    try {
-      return new URL(referer).origin;
-    } catch {
-      return getCmsOrigin();
-    }
-  }
-
-  return getCmsOrigin();
-};
-
-const buildCookie = (name: string, value: string, maxAge: number) => {
-  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
-  return `${name}=${encodeURIComponent(value)}; HttpOnly; Max-Age=${maxAge}; Path=/; SameSite=Lax${secure}`;
-};
-
-const renderHandshakePage = (authorizeUrl: string, targetOrigin: string) => `<!doctype html>
+const renderHandshakePage = (authorizeUrl: string) => `<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -52,40 +29,33 @@ const renderHandshakePage = (authorizeUrl: string, targetOrigin: string) => `<!d
     <title>CMS Auth</title>
   </head>
   <body>
+    <p>GitHub'a yonlendiriliyor...</p>
     <script>
       (function () {
         var authorizeUrl = ${JSON.stringify(authorizeUrl)};
-        var targetOrigin = ${JSON.stringify(targetOrigin)};
+        var targetOrigin = ${JSON.stringify(getCmsOrigin())};
         var started = false;
 
         function startAuth() {
-          if (started) {
-            return;
-          }
-
+          if (started) return;
           started = true;
           window.location.replace(authorizeUrl);
         }
 
         window.addEventListener("message", function (event) {
-          if (event.origin !== targetOrigin) {
-            return;
-          }
-
-          if (event.data === "authorizing:github") {
+          if (event.origin === targetOrigin && event.data === "authorizing:github") {
             startAuth();
           }
         });
 
         if (window.opener) {
           window.opener.postMessage("authorizing:github", targetOrigin);
-          window.setTimeout(startAuth, 1500);
-        } else {
-          startAuth();
         }
+
+        // 800ms sonra otomatik yönlendir (handshake beklemeden)
+        window.setTimeout(startAuth, 800);
       })();
     </script>
-    <p>Yonlendiriliyor...</p>
   </body>
 </html>`;
 
@@ -99,15 +69,17 @@ export async function GET(request: Request) {
   const state = crypto.randomUUID().replaceAll("-", "");
   const redirectUri = `${getCmsOrigin()}/api/cms/callback`;
   const authorizeUrl = new URL("https://github.com/login/oauth/authorize");
-  const openerOrigin = getRequestOrigin(request);
-  const oauthContext = JSON.stringify({ state, origin: openerOrigin });
 
   authorizeUrl.searchParams.set("client_id", clientId);
   authorizeUrl.searchParams.set("redirect_uri", redirectUri);
   authorizeUrl.searchParams.set("scope", "repo");
   authorizeUrl.searchParams.set("state", state);
 
-  return html(renderHandshakePage(authorizeUrl.toString(), openerOrigin), 200, {
-    "set-cookie": buildCookie("cms_oauth_context", oauthContext, 600),
+  const oauthContext = JSON.stringify({ state, origin: getCmsOrigin() });
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  const cookie = `cms_oauth_context=${encodeURIComponent(oauthContext)}; HttpOnly; Max-Age=600; Path=/; SameSite=Lax${secure}`;
+
+  return html(renderHandshakePage(authorizeUrl.toString()), 200, {
+    "set-cookie": cookie,
   });
 }
