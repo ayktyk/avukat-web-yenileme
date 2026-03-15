@@ -56,6 +56,8 @@ const markdownToText = (value) =>
     .replace(/\s+/g, " ")
     .trim();
 
+const toRelativeHref = (prefix, slug) => `/${prefix}/${slug}`;
+
 const collectEntries = (dir, prefix, defaults) => {
   const folder = join(root, "src", "content", dir);
 
@@ -69,10 +71,15 @@ const collectEntries = (dir, prefix, defaults) => {
         const title = data.title ?? slug;
         const excerpt = data.seoDescription ?? data.excerpt ?? markdownToText(content).slice(0, 220);
         const date = data.updatedAt ?? data.publishedAt ?? today;
+        const href = toRelativeHref(prefix, slug);
 
         return {
-          loc: `${SITE}/${prefix}/${slug}`,
+          loc: `${SITE}${href}`,
+          href,
+          slug,
           title,
+          category: data.category ?? "",
+          collection: dir,
           description: excerpt,
           date,
           changefreq: defaults.changefreq,
@@ -114,6 +121,14 @@ const allPages = [...staticPages, ...blogEntries, ...legalEntries];
 const rssEntries = [...blogEntries, ...legalEntries]
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   .slice(0, 50);
+const adminLinkTargets = [...blogEntries, ...legalEntries].map((entry) => ({
+  slug: entry.slug,
+  title: entry.title,
+  href: entry.href,
+  category: entry.category,
+  collection: entry.collection,
+  description: entry.description,
+}));
 
 const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -152,8 +167,11 @@ ${rssEntries
 </rss>
 `;
 
+const linkTargetsJson = JSON.stringify(adminLinkTargets, null, 2);
+
 writeFileSync(join(root, "public", "sitemap.xml"), sitemapXml, "utf-8");
 writeFileSync(join(root, "public", "rss.xml"), rssXml, "utf-8");
+writeFileSync(join(root, "public", "admin", "link-targets.json"), linkTargetsJson, "utf-8");
 
 console.log(`Sitemap generated: ${allPages.length} URLs`);
 console.log(`RSS generated: ${rssEntries.length} items`);

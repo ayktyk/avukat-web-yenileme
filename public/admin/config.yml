@@ -26,7 +26,7 @@ collections:
     summary: "{{title}} - {{publishedAt}}"
     sortable_fields: [publishedAt, updatedAt, title]
     editor:
-      preview: false
+      preview: true
     fields:
       - { label: Başlık, name: title, widget: string }
       - { label: Slug, name: slug, widget: string, hint: "Örnek: ise-iade-arabuluculukta-kritik-noktalar" }
@@ -67,7 +67,7 @@ collections:
     summary: "{{title}} - {{publishedAt}}"
     sortable_fields: [publishedAt, updatedAt, title]
     editor:
-      preview: false
+      preview: true
     fields:
       - { label: Başlık, name: title, widget: string }
       - { label: Slug, name: slug, widget: string, hint: "Örnek: yargitay-fazla-mesai-karari-2026" }
