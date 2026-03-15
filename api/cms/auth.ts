@@ -21,6 +21,24 @@ const json = (body: Record<string, unknown>, status = 200) =>
 
 const getCmsOrigin = () => getEnv("CMS_SITE_URL") || "https://vegahukukistanbul.com";
 
+const getRequestOrigin = (request: Request) => {
+  const headerOrigin = request.headers.get("origin")?.trim();
+  if (headerOrigin) {
+    return headerOrigin;
+  }
+
+  const referer = request.headers.get("referer")?.trim();
+  if (referer) {
+    try {
+      return new URL(referer).origin;
+    } catch {
+      return getCmsOrigin();
+    }
+  }
+
+  return getCmsOrigin();
+};
+
 const buildCookie = (name: string, value: string, maxAge: number) => {
   const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
   return `${name}=${encodeURIComponent(value)}; HttpOnly; Max-Age=${maxAge}; Path=/; SameSite=Lax${secure}`;
@@ -71,7 +89,7 @@ const renderHandshakePage = (authorizeUrl: string, targetOrigin: string) => `<!d
   </body>
 </html>`;
 
-export async function GET() {
+export async function GET(request: Request) {
   const clientId = getEnv("GITHUB_CLIENT_ID");
 
   if (!clientId) {
@@ -81,14 +99,15 @@ export async function GET() {
   const state = crypto.randomUUID().replaceAll("-", "");
   const redirectUri = `${getCmsOrigin()}/api/cms/callback`;
   const authorizeUrl = new URL("https://github.com/login/oauth/authorize");
-  const oauthContext = JSON.stringify({ state, origin: getCmsOrigin() });
+  const openerOrigin = getRequestOrigin(request);
+  const oauthContext = JSON.stringify({ state, origin: openerOrigin });
 
   authorizeUrl.searchParams.set("client_id", clientId);
   authorizeUrl.searchParams.set("redirect_uri", redirectUri);
   authorizeUrl.searchParams.set("scope", "repo");
   authorizeUrl.searchParams.set("state", state);
 
-  return html(renderHandshakePage(authorizeUrl.toString(), getCmsOrigin()), 200, {
+  return html(renderHandshakePage(authorizeUrl.toString(), openerOrigin), 200, {
     "set-cookie": buildCookie("cms_oauth_context", oauthContext, 600),
   });
 }
