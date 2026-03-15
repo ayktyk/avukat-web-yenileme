@@ -1,6 +1,10 @@
 (function () {
   const CMS = window.CMS;
   const h = window.React?.createElement || window.h;
+  const allowedOrigins = new Set([
+    "https://vegahukukistanbul.com",
+    "https://www.vegahukukistanbul.com",
+  ]);
 
   if (!CMS) {
     return;
@@ -9,6 +13,37 @@
   const state = {
     linkTargets: [],
   };
+
+  window.addEventListener("message", (event) => {
+    if (!allowedOrigins.has(event.origin)) {
+      return;
+    }
+
+    const payload = event.data;
+    if (!payload || typeof payload !== "object") {
+      return;
+    }
+
+    if (payload.type === "vega-cms-auth" && typeof payload.token === "string") {
+      try {
+        window.localStorage.setItem(
+          "decap-cms-user",
+          JSON.stringify({
+            backendName: "github",
+            token: payload.token,
+            provider: payload.provider || "github",
+          }),
+        );
+        window.location.assign("/admin/#/");
+      } catch (error) {
+        console.error("CMS auth bridge failed.", error);
+      }
+    }
+
+    if (payload.type === "vega-cms-auth-error" && typeof payload.message === "string") {
+      console.error("CMS auth error:", payload.message);
+    }
+  });
 
   const STOPWORDS = new Set([
     "ve",

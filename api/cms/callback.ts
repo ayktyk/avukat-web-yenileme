@@ -43,7 +43,12 @@ const readCookie = (request: Request, name: string) => {
 
 const clearCookie = buildCookie("cms_oauth_context", "", 0);
 
-const renderResultPage = (payload: string, isError: boolean, errorDetail?: string) => `<!doctype html>
+const renderResultPage = (
+  payload: string,
+  isError: boolean,
+  errorDetail?: string,
+  authPayload?: Record<string, string>,
+) => `<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -66,11 +71,15 @@ const renderResultPage = (payload: string, isError: boolean, errorDetail?: strin
       (function () {
         var payload = ${JSON.stringify(payload)};
         var origins = ${JSON.stringify(getAllowedOrigins())};
+        var authPayload = ${JSON.stringify(authPayload ?? null)};
 
         function send() {
           if (window.opener) {
             origins.forEach(function (origin) {
               window.opener.postMessage(payload, origin);
+              if (authPayload) {
+                window.opener.postMessage(authPayload, origin);
+              }
             });
             return true;
           }
@@ -102,7 +111,12 @@ export async function GET(request: Request) {
 
   if (!clientId || !clientSecret) {
     return html(
-      renderResultPage("authorization:github:error:{}", true, "GITHUB_CLIENT_ID veya GITHUB_CLIENT_SECRET tanimli degil."),
+      renderResultPage(
+        "authorization:github:error:{}",
+        true,
+        "GITHUB_CLIENT_ID veya GITHUB_CLIENT_SECRET tanimli degil.",
+        { type: "vega-cms-auth-error", message: "GITHUB_CLIENT_ID veya GITHUB_CLIENT_SECRET tanimli degil." },
+      ),
       500,
       { "set-cookie": clearCookie },
     );
@@ -110,7 +124,12 @@ export async function GET(request: Request) {
 
   if (!code) {
     return html(
-      renderResultPage("authorization:github:error:{}", true, "GitHub dogrulama kodu eksik."),
+      renderResultPage(
+        "authorization:github:error:{}",
+        true,
+        "GitHub dogrulama kodu eksik.",
+        { type: "vega-cms-auth-error", message: "GitHub dogrulama kodu eksik." },
+      ),
       400,
       { "set-cookie": clearCookie },
     );
@@ -127,6 +146,7 @@ export async function GET(request: Request) {
             `authorization:github:error:${JSON.stringify({ message: "State eslesmedi." })}`,
             true,
             "Dogrulama durumu eslesmedi. Tekrar deneyin.",
+            { type: "vega-cms-auth-error", message: "Dogrulama durumu eslesmedi. Tekrar deneyin." },
           ),
           400,
           { "set-cookie": clearCookie },
@@ -157,6 +177,7 @@ export async function GET(request: Request) {
         `authorization:github:error:${JSON.stringify({ message: "Token alinamadi." })}`,
         true,
         `GitHub API yanit kodu: ${response.status}`,
+        { type: "vega-cms-auth-error", message: `GitHub API yanit kodu: ${response.status}` },
       ),
       502,
       { "set-cookie": clearCookie },
@@ -176,6 +197,7 @@ export async function GET(request: Request) {
         `authorization:github:error:${JSON.stringify({ message: msg })}`,
         true,
         msg,
+        { type: "vega-cms-auth-error", message: msg },
       ),
       502,
       { "set-cookie": clearCookie },
@@ -187,7 +209,15 @@ export async function GET(request: Request) {
     provider: "github",
   })}`;
 
-  return html(renderResultPage(successPayload, false), 200, {
+  return html(
+    renderResultPage(successPayload, false, undefined, {
+      type: "vega-cms-auth",
+      token: data.access_token,
+      provider: "github",
+    }),
+    200,
+    {
     "set-cookie": clearCookie,
-  });
+    },
+  );
 }
