@@ -64,6 +64,7 @@ const resolvePlaceId = async (apiKey: string) => {
     body: JSON.stringify({
       textQuery,
       languageCode: "tr",
+      regionCode: "TR",
       maxResultCount: 1,
     }),
   });
@@ -101,7 +102,11 @@ export async function GET() {
 
   try {
     const placeId = await resolvePlaceId(apiKey);
-    const detailsResponse = await fetch(`https://places.googleapis.com/v1/places/${placeId}`, {
+    const detailsUrl = new URL(`https://places.googleapis.com/v1/places/${placeId}`);
+    detailsUrl.searchParams.set("languageCode", "tr");
+    detailsUrl.searchParams.set("regionCode", "TR");
+
+    const detailsResponse = await fetch(detailsUrl, {
       headers: googleHeaders(
         apiKey,
         "id,displayName,googleMapsUri,rating,userRatingCount,reviews,rating",

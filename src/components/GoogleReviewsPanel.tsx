@@ -77,7 +77,7 @@ const GoogleReviewsPanel = ({
         if (!response.ok) {
           const payload = (await response.json().catch(() => null)) as { message?: string } | null;
           if (active) {
-            setLoadError(payload?.message ?? "Google yorumlari su an otomatik olarak yuklenemiyor.");
+            setLoadError(payload?.message ?? "Google yorumları şu an otomatik olarak yüklenemiyor.");
           }
           return;
         }
@@ -90,7 +90,7 @@ const GoogleReviewsPanel = ({
       } catch (error) {
         console.error("Google yorumları yüklenemedi.", error);
         if (active) {
-          setLoadError("Google yorumlari su an otomatik olarak yuklenemiyor.");
+          setLoadError("Google yorumları şu an otomatik olarak yüklenemiyor.");
         }
       } finally {
         if (active) {
@@ -111,11 +111,11 @@ const GoogleReviewsPanel = ({
   const isMarquee = variant === "marquee";
   const loopedReviews = reviews.length > 1 ? [...reviews, ...reviews] : reviews;
   const mapsUrl = data?.mapsUrl ?? fallbackMapsUrl;
-
+  const marqueeAnimation = { x: ["0%", "-50%", "0%"] };
   const fallbackCards = [
-    "Google Haritalar yorumlarimiz su anda isletme profilimizde yayinda.",
-    "Canli yorum akisi, production API anahtari tanimlandiginda bu alanda otomatik gorunecek.",
-    "Tum degerlendirmeleri simdiden Google Haritalar uzerinden inceleyebilirsiniz.",
+    "Google Haritalar yorumlarımız şu anda işletme profilimizde yayında.",
+    "Canlı yorum akışı, production API ayarı tamamlandığında bu alanda otomatik görünecek.",
+    "Tüm değerlendirmeleri şimdiden Google Haritalar üzerinden inceleyebilirsiniz.",
   ];
 
   if (isMarquee) {
@@ -163,7 +163,7 @@ const GoogleReviewsPanel = ({
                 <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#eef3fb] to-transparent" />
                 <motion.div
                   initial={false}
-                  animate={{ x: ["0%", "-50%"] }}
+                  animate={marqueeAnimation}
                   transition={{ duration: 18, ease: "linear", repeat: Infinity }}
                   className="flex w-max gap-5 pr-5"
                 >
@@ -187,9 +187,9 @@ const GoogleReviewsPanel = ({
                 {reviews.length > 1 ? (
                   <motion.div
                     initial={false}
-                    animate={{ x: ["0%", "-50%"] }}
+                    animate={marqueeAnimation}
                     transition={{
-                      duration: Math.max(20, reviews.length * 5),
+                      duration: Math.max(24, reviews.length * 6),
                       ease: "linear",
                       repeat: Infinity,
                     }}
@@ -288,7 +288,7 @@ const GoogleReviewsPanel = ({
         ) : !loading ? (
           <div className="rounded-2xl border border-border bg-card p-7">
             <p className="text-base text-muted-foreground">
-              {loadError ?? "Google yorumlari su an otomatik olarak yuklenemiyor."}
+              {loadError ?? "Google yorumları şu an otomatik olarak yüklenemiyor."}
             </p>
           </div>
         ) : (
