@@ -10,7 +10,6 @@ window.VEGA_CMS_CONFIG = {
   site_domain: "vegahukukistanbul.com",
   logo_url: "/og-image.svg",
   locale: "tr",
-  publish_mode: "simple",
   media_folder: "public/uploads/blog",
   public_folder: "/uploads/blog",
   collections: [
