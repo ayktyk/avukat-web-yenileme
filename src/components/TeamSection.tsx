@@ -4,7 +4,7 @@ import { Star } from "lucide-react";
 
 const teamMembers = [
   {
-    name: "Av. Aykut Yeşilkaya",
+    name: "Arb. Av. Aykut Yeşilkaya",
     jobTitle: "Kurucu Avukat, Arabulucu",
     description:
       "İş hukuku, kira ve gayrimenkul, miras ve aile hukuku, tüketici ve sigorta alanlarında hukuki danışmanlık ve dava takibi.",
@@ -95,7 +95,7 @@ const TeamSection = () => {
             transition={{ delay: 0.2 }}
             className="mt-4 max-w-[56ch] text-base leading-relaxed text-muted-foreground"
           >
-            Vega Hukuk İstanbul ekibi; Av. Aykut Yeşilkaya, Av. Mücahit İslam Keskün ve Av. Büşra Yeşilkaya ile sonuç
+            Vega Hukuk İstanbul ekibi; Arb. Av. Aykut Yeşilkaya, Av. Mücahit İslam Keskün ve Av. Büşra Yeşilkaya ile sonuç
             odaklı hukuki danışmanlık sunar.
           </motion.p>
         </div>
@@ -113,7 +113,7 @@ const TeamSection = () => {
                 <Star className="h-[10px] w-[10px] text-primary-foreground" />
               </span>
             </div>
-            <h4 className="font-display text-[22px] font-bold text-accent-light">Av. Aykut Yeşilkaya, Arb.</h4>
+            <h4 className="font-display text-[22px] font-bold text-accent-light">Arb. Av. Aykut Yeşilkaya</h4>
             <p className="mt-1 text-primary-foreground/75">Kurucu Avukat • Arb. • Özel Hukuk</p>
 
             <div className="relative mt-5 pl-7">

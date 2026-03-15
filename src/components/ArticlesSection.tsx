@@ -48,7 +48,7 @@ const ArticlesSection = () => {
               transition={{ delay: 0.1 }}
               className="mt-3 font-display text-[clamp(30px,4vw,42px)] font-bold leading-[1.15] text-primary-deep"
             >
-              Yayınlar ve İçgörüler
+              Makaleler
             </motion.h3>
           </div>
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>

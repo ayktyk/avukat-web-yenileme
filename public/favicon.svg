@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Vega Hukuk amblemi">
+  <defs>
+    <linearGradient id="vega-bg" x1="32" y1="24" x2="224" y2="232" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f2b56" />
+      <stop offset="100%" stop-color="#1f4c8f" />
+    </linearGradient>
+  </defs>
+  <rect x="12" y="12" width="232" height="232" rx="52" fill="url(#vega-bg)" />
+  <rect x="15" y="15" width="226" height="226" rx="49" fill="none" stroke="#d4af6a" stroke-opacity="0.38" stroke-width="6" />
+  <g fill="none" stroke="#d4af6a" stroke-linecap="round" stroke-linejoin="round" stroke-width="12">
+    <path d="M128 52v138" />
+    <path d="M92 200h72" />
+    <path d="M50 84h156" />
+    <path d="M82 84 60 122" />
+    <path d="M82 84 104 122" />
+    <path d="M174 84 152 122" />
+    <path d="M174 84 196 122" />
+    <path d="M58 122h48" />
+    <path d="M150 122h48" />
+    <path d="M58 122a24 18 0 0 0 48 0" />
+    <path d="M150 122a24 18 0 0 0 48 0" />
+  </g>
+</svg>

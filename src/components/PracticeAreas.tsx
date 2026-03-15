@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Briefcase, Scale, Handshake, Home, Users, ShoppingCart, Gavel, FileSignature, Phone } from "lucide-react";
+import { Briefcase, Scale, Handshake, Home, Users, ShoppingCart, Gavel, Copyright, BadgeDollarSign, Phone } from "lucide-react";
 
 const areas = [
   { icon: Briefcase, title: "İş Hukuku", items: ["İşe iade • Kıdem/ihbar • Fazla mesai", "Mobbing • İş kazası tazminatı"] },
@@ -9,7 +9,8 @@ const areas = [
   { icon: Users, title: "Miras & Aile", items: ["Tereke • Tenkis • Mal rejimi", "Nafaka • Velayet • Vasi işlemleri"] },
   { icon: ShoppingCart, title: "Tüketici & Sigorta", items: ["Ayıplı mal/hizmet • Poliçe uyuşmazlığı", "Tazminat • Hakem heyeti süreçleri"] },
   { icon: Gavel, title: "Ceza Hukuku", items: ["Ceza davalarında savunma", "Soruşturma • Kovuşturma süreçleri"] },
-  { icon: FileSignature, title: "Sözleşmeler Hukuku", items: ["Sözleşme tasarımı • Müzakere", "Sözleşme uyuşmazlıkları • Revizyon"] },
+  { icon: Copyright, title: "Fikri Mülkiyet Davaları", items: ["Marka hakkı ihlali • Taklit ürün uyuşmazlıkları", "Telif ve tasarım davaları • İhtiyati tedbir talepleri"] },
+  { icon: BadgeDollarSign, title: "Tazminat Davaları", items: ["İş kazası tazminatı • Maluliyet • Destekten yoksun kalma", "Trafik kazası tazminatı • Değer kaybı • Sürekli sakatlık"] },
 ];
 
 const scrollTo = (href: string) => {
