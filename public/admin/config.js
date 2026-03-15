@@ -4,7 +4,7 @@ window.VEGA_CMS_CONFIG = {
     repo: "ayktyk/avukat-web-yenileme",
     branch: "main",
     base_url: "https://vegahukukistanbul.com",
-    auth_endpoint: "api/cms/auth",
+    auth_endpoint: "/api/cms/auth",
   },
   site_url: "https://vegahukukistanbul.com",
   site_domain: "vegahukukistanbul.com",

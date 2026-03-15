@@ -29,9 +29,22 @@ const json = (body: Record<string, unknown>, status = 200) =>
     },
   });
 
-const getCmsOrigin = () => getEnv("CMS_SITE_URL") || "https://vegahukukistanbul.com";
+const getCmsOrigin = (request?: Request) => {
+  const envUrl = getEnv("CMS_SITE_URL");
+  if (envUrl) return envUrl;
 
-const renderHandshakePage = (authorizeUrl: string) => `<!doctype html>
+  if (request) {
+    const host = request.headers.get("host");
+    if (host) {
+      const protocol = host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https";
+      return `${protocol}://${host}`;
+    }
+  }
+
+  return "https://vegahukukistanbul.com";
+};
+
+const renderHandshakePage = (authorizeUrl: string, origin: string) => `<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -43,7 +56,7 @@ const renderHandshakePage = (authorizeUrl: string) => `<!doctype html>
     <script>
       (function () {
         var authorizeUrl = ${JSON.stringify(authorizeUrl)};
-        var targetOrigin = ${JSON.stringify(getCmsOrigin())};
+        var targetOrigin = ${JSON.stringify(origin)};
         var started = false;
 
         function startAuth() {
@@ -76,10 +89,11 @@ export async function GET(request: Request) {
     return json({ ok: false, message: "GITHUB_CLIENT_ID tanimli degil." }, 500);
   }
 
+  const origin = getCmsOrigin(request);
   const state = crypto.randomUUID().replaceAll("-", "");
   const url = new URL(request.url);
   const isDirectMode = url.searchParams.get("mode") === "direct";
-  const redirectUri = `${getCmsOrigin()}/api/cms/callback`;
+  const redirectUri = `${origin}/api/cms/callback`;
   const authorizeUrl = new URL("https://github.com/login/oauth/authorize");
 
   authorizeUrl.searchParams.set("client_id", clientId);
@@ -87,7 +101,7 @@ export async function GET(request: Request) {
   authorizeUrl.searchParams.set("scope", "repo");
   authorizeUrl.searchParams.set("state", state);
 
-  const oauthContext = JSON.stringify({ state, origin: getCmsOrigin() });
+  const oauthContext = JSON.stringify({ state, origin: origin });
   const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
   const cookie = `cms_oauth_context=${encodeURIComponent(oauthContext)}; HttpOnly; Max-Age=600; Path=/; SameSite=Lax${secure}`;
 
@@ -97,7 +111,7 @@ export async function GET(request: Request) {
     });
   }
 
-  return html(renderHandshakePage(authorizeUrl.toString()), 200, {
+  return html(renderHandshakePage(authorizeUrl.toString(), origin), 200, {
     "set-cookie": cookie,
   });
 }

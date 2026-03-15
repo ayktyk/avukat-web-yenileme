@@ -2,6 +2,7 @@
   const CMS = window.CMS;
   const h = window.React?.createElement || window.h;
   const allowedOrigins = new Set([
+    window.location.origin,
     "https://vegahukukistanbul.com",
     "https://www.vegahukukistanbul.com",
   ]);
@@ -611,9 +612,7 @@
   };
 
   const patchLoginButton = () => {
-    const loginButton = [...document.querySelectorAll("button")].find((button) =>
-      /GitHub ile Giriş/i.test(button.textContent || ""),
-    );
+    const loginButton = [...document.querySelectorAll("button")].find((button) => /github/i.test(button.textContent || ""));
 
     if (!loginButton || loginButton.dataset.vegaDirectAuth === "true") {
       return;

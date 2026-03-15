@@ -10,10 +10,23 @@ const html = (content: string, status = 200, headers?: HeadersInit) =>
     },
   });
 
-const getCmsOrigin = () => getEnv("CMS_SITE_URL") || "https://vegahukukistanbul.com";
+const getCmsOrigin = (request?: Request) => {
+  const envUrl = getEnv("CMS_SITE_URL");
+  if (envUrl) return envUrl;
 
-const getAllowedOrigins = () => {
-  const base = getCmsOrigin();
+  if (request) {
+    const host = request.headers.get("host");
+    if (host) {
+      const protocol = host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https";
+      return `${protocol}://${host}`;
+    }
+  }
+
+  return "https://vegahukukistanbul.com";
+};
+
+const getAllowedOrigins = (request?: Request) => {
+  const base = getCmsOrigin(request);
   const origins = new Set<string>([base]);
 
   if (base === "https://vegahukukistanbul.com") {
@@ -46,6 +59,8 @@ const clearCookie = buildCookie("cms_oauth_context", "", 0);
 const renderResultPage = (
   payload: string,
   isError: boolean,
+  origin: string,
+  allowedOrigins: string[],
   errorDetail?: string,
   authPayload?: Record<string, string>,
 ) => `<!doctype html>
@@ -70,7 +85,7 @@ const renderResultPage = (
     <script>
       (function () {
         var payload = ${JSON.stringify(payload)};
-        var origins = ${JSON.stringify(getAllowedOrigins())};
+        var origins = ${JSON.stringify(allowedOrigins)};
         var authPayload = ${JSON.stringify(authPayload ?? null)};
 
         function send() {
@@ -126,12 +141,17 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code") ?? "";
   const state = url.searchParams.get("state") ?? "";
+  
+  const origin = getCmsOrigin(request);
+  const allowedOrigins = getAllowedOrigins(request);
 
   if (!clientId || !clientSecret) {
     return html(
       renderResultPage(
         "authorization:github:error:{}",
         true,
+        origin,
+        allowedOrigins,
         "GITHUB_CLIENT_ID veya GITHUB_CLIENT_SECRET tanimli degil.",
         { type: "vega-cms-auth-error", message: "GITHUB_CLIENT_ID veya GITHUB_CLIENT_SECRET tanimli degil." },
       ),
@@ -145,6 +165,8 @@ export async function GET(request: Request) {
       renderResultPage(
         "authorization:github:error:{}",
         true,
+        origin,
+        allowedOrigins,
         "GitHub dogrulama kodu eksik.",
         { type: "vega-cms-auth-error", message: "GitHub dogrulama kodu eksik." },
       ),
@@ -163,6 +185,8 @@ export async function GET(request: Request) {
           renderResultPage(
             `authorization:github:error:${JSON.stringify({ message: "State eslesmedi." })}`,
             true,
+            origin,
+            allowedOrigins,
             "Dogrulama durumu eslesmedi. Tekrar deneyin.",
             { type: "vega-cms-auth-error", message: "Dogrulama durumu eslesmedi. Tekrar deneyin." },
           ),
@@ -185,7 +209,7 @@ export async function GET(request: Request) {
       client_id: clientId,
       client_secret: clientSecret,
       code,
-      redirect_uri: `${getCmsOrigin()}/api/cms/callback`,
+      redirect_uri: `${origin}/api/cms/callback`,
     }),
   });
 
@@ -194,6 +218,8 @@ export async function GET(request: Request) {
       renderResultPage(
         `authorization:github:error:${JSON.stringify({ message: "Token alinamadi." })}`,
         true,
+        origin,
+        allowedOrigins,
         `GitHub API yanit kodu: ${response.status}`,
         { type: "vega-cms-auth-error", message: `GitHub API yanit kodu: ${response.status}` },
       ),
@@ -214,6 +240,8 @@ export async function GET(request: Request) {
       renderResultPage(
         `authorization:github:error:${JSON.stringify({ message: msg })}`,
         true,
+        origin,
+        allowedOrigins,
         msg,
         { type: "vega-cms-auth-error", message: msg },
       ),
@@ -228,7 +256,7 @@ export async function GET(request: Request) {
   })}`;
 
   return html(
-    renderResultPage(successPayload, false, undefined, {
+    renderResultPage(successPayload, false, origin, allowedOrigins, undefined, {
       type: "vega-cms-auth",
       token: data.access_token,
       provider: "github",
