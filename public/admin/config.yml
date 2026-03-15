@@ -92,3 +92,4 @@ collections:
           - { label: Anahtar İfade, name: phrase, widget: string }
           - { label: Hedef, name: target, widget: string, hint: "Slug veya tam site içi yol girin." }
       - { label: İçerik, name: body, widget: markdown }
+# collections unique fix - 15 Mart 2026
