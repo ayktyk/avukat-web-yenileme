@@ -1,4 +1,4 @@
-﻿const getEnv = (key: string) => process.env[key]?.trim() ?? "";
+const getEnv = (key: string) => process.env[key]?.trim() ?? "";
 
 const json = (body: Record<string, unknown>, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -10,6 +10,7 @@ const json = (body: Record<string, unknown>, status = 200) =>
   });
 
 const getOrigin = (request: Request) => new URL(request.url).origin;
+const getCmsOrigin = () => getEnv("CMS_SITE_URL") || "https://vegahukukistanbul.com";
 
 const buildCookie = (name: string, value: string, maxAge: number) => {
   const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
@@ -38,11 +39,11 @@ export async function GET(request: Request) {
   const clientId = getEnv("GITHUB_CLIENT_ID");
 
   if (!clientId) {
-    return json({ ok: false, message: "GITHUB_CLIENT_ID tanımlı değil." }, 500);
+    return json({ ok: false, message: "GITHUB_CLIENT_ID tanimli degil." }, 500);
   }
 
   const state = crypto.randomUUID().replaceAll("-", "");
-  const redirectUri = `${getOrigin(request)}/api/cms/callback`;
+  const redirectUri = `${getCmsOrigin()}/api/cms/callback`;
   const authorizeUrl = new URL("https://github.com/login/oauth/authorize");
   const openerOrigin = getRequestOrigin(request);
   const oauthContext = JSON.stringify({ state, origin: openerOrigin });

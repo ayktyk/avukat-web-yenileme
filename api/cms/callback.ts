@@ -11,6 +11,7 @@ const html = (content: string, status = 200, headers?: HeadersInit) =>
   });
 
 const getOrigin = (request: Request) => new URL(request.url).origin;
+const getCmsOrigin = () => getEnv("CMS_SITE_URL") || "https://vegahukukistanbul.com";
 
 const buildCookie = (name: string, value: string, maxAge: number) => {
   const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
@@ -44,7 +45,7 @@ const readOauthContext = (request: Request) => {
   }
 };
 
-const renderMessagePage = (message: string) => `<!doctype html>
+const renderMessagePage = (message: string, targetOrigin: string) => `<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -55,30 +56,11 @@ const renderMessagePage = (message: string) => `<!doctype html>
     <script>
       (function () {
         var payload = ${JSON.stringify(message)};
-        var finished = false;
-
-        function finish(targetOrigin) {
-          if (finished || !window.opener) {
-            return;
-          }
-
-          finished = true;
-          window.opener.postMessage(payload, targetOrigin || "*");
-          window.close();
-        }
-
-        function receiveMessage(message) {
-          window.removeEventListener("message", receiveMessage, false);
-          finish(message && message.origin ? message.origin : "*");
-        }
-
-        window.addEventListener("message", receiveMessage, false);
+        var targetOrigin = ${JSON.stringify(targetOrigin || "*")};
 
         if (window.opener) {
-          window.opener.postMessage("authorizing:github", "*");
-          window.setTimeout(function () {
-            finish("*");
-          }, 3000);
+          window.opener.postMessage(payload, targetOrigin);
+          window.close();
         }
       })();
     </script>
@@ -88,8 +70,8 @@ const renderMessagePage = (message: string) => `<!doctype html>
 
 const clearCookie = buildCookie("cms_oauth_context", "", 0);
 
-const renderError = (message: string, status = 400) =>
-  html(renderMessagePage(`authorization:github:error:${JSON.stringify({ message })}`), status, {
+const renderError = (message: string, targetOrigin: string, status = 400) =>
+  html(renderMessagePage(`authorization:github:error:${JSON.stringify({ message })}`, targetOrigin), status, {
     "set-cookie": clearCookie,
   });
 
@@ -100,13 +82,14 @@ export async function GET(request: Request) {
   const code = url.searchParams.get("code") ?? "";
   const state = url.searchParams.get("state") ?? "";
   const oauthContext = readOauthContext(request);
+  const targetOrigin = oauthContext.origin || getOrigin(request);
 
   if (!clientId || !clientSecret) {
-    return renderError("GitHub OAuth ayarları eksik.", 500);
+    return renderError("GitHub OAuth ayarlari eksik.", targetOrigin, 500);
   }
 
   if (!code || !state || !oauthContext.state || state !== oauthContext.state) {
-    return renderError("GitHub doğrulama durumu eşleşmedi.", 400);
+    return renderError("GitHub dogrulama durumu eslesmedi.", targetOrigin, 400);
   }
 
   const response = await fetch("https://github.com/login/oauth/access_token", {
@@ -119,13 +102,13 @@ export async function GET(request: Request) {
       client_id: clientId,
       client_secret: clientSecret,
       code,
-      redirect_uri: `${getOrigin(request)}/api/cms/callback`,
+      redirect_uri: `${getCmsOrigin()}/api/cms/callback`,
       state,
     }),
   });
 
   if (!response.ok) {
-    return renderError("GitHub erişim anahtarı alınamadı.", 502);
+    return renderError("GitHub erisim anahtari alinamadi.", targetOrigin, 502);
   }
 
   const payload = (await response.json()) as {
@@ -135,7 +118,7 @@ export async function GET(request: Request) {
   };
 
   if (!payload.access_token) {
-    return renderError(payload.error_description || payload.error || "GitHub erişim anahtarı alınamadı.", 502);
+    return renderError(payload.error_description || payload.error || "GitHub erisim anahtari alinamadi.", targetOrigin, 502);
   }
 
   const successMessage = `authorization:github:success:${JSON.stringify({
@@ -143,7 +126,7 @@ export async function GET(request: Request) {
     provider: "github",
   })}`;
 
-  return html(renderMessagePage(successMessage), 200, {
+  return html(renderMessagePage(successMessage, targetOrigin), 200, {
     "set-cookie": clearCookie,
   });
 }

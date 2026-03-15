@@ -27,6 +27,9 @@ describe("cms oauth api", () => {
 
     expect(response.status).toBe(302);
     expect(response.headers.get("location")).toContain("https://github.com/login/oauth/authorize");
+    expect(response.headers.get("location")).toContain(
+      encodeURIComponent("https://vegahukukistanbul.com/api/cms/callback"),
+    );
     expect(response.headers.get("set-cookie")).toContain("cms_oauth_context=");
     expect(response.headers.get("set-cookie")).toContain("www.vegahukukistanbul.com");
   });
@@ -60,9 +63,9 @@ describe("cms oauth api", () => {
     const body = await response.text();
 
     expect(response.status).toBe(200);
-    expect(body).toContain("authorizing:github");
     expect(body).toContain("authorization:github:success");
     expect(body).toContain("github_access_token");
-    expect(body).toContain('finish(message && message.origin ? message.origin : "*")');
+    expect(body).toContain('window.opener.postMessage(payload, targetOrigin);');
+    expect(body).toContain('"https://www.vegahukukistanbul.com"');
   });
 });
