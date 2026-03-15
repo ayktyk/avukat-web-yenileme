@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "/config.yml",
+      "destination": "/admin/config.yml",
+      "permanent": false
+    },
+    {
       "source": "/admin",
       "destination": "/admin/",
       "permanent": false
