@@ -1,58 +1,25 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import ContentPageHeader from "@/components/ContentPageHeader";
-import RelatedContentBox from "@/components/RelatedContentBox";
 import { useSeo } from "@/hooks/use-seo";
 import { formatDateTr } from "@/lib/format-date";
-import { autoLinkRelatedContent, getRelatedContentSuggestions, type LinkableContent, type RelatedContentSuggestion } from "@/lib/internal-linking";
-import { listBlogPosts } from "@/lib/blog-repository";
-import { getLegalUpdateBySlug, listLegalUpdates } from "@/lib/legal-updates-repository";
+import { getLegalUpdateBySlug } from "@/lib/legal-updates-repository";
 import type { LegalUpdate } from "@/types/legal-update";
 
 const LegalUpdatePost = () => {
   const { slug = "" } = useParams();
   const [item, setItem] = useState<LegalUpdate | null>(null);
-  const [linkedContent, setLinkedContent] = useState("");
-  const [relatedItems, setRelatedItems] = useState<RelatedContentSuggestion[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
 
     const loadItem = async () => {
-      const [result, legalUpdates, blogPosts] = await Promise.all([
-        getLegalUpdateBySlug(slug),
-        listLegalUpdates(),
-        listBlogPosts(),
-      ]);
-
+      const result = await getLegalUpdateBySlug(slug);
       if (mounted) {
         setItem(result);
-        if (result) {
-          const source: LinkableContent & { content: string } = {
-            ...result,
-            href: `/guncel-hukuk-gundemi/${result.slug}`,
-          };
-          const candidates: LinkableContent[] = [
-            ...legalUpdates.map((entry) => ({
-              ...entry,
-              href: `/guncel-hukuk-gundemi/${entry.slug}`,
-            })),
-            ...blogPosts.map((entry) => ({
-              ...entry,
-              href: `/blog/${entry.slug}`,
-            })),
-          ];
-
-          setLinkedContent(autoLinkRelatedContent(source, candidates));
-          setRelatedItems(getRelatedContentSuggestions(source, candidates));
-        } else {
-          setLinkedContent("");
-          setRelatedItems([]);
-        }
         setLoading(false);
       }
     };
@@ -105,8 +72,7 @@ const LegalUpdatePost = () => {
   if (loading) {
     return (
       <main className="min-h-screen bg-background">
-        <ContentPageHeader />
-        <section className="section-container py-32">
+        <section className="section-container py-24">
           <p className="text-muted-foreground">İçerik yükleniyor...</p>
         </section>
       </main>
@@ -116,8 +82,7 @@ const LegalUpdatePost = () => {
   if (!item) {
     return (
       <main className="min-h-screen bg-background">
-        <ContentPageHeader />
-        <section className="section-container py-32">
+        <section className="section-container py-24">
           <h1 className="font-display text-4xl font-bold text-primary-deep">İçerik bulunamadı</h1>
           <p className="mt-3 text-muted-foreground">İlgili hukuk gündemi içeriği kaldırılmış olabilir veya bağlantı yanlış olabilir.</p>
           <Link to="/guncel-hukuk-gundemi" className="mt-6 inline-flex items-center gap-2 font-semibold text-primary">
@@ -130,8 +95,7 @@ const LegalUpdatePost = () => {
 
   return (
     <main className="min-h-screen bg-background">
-      <ContentPageHeader />
-      <article className="section-container max-w-[900px] pt-32 pb-16">
+      <article className="section-container max-w-[900px] pt-24 pb-16">
         <Link
           to="/guncel-hukuk-gundemi"
           className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary"
@@ -156,8 +120,10 @@ const LegalUpdatePost = () => {
           <img
             src={item.coverImage}
             alt={item.title}
-            className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl object-cover object-top"
+            className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl object-cover"
             loading="eager"
+            decoding="async"
+            fetchPriority="high"
           />
         ) : (
           <div
@@ -173,19 +139,15 @@ const LegalUpdatePost = () => {
             components={{
               h2: ({ node, ...props }) => <h2 className="mt-10 font-display text-3xl font-bold text-primary-deep" {...props} />,
               h3: ({ node, ...props }) => <h3 className="mt-8 font-display text-2xl font-bold text-primary-deep" {...props} />,
-              img: ({ node, ...props }) => <img className="mt-8 w-full rounded-2xl border border-border bg-card object-contain" {...props} />,
               p: ({ node, ...props }) => <p className="mt-5" {...props} />,
               ul: ({ node, ...props }) => <ul className="mt-5 list-disc space-y-2 pl-6" {...props} />,
               ol: ({ node, ...props }) => <ol className="mt-5 list-decimal space-y-2 pl-6" {...props} />,
               li: ({ node, ...props }) => <li className="pl-1" {...props} />,
-              a: ({ node, ...props }) => <a className="font-semibold text-primary underline underline-offset-4" {...props} />,
             }}
           >
-            {linkedContent || item.content}
+            {item.content}
           </ReactMarkdown>
         </div>
-
-        <RelatedContentBox items={relatedItems} />
       </article>
     </main>
   );
