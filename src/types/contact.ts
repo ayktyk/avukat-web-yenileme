@@ -1,7 +1,6 @@
 export type ContactFormPayload = {
   adsoyad: string;
-  email?: string;
-  telefon?: string;
+  email: string;
   mesaj: string;
   kvkkOnay: boolean;
   website?: string;
@@ -16,6 +15,16 @@ export type CallbackRequestPayload = {
   website?: string;
 };
 
+export type EvaluationRequestPayload = {
+  adsoyad: string;
+  email?: string;
+  telefon?: string;
+  konu?: string;
+  mesaj?: string;
+  kvkkOnay: boolean;
+  website?: string;
+};
+
 export type InquiryPayload = {
   adsoyad: string;
   email?: string;
@@ -24,7 +33,7 @@ export type InquiryPayload = {
   mesaj?: string;
   kvkkOnay: boolean;
   website?: string;
-  source: "website-contact-form" | "website-callback-form";
+  source: "website-contact-form" | "website-callback-form" | "website-evaluation-form";
 };
 
 export type ContactServiceErrorCode =

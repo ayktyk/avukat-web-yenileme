@@ -2,6 +2,7 @@
   ContactServiceError,
   type CallbackRequestPayload,
   type ContactFormPayload,
+  type EvaluationRequestPayload,
   type InquiryPayload,
 } from "@/types/contact";
 
@@ -66,8 +67,16 @@ const validateInquiryPayload = (payload: InquiryPayload) => {
     throw new ContactServiceError("invalid", "En az bir iletişim bilgisi girin.");
   }
 
+  if (payload.source === "website-contact-form" && !email) {
+    throw new ContactServiceError("invalid", "İletişim formunda e-posta zorunludur.");
+  }
+
   if (payload.source === "website-callback-form" && !telefon) {
     throw new ContactServiceError("invalid", "Ön değerlendirme formunda telefon zorunludur.");
+  }
+
+  if (payload.source === "website-evaluation-form" && !email && !telefon) {
+    throw new ContactServiceError("invalid", "Telefon veya e-posta bilgilerinden en az birini girin.");
   }
 
   if (!mesaj && !konu) {
@@ -143,4 +152,10 @@ export const submitCallbackRequest = async (payload: CallbackRequestPayload) =>
   submitInquiry({
     ...payload,
     source: "website-callback-form",
+  });
+
+export const submitEvaluationRequest = async (payload: EvaluationRequestPayload) =>
+  submitInquiry({
+    ...payload,
+    source: "website-evaluation-form",
   });

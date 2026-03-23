@@ -1,58 +1,25 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import ContentPageHeader from "@/components/ContentPageHeader";
-import RelatedContentBox from "@/components/RelatedContentBox";
 import { useSeo } from "@/hooks/use-seo";
 import { formatDateTr } from "@/lib/format-date";
-import { autoLinkRelatedContent, getRelatedContentSuggestions, type LinkableContent, type RelatedContentSuggestion } from "@/lib/internal-linking";
-import { getBlogPostBySlug, listBlogPosts } from "@/lib/blog-repository";
-import { listLegalUpdates } from "@/lib/legal-updates-repository";
+import { getBlogPostBySlug } from "@/lib/blog-repository";
 import type { BlogPost as BlogPostType } from "@/types/blog";
 
 const BlogPost = () => {
   const { slug = "" } = useParams();
   const [post, setPost] = useState<BlogPostType | null>(null);
-  const [linkedContent, setLinkedContent] = useState("");
-  const [relatedItems, setRelatedItems] = useState<RelatedContentSuggestion[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
 
     const loadPost = async () => {
-      const [result, blogPosts, legalUpdates] = await Promise.all([
-        getBlogPostBySlug(slug),
-        listBlogPosts(),
-        listLegalUpdates(),
-      ]);
-
+      const result = await getBlogPostBySlug(slug);
       if (mounted) {
         setPost(result);
-        if (result) {
-          const source: LinkableContent & { content: string } = {
-            ...result,
-            href: `/blog/${result.slug}`,
-          };
-          const candidates: LinkableContent[] = [
-            ...blogPosts.map((item) => ({
-              ...item,
-              href: `/blog/${item.slug}`,
-            })),
-            ...legalUpdates.map((item) => ({
-              ...item,
-              href: `/guncel-hukuk-gundemi/${item.slug}`,
-            })),
-          ];
-
-          setLinkedContent(autoLinkRelatedContent(source, candidates));
-          setRelatedItems(getRelatedContentSuggestions(source, candidates));
-        } else {
-          setLinkedContent("");
-          setRelatedItems([]);
-        }
         setLoading(false);
       }
     };
@@ -110,8 +77,7 @@ const BlogPost = () => {
   if (loading) {
     return (
       <main className="min-h-screen bg-background">
-        <ContentPageHeader />
-        <section className="section-container py-32">
+        <section className="section-container py-24">
           <p className="text-muted-foreground">Yazı yükleniyor...</p>
         </section>
       </main>
@@ -121,8 +87,7 @@ const BlogPost = () => {
   if (!post) {
     return (
       <main className="min-h-screen bg-background">
-        <ContentPageHeader />
-        <section className="section-container py-32">
+        <section className="section-container py-24">
           <h1 className="font-display text-4xl font-bold text-primary-deep">Yazı bulunamadı</h1>
           <p className="mt-3 text-muted-foreground">
             İstediğiniz blog yazısı kaldırılmış olabilir veya bağlantı yanlış olabilir.
@@ -137,8 +102,7 @@ const BlogPost = () => {
 
   return (
     <main className="min-h-screen bg-background">
-      <ContentPageHeader />
-      <article className="section-container max-w-[900px] pt-32 pb-16">
+      <article className="section-container max-w-[900px] pt-24 pb-16">
         <Link
           to="/blog"
           className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary"
@@ -165,8 +129,10 @@ const BlogPost = () => {
           <img
             src={post.coverImage}
             alt={post.title}
-            className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl object-cover object-top"
+            className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl object-cover"
             loading="eager"
+            decoding="async"
+            fetchPriority="high"
           />
         ) : (
           <div
@@ -182,7 +148,6 @@ const BlogPost = () => {
             components={{
               h2: ({ node, ...props }) => <h2 className="mt-10 font-display text-3xl font-bold text-primary-deep" {...props} />,
               h3: ({ node, ...props }) => <h3 className="mt-8 font-display text-2xl font-bold text-primary-deep" {...props} />,
-              img: ({ node, ...props }) => <img className="mt-8 w-full rounded-2xl border border-border bg-card object-contain" {...props} />,
               p: ({ node, ...props }) => <p className="mt-5" {...props} />,
               ul: ({ node, ...props }) => <ul className="mt-5 list-disc space-y-2 pl-6" {...props} />,
               ol: ({ node, ...props }) => <ol className="mt-5 list-decimal space-y-2 pl-6" {...props} />,
@@ -194,11 +159,9 @@ const BlogPost = () => {
               strong: ({ node, ...props }) => <strong className="font-semibold text-primary-deep" {...props} />,
             }}
           >
-            {linkedContent || post.content}
+            {post.content}
           </ReactMarkdown>
         </div>
-
-        <RelatedContentBox items={relatedItems} />
 
         <div className="mt-12 rounded-xl border border-border bg-card p-5">
           <p className="text-sm text-muted-foreground">

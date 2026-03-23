@@ -1,6 +1,5 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { ArrowRight, CalendarDays, Scale } from "lucide-react";
 import { listLatestLegalUpdates } from "@/lib/legal-updates-repository";
 import { formatDateTr } from "@/lib/format-date";
@@ -33,23 +32,12 @@ const LegalUpdatesSection = () => {
       <div className="section-container">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-5">
           <div>
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[2.5px] text-accent before:h-[1.5px] before:w-6 before:bg-accent before:content-['']"
-            >
+            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[2.5px] text-accent before:h-[1.5px] before:w-6 before:bg-accent before:content-['']">
               Gündem
-            </motion.span>
-            <motion.h3
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="mt-3 font-display text-[clamp(30px,4vw,42px)] font-bold leading-[1.15] text-primary-deep"
-            >
+            </span>
+            <h3 className="mt-3 font-display text-[clamp(30px,4vw,42px)] font-bold leading-[1.15] text-primary-deep">
               Güncel Hukuk Gündemi
-            </motion.h3>
+            </h3>
             <p className="mt-3 max-w-[70ch] text-base text-muted-foreground">
               Güncel hukuki gelişmeleri, önemli Yargıtay kararlarını ve uygulamaya dönük kısa notları panelden ekleyip
               burada yayınlayabilirsin.
@@ -67,37 +55,34 @@ const LegalUpdatesSection = () => {
           <p className="text-muted-foreground">Gündem yükleniyor...</p>
         ) : (
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            {items.map((item, index) => (
-              <motion.article
+            {items.map((item) => (
+              <article
                 key={item.slug}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="group rounded-2xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/25 hover:shadow-elegant-lg"
+                className="rounded-2xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/25 hover:shadow-elegant-lg"
               >
-                <Link to={`/guncel-hukuk-gundemi/${item.slug}`} className="block overflow-hidden rounded-xl">
-                  {item.coverImage ? (
-                    <img
-                      src={item.coverImage}
-                      alt={item.title}
-                      className="mb-5 aspect-[16/8] w-full rounded-xl object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div
-                      className={`mb-5 aspect-[16/8] w-full rounded-xl bg-gradient-to-br ${
-                        item.coverClass ?? "from-primary/[0.08] to-primary/[0.03]"
-                      }`}
-                    />
-                  )}
-                </Link>
+                {item.coverImage ? (
+                  <img
+                    src={item.coverImage}
+                    alt={item.title}
+                    className="mb-5 aspect-[16/8] w-full rounded-xl object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <div
+                    className={`mb-5 aspect-[16/8] w-full rounded-xl bg-gradient-to-br ${
+                      item.coverClass ?? "from-primary/[0.08] to-primary/[0.03]"
+                    }`}
+                  />
+                )}
                 <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-accent">
                   <CalendarDays className="h-3.5 w-3.5" />
                   {formatDateTr(item.publishedAt)}
                 </div>
                 <Link to={`/guncel-hukuk-gundemi/${item.slug}`} className="block">
-                  <h4 className="font-display text-2xl font-bold text-primary-deep transition-colors hover:text-primary">{item.title}</h4>
+                  <h4 className="font-display text-2xl font-bold text-primary-deep transition-colors hover:text-primary">
+                    {item.title}
+                  </h4>
                 </Link>
                 <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">{item.excerpt}</p>
                 <div className="mt-5 flex items-center gap-2">
@@ -109,7 +94,7 @@ const LegalUpdatesSection = () => {
                 >
                   Devamını oku <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
-              </motion.article>
+              </article>
             ))}
           </div>
         )}

@@ -39,7 +39,6 @@ const SiteFooter = () => {
             {[
               { label: "Hakkımızda", href: "#hakkimizda" },
               { label: "Çalışma Alanları", href: "#calisma-alanlari" },
-              { label: "Müvekkil Yorumları", href: "#muvekkil-gorusleri" },
               { label: "Yayınlar", href: "#yayinlar" },
               { label: "Hukuk Gündemi", href: "#hukuk-gundemi" },
               { label: "İletişim", href: "#iletisim" },
@@ -63,11 +62,6 @@ const SiteFooter = () => {
         <div>
           <h5 className="mb-4 font-display text-base font-bold tracking-wide text-primary-foreground">Yasal</h5>
           <ul className="space-y-2.5">
-            <li>
-              <Link to="/muvekkil-yorumlari" className="text-sm transition-colors hover:text-accent-light">
-                Müvekkil Yorumları
-              </Link>
-            </li>
             <li>
               <Link to="/kvkk-aydinlatma" className="text-sm transition-colors hover:text-accent-light">
                 KVKK Aydınlatma Metni

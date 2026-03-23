@@ -10,7 +10,7 @@ seoTitle: Tahliye Taahhüdü Geçerlilik Şartları 2026 | Vega Hukuk
 seoDescription: Tahliye taahhüdü nedir, nasıl geçerli olur? TBK 352/1 kapsamında
   yazılı şekil şartı, düzenleme tarihi ve Yargıtay'ın en güncel kararları
   hakkında detaylı rehber.
-coverImage: /uploads/blog/chatgpt-image-12-mar-2026-18_00_10.png
+coverImage: /uploads/blog/chatgpt-image-12-mar-2026-18_00_10.webp
 ---
 ## Tahliye Taahhüdüyle İlgili Mutlaka Bilinmesi Gerekenler
 

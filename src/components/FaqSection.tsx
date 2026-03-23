@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 
@@ -52,48 +51,40 @@ const FaqSection = () => {
   }, []);
 
   return (
-    <section id="sss" className="py-20 bg-cream">
+    <section id="sss" className="bg-cream py-20">
       <div className="section-container">
         <div className="mb-10">
-          <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            className="inline-flex items-center gap-2 text-xs font-bold tracking-[2.5px] uppercase text-accent before:content-[''] before:w-6 before:h-[1.5px] before:bg-accent">
+          <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[2.5px] text-accent before:h-[1.5px] before:w-6 before:bg-accent before:content-['']">
             SSS
-          </motion.span>
-          <motion.h3 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
-            className="font-display text-[clamp(30px,4vw,42px)] font-bold leading-[1.15] text-primary-deep mt-3">
+          </span>
+          <h3 className="mt-3 font-display text-[clamp(30px,4vw,42px)] font-bold leading-[1.15] text-primary-deep">
             Sık Sorulan Sorular
-          </motion.h3>
-          <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
-            className="text-base leading-relaxed text-muted-foreground mt-4">
-            Kısa, net ve anlaşılır yanıtlar.
-          </motion.p>
+          </h3>
+          <p className="mt-4 text-base leading-relaxed text-muted-foreground">Kısa, net ve anlaşılır yanıtlar.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {faqs.map((faq, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-card border border-border rounded-2xl p-7 cursor-pointer hover:-translate-y-1 hover:shadow-elegant-lg transition-all duration-400"
-              onClick={() => setOpenIndex(openIndex === i ? null : i)}
-            >
-              <div className="flex items-center justify-between gap-4">
-                <h4 className="font-display text-lg font-bold text-primary-deep">{faq.q}</h4>
-                <Plus className={`w-5 h-5 text-accent flex-shrink-0 transition-transform duration-300 ${openIndex === i ? "rotate-45" : ""}`} />
-              </div>
-              <motion.div
-                initial={false}
-                animate={{ height: openIndex === i ? "auto" : 0, opacity: openIndex === i ? 1 : 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
+
+            return (
+              <div
+                key={faq.q}
+                className="cursor-pointer rounded-2xl border border-border bg-card p-7 transition-all duration-400 hover:-translate-y-1 hover:shadow-elegant-lg"
+                onClick={() => setOpenIndex(isOpen ? null : index)}
               >
-                <p className="text-[14.5px] leading-relaxed text-muted-foreground mt-3 pb-1">{faq.a}</p>
-              </motion.div>
-            </motion.div>
-          ))}
+                <div className="flex items-center justify-between gap-4">
+                  <h4 className="font-display text-lg font-bold text-primary-deep">{faq.q}</h4>
+                  <Plus className={`h-5 w-5 flex-shrink-0 text-accent transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`} />
+                </div>
+                <div className={`grid overflow-hidden transition-all duration-300 ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+                  <div className="overflow-hidden">
+                    <p className="mt-3 pb-1 text-[14.5px] leading-relaxed text-muted-foreground">{faq.a}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

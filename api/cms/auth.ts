@@ -1,24 +1,4 @@
-const getEnv = (key: string) => process.env[key]?.trim() ?? "";
-
-const html = (content: string, status = 200, headers?: HeadersInit) =>
-  new Response(content, {
-    status,
-    headers: {
-      "content-type": "text/html; charset=utf-8",
-      "cache-control": "no-store",
-      ...headers,
-    },
-  });
-
-const redirect = (location: string, headers?: HeadersInit) =>
-  new Response(null, {
-    status: 302,
-    headers: {
-      location,
-      "cache-control": "no-store",
-      ...headers,
-    },
-  });
+﻿const getEnv = (key: string) => process.env[key]?.trim() ?? "";
 
 const json = (body: Record<string, unknown>, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -29,89 +9,54 @@ const json = (body: Record<string, unknown>, status = 200) =>
     },
   });
 
-const getCmsOrigin = (request?: Request) => {
-  const envUrl = getEnv("CMS_SITE_URL");
-  if (envUrl) return envUrl;
+const getOrigin = (request: Request) => new URL(request.url).origin;
 
-  if (request) {
-    const host = request.headers.get("host");
-    if (host) {
-      const protocol = host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https";
-      return `${protocol}://${host}`;
+const buildCookie = (name: string, value: string, maxAge: number) => {
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  return `${name}=${encodeURIComponent(value)}; HttpOnly; Max-Age=${maxAge}; Path=/; SameSite=Lax${secure}`;
+};
+
+const getRequestOrigin = (request: Request) => {
+  const headerOrigin = request.headers.get("origin")?.trim();
+  if (headerOrigin) {
+    return headerOrigin;
+  }
+
+  const referer = request.headers.get("referer");
+  if (referer) {
+    try {
+      return new URL(referer).origin;
+    } catch {
+      return getOrigin(request);
     }
   }
 
-  return "https://vegahukukistanbul.com";
+  return getOrigin(request);
 };
-
-const renderHandshakePage = (authorizeUrl: string, origin: string) => `<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="robots" content="noindex" />
-    <title>CMS Auth</title>
-  </head>
-  <body>
-    <p>GitHub'a yonlendiriliyor...</p>
-    <script>
-      (function () {
-        var authorizeUrl = ${JSON.stringify(authorizeUrl)};
-        var targetOrigin = ${JSON.stringify(origin)};
-        var started = false;
-
-        function startAuth() {
-          if (started) return;
-          started = true;
-          window.location.replace(authorizeUrl);
-        }
-
-        window.addEventListener("message", function (event) {
-          if (event.origin === targetOrigin && event.data === "authorizing:github") {
-            startAuth();
-          }
-        });
-
-        if (window.opener) {
-          window.opener.postMessage("authorizing:github", targetOrigin);
-        }
-
-        // 800ms sonra otomatik yönlendir (handshake beklemeden)
-        window.setTimeout(startAuth, 800);
-      })();
-    </script>
-  </body>
-</html>`;
 
 export async function GET(request: Request) {
   const clientId = getEnv("GITHUB_CLIENT_ID");
 
   if (!clientId) {
-    return json({ ok: false, message: "GITHUB_CLIENT_ID tanimli degil." }, 500);
+    return json({ ok: false, message: "GITHUB_CLIENT_ID tanımlı değil." }, 500);
   }
 
-  const origin = getCmsOrigin(request);
   const state = crypto.randomUUID().replaceAll("-", "");
-  const url = new URL(request.url);
-  const isDirectMode = url.searchParams.get("mode") === "direct";
-  const redirectUri = `${origin}/api/cms/callback`;
+  const redirectUri = `${getOrigin(request)}/api/cms/callback`;
   const authorizeUrl = new URL("https://github.com/login/oauth/authorize");
+  const openerOrigin = getRequestOrigin(request);
+  const oauthContext = JSON.stringify({ state, origin: openerOrigin });
 
   authorizeUrl.searchParams.set("client_id", clientId);
   authorizeUrl.searchParams.set("redirect_uri", redirectUri);
   authorizeUrl.searchParams.set("scope", "repo");
   authorizeUrl.searchParams.set("state", state);
 
-  const oauthContext = JSON.stringify({ state, origin: origin });
-  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
-  const cookie = `cms_oauth_context=${encodeURIComponent(oauthContext)}; HttpOnly; Max-Age=600; Path=/; SameSite=Lax${secure}`;
-
-  if (isDirectMode) {
-    return redirect(authorizeUrl.toString(), {
-      "set-cookie": cookie,
-    });
-  }
-
-  return html(renderHandshakePage(authorizeUrl.toString(), origin), 200, {
-    "set-cookie": cookie,
+  return new Response(null, {
+    status: 302,
+    headers: {
+      location: authorizeUrl.toString(),
+      "set-cookie": buildCookie("cms_oauth_context", oauthContext, 600),
+    },
   });
 }

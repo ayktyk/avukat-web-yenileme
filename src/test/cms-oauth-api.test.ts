@@ -14,18 +14,21 @@ describe("cms oauth api", () => {
     process.env = originalEnv;
   });
 
-  it("returns a handshake page from the auth endpoint and stores oauth context", async () => {
+  it("redirects to GitHub authorize from the auth endpoint and stores oauth context", async () => {
     process.env.GITHUB_CLIENT_ID = "github_client_id";
 
-    const response = await getAuth(new Request("https://vegahukukistanbul.com/api/cms/auth"));
-    const body = await response.text();
+    const response = await getAuth(
+      new Request("https://vegahukukistanbul.com/api/cms/auth", {
+        headers: {
+          referer: "https://www.vegahukukistanbul.com/admin/#/",
+        },
+      }),
+    );
 
-    expect(response.status).toBe(200);
-    expect(body).toContain("authorizing:github");
-    expect(body).toContain("window.location.replace(authorizeUrl)");
-    expect(body).toContain(encodeURIComponent("https://vegahukukistanbul.com/api/cms/callback"));
+    expect(response.status).toBe(302);
+    expect(response.headers.get("location")).toContain("https://github.com/login/oauth/authorize");
     expect(response.headers.get("set-cookie")).toContain("cms_oauth_context=");
-    expect(response.headers.get("set-cookie")).toContain("vegahukukistanbul.com");
+    expect(response.headers.get("set-cookie")).toContain("www.vegahukukistanbul.com");
   });
 
   it("returns a success message page after exchanging the GitHub code", async () => {
@@ -42,7 +45,7 @@ describe("cms oauth api", () => {
     const cookieValue = encodeURIComponent(
       JSON.stringify({
         state: "test-state",
-        origin: "https://vegahukukistanbul.com",
+        origin: "https://www.vegahukukistanbul.com",
       }),
     );
 
@@ -57,11 +60,9 @@ describe("cms oauth api", () => {
     const body = await response.text();
 
     expect(response.status).toBe(200);
+    expect(body).toContain("authorizing:github");
     expect(body).toContain("authorization:github:success");
     expect(body).toContain("github_access_token");
-    expect(body).toContain("origins.forEach");
-    expect(body).toContain('"https://vegahukukistanbul.com"');
-    expect(body).toContain('"decap-cms-user"');
-    expect(body).toContain('window.location.replace("/admin/#/")');
+    expect(body).toContain('finish(message && message.origin ? message.origin : "*")');
   });
 });

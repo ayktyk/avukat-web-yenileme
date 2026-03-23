@@ -1,29 +1,4 @@
 {
-  "headers": [
-    {
-      "source": "/admin/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
-      ]
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/admin/api/cms/:path*",
-      "destination": "/api/cms/:path*",
-      "permanent": false
-    },
-    {
-      "source": "/config.yml",
-      "destination": "/admin/config.yml",
-      "permanent": false
-    },
-    {
-      "source": "/admin",
-      "destination": "/admin/",
-      "permanent": false
-    }
-  ],
   "rewrites": [
     {
       "source": "/blog/:path*",

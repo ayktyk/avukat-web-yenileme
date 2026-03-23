@@ -1,6 +1,4 @@
-import type { InternalLinkRule } from "@/types/internal-links";
-
-export interface BlogPost {
+﻿export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
@@ -13,6 +11,4 @@ export interface BlogPost {
   seoDescription?: string;
   coverClass?: string;
   coverImage?: string;
-  internalLinkPriority?: string[];
-  internalLinkMatches?: InternalLinkRule[];
 }

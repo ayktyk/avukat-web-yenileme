@@ -100,8 +100,16 @@ const validateBody = (body: ContactRequestBody) => {
     throw error(400, "invalid_payload", "En az bir iletişim bilgisi gereklidir.");
   }
 
+  if (source === "website-contact-form" && !email) {
+    throw error(400, "invalid_payload", "İletişim formunda e-posta zorunludur.");
+  }
+
   if (source === "website-callback-form" && !telefon) {
     throw error(400, "invalid_payload", "Ön değerlendirme formunda telefon zorunludur.");
+  }
+
+  if (source === "website-evaluation-form" && !email && !telefon) {
+    throw error(400, "invalid_payload", "Telefon veya e-posta bilgilerinden en az birini girin.");
   }
 
   if (!mesaj && !konu) {
@@ -124,7 +132,17 @@ const validateBody = (body: ContactRequestBody) => {
   };
 };
 
-const sourceTitle = (source: string) => (source === "website-callback-form" ? "Ön değerlendirme talebi" : "İletişim formu mesajı");
+const sourceTitle = (source: string) => {
+  if (source === "website-callback-form") {
+    return "Ön değerlendirme talebi";
+  }
+
+  if (source === "website-evaluation-form") {
+    return "Ücretsiz ön değerlendirme talebi";
+  }
+
+  return "İletişim formu mesajı";
+};
 
 const sendWithResend = async (body: ReturnType<typeof validateBody>) => {
   const apiKey = getEnv("RESEND_API_KEY");

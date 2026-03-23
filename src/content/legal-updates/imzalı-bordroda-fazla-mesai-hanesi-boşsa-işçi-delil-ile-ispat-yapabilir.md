@@ -9,7 +9,7 @@ publishedAt: 2026-03-10
 seoTitle: " İmzalı Bordroda Fazla Mesai Boşsa Fazla Çalışma Nasıl İspatlanır?"
 seoDescription: Yargıtay uygulamasına göre, bordroda fazla mesai tahakkuku yoksa
   işçi fazla çalışmayı tanık dahil her türlü delille ispat edebilir.
-coverImage: /uploads/blog/fazla-mesai-bordro.png
+coverImage: /uploads/blog/fazla-mesai-bordro.webp
 ---
 İmzalı bordroda fazla mesai tahakkukunun hiç bulunmaması halinde, işçi bordroyu imzalarken ihtirazi kayıt koymamış olsa dahi fazla çalışma yaptığını tanık dahil her türlü delille ispat edebilir.
 

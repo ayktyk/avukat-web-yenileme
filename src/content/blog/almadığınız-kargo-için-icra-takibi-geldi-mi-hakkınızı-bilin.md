@@ -12,7 +12,7 @@ seoDescription: Online alışverişte kargoyu teslim almadınız ama icra takibi
   geldi mi? Mesafeli sözleşmelerde cayma hakkı, kargo ücreti sorumluluğu ve icra
   takibine itiraz yollarını öğrenin. Güncel mevzuat ve Yargıtay kararları
   ışığında tüketici hakları rehberi.
-coverImage: /uploads/blog/gemini_generated_image_nkrjd8nkrjd8nkrj.png
+coverImage: /uploads/blog/gemini_generated_image_nkrjd8nkrjd8nkrj.webp
 ---
 
 

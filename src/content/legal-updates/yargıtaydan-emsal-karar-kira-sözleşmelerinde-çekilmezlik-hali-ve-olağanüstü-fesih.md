@@ -17,7 +17,7 @@ excerpt: >
 category: Güncel Hukuk Gelişmeleri Kira Hukuku
 publishedAt: 2026-03-14
 seoTitle: "Kira Sözleşmesinde Olağanüstü Fesih: Yargıtay'dan Çekilmezlik Hali Kararı"
-coverImage: /uploads/blog/12.png
+coverImage: /uploads/blog/12.webp
 ---
 **Yargıtay'dan Kira Hukukunda Emsal Nitelikte "Olağanüstü Fesih" Kararı**
 

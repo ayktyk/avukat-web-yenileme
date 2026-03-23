@@ -10,34 +10,7 @@ const html = (content: string, status = 200, headers?: HeadersInit) =>
     },
   });
 
-const getCmsOrigin = (request?: Request) => {
-  const envUrl = getEnv("CMS_SITE_URL");
-  if (envUrl) return envUrl;
-
-  if (request) {
-    const host = request.headers.get("host");
-    if (host) {
-      const protocol = host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https";
-      return `${protocol}://${host}`;
-    }
-  }
-
-  return "https://vegahukukistanbul.com";
-};
-
-const getAllowedOrigins = (request?: Request) => {
-  const base = getCmsOrigin(request);
-  const origins = new Set<string>([base]);
-
-  if (base === "https://vegahukukistanbul.com") {
-    origins.add("https://www.vegahukukistanbul.com");
-  }
-  if (base === "https://www.vegahukukistanbul.com") {
-    origins.add("https://vegahukukistanbul.com");
-  }
-
-  return [...origins];
-};
+const getOrigin = (request: Request) => new URL(request.url).origin;
 
 const buildCookie = (name: string, value: string, maxAge: number) => {
   const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
@@ -54,86 +27,71 @@ const readCookie = (request: Request, name: string) => {
   return pair ? decodeURIComponent(pair.split("=").slice(1).join("=")) : "";
 };
 
-const clearCookie = buildCookie("cms_oauth_context", "", 0);
+const readOauthContext = (request: Request) => {
+  const raw = readCookie(request, "cms_oauth_context");
+  if (!raw) {
+    return { state: "", origin: getOrigin(request) };
+  }
 
-const renderResultPage = (
-  payload: string,
-  isError: boolean,
-  origin: string,
-  allowedOrigins: string[],
-  errorDetail?: string,
-  authPayload?: Record<string, string>,
-) => `<!doctype html>
+  try {
+    const parsed = JSON.parse(raw) as { state?: string; origin?: string };
+    return {
+      state: typeof parsed.state === "string" ? parsed.state : "",
+      origin: typeof parsed.origin === "string" ? parsed.origin : getOrigin(request),
+    };
+  } catch {
+    return { state: "", origin: getOrigin(request) };
+  }
+};
+
+const renderMessagePage = (message: string) => `<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
     <meta name="robots" content="noindex" />
     <title>CMS Auth</title>
-    <style>
-      body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #f5f1ea; color: #1d2830; }
-      .box { text-align: center; padding: 32px; }
-      .error { color: #b91c1c; }
-      .detail { margin-top: 12px; font-size: 13px; color: #6a7680; }
-    </style>
   </head>
   <body>
-    <div class="box">
-      <p>${isError ? '<span class="error">Giris basarisiz.</span>' : 'Giris tamamlaniyor...'}</p>
-      ${errorDetail ? `<p class="detail">${errorDetail}</p>` : ""}
-      ${isError ? '<p class="detail"><a href="/admin/">Admin paneline don</a></p>' : ""}
-    </div>
     <script>
       (function () {
-        var payload = ${JSON.stringify(payload)};
-        var origins = ${JSON.stringify(allowedOrigins)};
-        var authPayload = ${JSON.stringify(authPayload ?? null)};
+        var payload = ${JSON.stringify(message)};
+        var finished = false;
 
-        function send() {
-          if (window.opener) {
-            origins.forEach(function (origin) {
-              window.opener.postMessage(payload, origin);
-              if (authPayload) {
-                window.opener.postMessage(authPayload, origin);
-              }
-            });
-            return true;
+        function finish(targetOrigin) {
+          if (finished || !window.opener) {
+            return;
           }
 
-          if (authPayload && authPayload.type === "vega-cms-auth" && authPayload.token) {
-            try {
-              window.localStorage.setItem(
-                "decap-cms-user",
-                JSON.stringify({
-                  backendName: "github",
-                  token: authPayload.token,
-                  provider: authPayload.provider || "github",
-                }),
-              );
-              window.location.replace("/admin/#/");
-              return true;
-            } catch (error) {
-              console.error("Direct CMS auth bridge failed.", error);
-            }
-          }
-
-          return false;
+          finished = true;
+          window.opener.postMessage(payload, targetOrigin || "*");
+          window.close();
         }
 
-        var attempts = 0;
-        var timer = setInterval(function () {
-          attempts++;
-          send();
-          if (attempts >= 10) {
-            clearInterval(timer);
-            if (!${JSON.stringify(isError)}) {
-              setTimeout(function () { window.close(); }, 200);
-            }
-          }
-        }, 150);
+        function receiveMessage(message) {
+          window.removeEventListener("message", receiveMessage, false);
+          finish(message && message.origin ? message.origin : "*");
+        }
+
+        window.addEventListener("message", receiveMessage, false);
+
+        if (window.opener) {
+          window.opener.postMessage("authorizing:github", "*");
+          window.setTimeout(function () {
+            finish("*");
+          }, 3000);
+        }
       })();
     </script>
+    <p>Bu pencereyi kapatabilirsiniz.</p>
   </body>
 </html>`;
+
+const clearCookie = buildCookie("cms_oauth_context", "", 0);
+
+const renderError = (message: string, status = 400) =>
+  html(renderMessagePage(`authorization:github:error:${JSON.stringify({ message })}`), status, {
+    "set-cookie": clearCookie,
+  });
 
 export async function GET(request: Request) {
   const clientId = getEnv("GITHUB_CLIENT_ID");
@@ -141,62 +99,14 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code") ?? "";
   const state = url.searchParams.get("state") ?? "";
-  
-  const origin = getCmsOrigin(request);
-  const allowedOrigins = getAllowedOrigins(request);
+  const oauthContext = readOauthContext(request);
 
   if (!clientId || !clientSecret) {
-    return html(
-      renderResultPage(
-        "authorization:github:error:{}",
-        true,
-        origin,
-        allowedOrigins,
-        "GITHUB_CLIENT_ID veya GITHUB_CLIENT_SECRET tanimli degil.",
-        { type: "vega-cms-auth-error", message: "GITHUB_CLIENT_ID veya GITHUB_CLIENT_SECRET tanimli degil." },
-      ),
-      500,
-      { "set-cookie": clearCookie },
-    );
+    return renderError("GitHub OAuth ayarları eksik.", 500);
   }
 
-  if (!code) {
-    return html(
-      renderResultPage(
-        "authorization:github:error:{}",
-        true,
-        origin,
-        allowedOrigins,
-        "GitHub dogrulama kodu eksik.",
-        { type: "vega-cms-auth-error", message: "GitHub dogrulama kodu eksik." },
-      ),
-      400,
-      { "set-cookie": clearCookie },
-    );
-  }
-
-  // State doğrulama: cookie varsa kontrol et, yoksa devam et (incognito uyumu)
-  const rawCookie = readCookie(request, "cms_oauth_context");
-  if (rawCookie) {
-    try {
-      const ctx = JSON.parse(rawCookie) as { state?: string };
-      if (ctx.state && state && ctx.state !== state) {
-        return html(
-          renderResultPage(
-            `authorization:github:error:${JSON.stringify({ message: "State eslesmedi." })}`,
-            true,
-            origin,
-            allowedOrigins,
-            "Dogrulama durumu eslesmedi. Tekrar deneyin.",
-            { type: "vega-cms-auth-error", message: "Dogrulama durumu eslesmedi. Tekrar deneyin." },
-          ),
-          400,
-          { "set-cookie": clearCookie },
-        );
-      }
-    } catch {
-      // Cookie parse hatası — devam et
-    }
+  if (!code || !state || !oauthContext.state || state !== oauthContext.state) {
+    return renderError("GitHub doğrulama durumu eşleşmedi.", 400);
   }
 
   const response = await fetch("https://github.com/login/oauth/access_token", {
@@ -209,61 +119,31 @@ export async function GET(request: Request) {
       client_id: clientId,
       client_secret: clientSecret,
       code,
-      redirect_uri: `${origin}/api/cms/callback`,
+      redirect_uri: `${getOrigin(request)}/api/cms/callback`,
+      state,
     }),
   });
 
   if (!response.ok) {
-    return html(
-      renderResultPage(
-        `authorization:github:error:${JSON.stringify({ message: "Token alinamadi." })}`,
-        true,
-        origin,
-        allowedOrigins,
-        `GitHub API yanit kodu: ${response.status}`,
-        { type: "vega-cms-auth-error", message: `GitHub API yanit kodu: ${response.status}` },
-      ),
-      502,
-      { "set-cookie": clearCookie },
-    );
+    return renderError("GitHub erişim anahtarı alınamadı.", 502);
   }
 
-  const data = (await response.json()) as {
+  const payload = (await response.json()) as {
     access_token?: string;
     error?: string;
     error_description?: string;
   };
 
-  if (!data.access_token) {
-    const msg = data.error_description || data.error || "Token alinamadi.";
-    return html(
-      renderResultPage(
-        `authorization:github:error:${JSON.stringify({ message: msg })}`,
-        true,
-        origin,
-        allowedOrigins,
-        msg,
-        { type: "vega-cms-auth-error", message: msg },
-      ),
-      502,
-      { "set-cookie": clearCookie },
-    );
+  if (!payload.access_token) {
+    return renderError(payload.error_description || payload.error || "GitHub erişim anahtarı alınamadı.", 502);
   }
 
-  const successPayload = `authorization:github:success:${JSON.stringify({
-    token: data.access_token,
+  const successMessage = `authorization:github:success:${JSON.stringify({
+    token: payload.access_token,
     provider: "github",
   })}`;
 
-  return html(
-    renderResultPage(successPayload, false, origin, allowedOrigins, undefined, {
-      type: "vega-cms-auth",
-      token: data.access_token,
-      provider: "github",
-    }),
-    200,
-    {
+  return html(renderMessagePage(successMessage), 200, {
     "set-cookie": clearCookie,
-    },
-  );
+  });
 }
