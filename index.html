@@ -63,27 +63,30 @@
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
     />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
       />
     </noscript>
     <script>
       (function () {
         const analyticsId = "G-0GVCCXHBHJ";
+        const interactionEvents = ["pointerdown", "keydown", "touchstart", "scroll"];
+        let fallbackTimerId;
 
         function loadAnalytics() {
           if (window.__vegaAnalyticsLoaded) return;
           window.__vegaAnalyticsLoaded = true;
+          cleanup();
           window.dataLayer = window.dataLayer || [];
           window.gtag = function () {
             window.dataLayer.push(arguments);
@@ -97,13 +100,31 @@
           document.head.appendChild(script);
         }
 
-        function scheduleAnalytics() {
-          if ("requestIdleCallback" in window) {
-            window.requestIdleCallback(loadAnalytics, { timeout: 3000 });
-            return;
+        function cleanup() {
+          interactionEvents.forEach((eventName) => {
+            window.removeEventListener(eventName, loadAnalytics);
+          });
+          document.removeEventListener("visibilitychange", handleVisibilityChange);
+          window.removeEventListener("pagehide", loadAnalytics);
+          if (fallbackTimerId) {
+            window.clearTimeout(fallbackTimerId);
+            fallbackTimerId = undefined;
           }
+        }
 
-          window.setTimeout(loadAnalytics, 2000);
+        function handleVisibilityChange() {
+          if (document.visibilityState === "hidden") {
+            loadAnalytics();
+          }
+        }
+
+        function scheduleAnalytics() {
+          interactionEvents.forEach((eventName) => {
+            window.addEventListener(eventName, loadAnalytics, { once: true, passive: true });
+          });
+          document.addEventListener("visibilitychange", handleVisibilityChange, { once: true });
+          window.addEventListener("pagehide", loadAnalytics, { once: true });
+          fallbackTimerId = window.setTimeout(loadAnalytics, 15000);
         }
 
         if (document.readyState === "complete") {
