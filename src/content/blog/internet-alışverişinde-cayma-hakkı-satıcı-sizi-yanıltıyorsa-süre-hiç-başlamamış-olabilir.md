@@ -12,7 +12,7 @@ seoTitle: E-Ticaret Cayma Hakkı 2026 | Güncel Tüketici Rehberi
 seoDescription: İnternet alışverişinde cayma hakkını reddeden satıcılara karşı
   2026 yönetmelik değişikliğiyle tüketicinin elindeki haklar güçlendi. Detaylar
   burada.
-coverImage: /uploads/blog/chatgpt-image-26-mar-2026-03_04_31.png
+coverImage: /uploads/blog/chatgpt-image-26-mar-2026-03_04_31.webp
 ---
 
 
