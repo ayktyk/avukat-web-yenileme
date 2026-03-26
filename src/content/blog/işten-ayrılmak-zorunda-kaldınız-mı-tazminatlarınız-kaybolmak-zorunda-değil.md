@@ -11,7 +11,7 @@ seoTitle: İşçi Tazminat Hakları 2026 | Haklı Fesih Rehberi
 seoDescription: İşten ayrılmak zorunda kalan işçiler tazminat haklarını yitirir
   mi? Haklı nedenle fesih, kıdem ve ibra sözleşmesi hakkında 2026 güncel
   bilgisi.
-coverImage: /uploads/blog/chatgpt-image-23-mar-2026-03_55_54.png
+coverImage: /uploads/blog/chatgpt-image-23-mar-2026-03_55_54.webp
 internalLinkPriority:
   - " isten-ayrilmak-zorunda-kaldiniz-tazminatlarinizi-alin"
 internalLinkMatches:

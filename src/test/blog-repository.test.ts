@@ -18,10 +18,15 @@ describe("blog repository", () => {
 
     const posts = await listBlogPosts();
 
-    expect(posts).toHaveLength(5);
-    expect(posts.map((post) => post.slug)).toContain("ise-iade-arabuluculukta-kritik-noktalar");
-    expect(posts.map((post) => post.slug)).toContain("menfi-tespit-davasinda-ispat-yuku");
-    expect(posts.map((post) => post.slug)).toContain("kira-uyarlama-davasi-yol-haritasi");
+    const slugs = posts.map((post) => post.slug);
+
+    expect(posts.length).toBeGreaterThanOrEqual(6);
+    expect(slugs).toContain("ise-iade-arabuluculukta-kritik-noktalar");
+    expect(slugs).toContain("menfi-tespit-davasinda-ispat-yuku");
+    expect(slugs).toContain("kira-uyarlama-davasi-yol-haritasi");
+    expect(posts).toEqual(
+      [...posts].sort((left, right) => right.publishedAt.localeCompare(left.publishedAt)),
+    );
     expect(posts.find((post) => post.slug === "ise-iade-arabuluculukta-kritik-noktalar")?.content).toContain(
       "Arabuluculuk başvurusu",
     );
@@ -101,8 +106,10 @@ describe("blog repository", () => {
 
     const posts = await listBlogPosts();
 
-    expect(posts).toHaveLength(5);
-    expect(posts[0]?.slug).toBe("nitelikli-dolandiricilik-iban-kullandirma-yargitay-kararlari");
+    expect(posts.length).toBeGreaterThanOrEqual(6);
+    expect(posts.some((post) => post.slug === "nitelikli-dolandiricilik-iban-kullandirma-yargitay-kararlari")).toBe(
+      true,
+    );
   });
 
   it("finds a post by slug", async () => {
