@@ -32,7 +32,7 @@ const isQuotedValueClosed = (value: string) => {
 };
 
 const normalizeWrappedQuotedValue = (value: string) =>
-  stripMatchingQuotes(value.replace(/\n\s+/g, " ").trim()).trim();
+  stripMatchingQuotes(value.replace(/\s*\n\s*/g, " ").replace(/\s+/g, " ").trim()).trim();
 
 const foldBlockScalar = (lines: string[], mode: ">" | "|") => {
   const cleanedLines = lines.map((line) => line.replace(/^\s{2}/, ""));

@@ -2,11 +2,14 @@ import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Index from "./pages/Index";
+import EagerBlogPost from "./pages/BlogPost";
+import EagerLegalUpdatePost from "./pages/LegalUpdatePost";
 
 const BlogIndex = lazy(() => import("./pages/BlogIndex"));
-const BlogPost = lazy(() => import("./pages/BlogPost"));
+const BlogPost = import.meta.env.MODE === "test" ? EagerBlogPost : lazy(() => import("./pages/BlogPost"));
 const LegalUpdatesIndex = lazy(() => import("./pages/LegalUpdatesIndex"));
-const LegalUpdatePost = lazy(() => import("./pages/LegalUpdatePost"));
+const LegalUpdatePost =
+  import.meta.env.MODE === "test" ? EagerLegalUpdatePost : lazy(() => import("./pages/LegalUpdatePost"));
 const CerezPolitikasi = lazy(() => import("./pages/CerezPolitikasi"));
 const HukukiUyari = lazy(() => import("./pages/HukukiUyari"));
 const KvkkAydinlatma = lazy(() => import("./pages/KvkkAydinlatma"));

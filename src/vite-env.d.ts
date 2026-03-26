@@ -3,6 +3,7 @@
 interface ImportMetaEnv {
   readonly VITE_BLOG_API_URL?: string;
   readonly VITE_BLOG_API_TOKEN?: string;
+  readonly VITE_BLOG_API_TIMEOUT_MS?: string;
   readonly VITE_BLOG_ITEMS_PATH?: string;
   readonly VITE_BLOG_FIELD_SLUG?: string;
   readonly VITE_BLOG_FIELD_TITLE?: string;

@@ -1,25 +1,36 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import MarkdownContent from "@/components/MarkdownContent";
 import { useSeo } from "@/hooks/use-seo";
 import { formatDateTr } from "@/lib/format-date";
-import { getBlogPostBySlug } from "@/lib/blog-repository";
+import { getBlogPostBySlug, listBlogPosts } from "@/lib/blog-repository";
+import { enrichMarkdownContent, type LinkableContent } from "@/lib/internal-linking";
+import { listLegalUpdates } from "@/lib/legal-updates-repository";
 import type { BlogPost as BlogPostType } from "@/types/blog";
 
 const BlogPost = () => {
   const { slug = "" } = useParams();
   const [post, setPost] = useState<BlogPostType | null>(null);
   const [loading, setLoading] = useState(true);
+  const [linkableEntries, setLinkableEntries] = useState<LinkableContent[]>([]);
 
   useEffect(() => {
     let mounted = true;
 
     const loadPost = async () => {
-      const result = await getBlogPostBySlug(slug);
+      const [result, blogPosts, legalUpdates] = await Promise.all([
+        getBlogPostBySlug(slug),
+        listBlogPosts(),
+        listLegalUpdates(),
+      ]);
+
       if (mounted) {
         setPost(result);
+        setLinkableEntries([
+          ...blogPosts.map((entry) => ({ ...entry, href: `/blog/${entry.slug}` })),
+          ...legalUpdates.map((entry) => ({ ...entry, href: `/guncel-hukuk-gundemi/${entry.slug}` })),
+        ]);
         setLoading(false);
       }
     };
@@ -30,6 +41,17 @@ const BlogPost = () => {
       mounted = false;
     };
   }, [slug]);
+
+  const renderedContent = post
+    ? enrichMarkdownContent(
+        {
+          ...post,
+          href: `/blog/${post.slug}`,
+          content: post.content,
+        },
+        linkableEntries,
+      )
+    : "";
 
   useSeo({
     title: post?.seoTitle ?? `${post?.title ?? "Yazı"} | Vega Hukuk`,
@@ -142,26 +164,7 @@ const BlogPost = () => {
           />
         )}
 
-        <div className="space-y-5 text-[17px] leading-[1.85] text-foreground/90">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            components={{
-              h2: ({ node, ...props }) => <h2 className="mt-10 font-display text-3xl font-bold text-primary-deep" {...props} />,
-              h3: ({ node, ...props }) => <h3 className="mt-8 font-display text-2xl font-bold text-primary-deep" {...props} />,
-              p: ({ node, ...props }) => <p className="mt-5" {...props} />,
-              ul: ({ node, ...props }) => <ul className="mt-5 list-disc space-y-2 pl-6" {...props} />,
-              ol: ({ node, ...props }) => <ol className="mt-5 list-decimal space-y-2 pl-6" {...props} />,
-              li: ({ node, ...props }) => <li className="pl-1" {...props} />,
-              a: ({ node, ...props }) => <a className="font-semibold text-primary underline underline-offset-4" {...props} />,
-              blockquote: ({ node, ...props }) => (
-                <blockquote className="mt-6 border-l-4 border-accent/40 bg-card px-5 py-3 italic text-muted-foreground" {...props} />
-              ),
-              strong: ({ node, ...props }) => <strong className="font-semibold text-primary-deep" {...props} />,
-            }}
-          >
-            {post.content}
-          </ReactMarkdown>
-        </div>
+        <MarkdownContent content={renderedContent} />
 
         <div className="mt-12 rounded-xl border border-border bg-card p-5">
           <p className="text-sm text-muted-foreground">
