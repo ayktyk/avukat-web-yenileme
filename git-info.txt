@@ -1,0 +1,40 @@
+=== avukat-web-yenileme ===
+Remote:
+origin	https://github.com/ayktyk/avukat-web-yenileme.git (fetch)
+origin	https://github.com/ayktyk/avukat-web-yenileme.git (push)
+Last Commit:
+08a5d35 - 2026-03-26 03:13:10 +0300 - Fix CMS content rendering and internal linking
+Status:
+ D .claude/settings.local.json
+ D public/admin/config.yml
+ M public/admin/index.html
+?? .codex-mobile-lighthouse.json
+?? .codex-pagespeed-report-2.html
+?? .codex-pagespeed-report.html
+?? _codex_push.patch
+?? _codex_push_temp/
+?? _pushrepo/
+?? git-info.txt
+?? public/admin/cms-config.yml
+
+
+=== avukat-web-yenileme-git ===
+Remote:
+origin	https://github.com/ayktyk/avukat-web-yenileme.git (fetch)
+origin	https://github.com/ayktyk/avukat-web-yenileme.git (push)
+Last Commit:
+5fed8f9 - 2026-03-22 22:27:59 +0300 - Create Blog Yaz─▒s─▒ ÔÇ£uyap-ihalesinde-yanl─▒┼ş-teklif-verdim-ihalenin-feshi-m├╝mk├╝n-m├╝ÔÇØ
+Status:
+
+
+=== avukat-web ===
+Remote:
+origin	https://github.com/ayktyk/avukat-web-yenileme.git (fetch)
+origin	https://github.com/ayktyk/avukat-web-yenileme.git (push)
+Last Commit:
+1e33091 - 2026-03-15 22:48:55 +0300 - fix: make admin panel login origin-agnostic to support localhost and previews
+Status:
+?? .chrome-debug/
+?? admin-live.png
+
+

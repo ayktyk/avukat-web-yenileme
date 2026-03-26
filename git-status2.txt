@@ -1,0 +1,41 @@
+﻿On branch main
+No commands done.
+Next commands to do (4 remaining commands):
+   pick c70dbd7 # Siteyi sadele┼ştir: kullan─▒lmayan ├Âzellikleri kald─▒r, bile┼şenleri g├╝ncelle
+   pick 9dc28ed # Claude Code yap─▒land─▒rmas─▒ ekle (Kalfa i┼şletim sistemi)
+  (use "git rebase --edit-todo" to view and edit)
+You are currently editing a commit while rebasing branch 'main' on '378bee8'.
+  (use "git commit --amend" to amend the current commit)
+  (use "git rebase --continue" once you are satisfied with your changes)
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	deleted:    .claude/agents/archaeologist.md
+	deleted:    .claude/agents/auditor.md
+	deleted:    .claude/agents/coach.md
+	deleted:    .claude/agents/debt-collector.md
+	deleted:    .claude/agents/error-whisperer.md
+	deleted:    .claude/agents/onboarding-sherpa.md
+	deleted:    .claude/agents/pr-ghostwriter.md
+	deleted:    .claude/agents/rubber-duck.md
+	deleted:    .claude/agents/unsticker.md
+	deleted:    .claude/agents/yak-shave-detector.md
+	deleted:    .claude/command-index.md
+	deleted:    .claude/commands/audit.md
+	deleted:    .claude/commands/brief.md
+	deleted:    .claude/commands/clear.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.codex-mobile-lighthouse.json
+	.codex-pagespeed-report-2.html
+	.codex-pagespeed-report.html
+	_codex_push.patch
+	_codex_push_temp/
+	_pushrepo/
+	git-info.txt
+	git-status.txt
+	git-status2.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")

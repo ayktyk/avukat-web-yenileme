@@ -1,0 +1,32 @@
+﻿On branch main
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Changes to be committed:
+	new file:   public/uploads/blog/chatgpt-image-23-mar-2026-03_55_54.png
+	new file:   public/uploads/blog/chatgpt-image-26-mar-2026-02_14_31.png
+	new file:   "src/content/blog/i\305\237ten-ayr\304\261lmak-zorunda-kald\304\261n\304\261z-m\304\261-tazminatlar\304\261n\304\261z-kaybolmak-zorunda-de\304\237il.md"
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+	both modified:   src/App.tsx
+	both modified:   src/components/ArticlesSection.tsx
+	both modified:   src/components/LegalUpdatesSection.tsx
+	both modified:   src/pages/BlogPost.tsx
+	both modified:   src/pages/LegalUpdatePost.tsx
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.codex-mobile-lighthouse.json
+	.codex-pagespeed-report-2.html
+	.codex-pagespeed-report.html
+	_codex_push.patch
+	_codex_push_temp/
+	_pushrepo/
+	git-conflict.txt
+	git-diff.txt
+	git-info.txt
+	git-status.txt
+	git-status2.txt
+
