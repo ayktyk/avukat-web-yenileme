@@ -22,7 +22,7 @@ Yargıtay son dönemde bu konuda birbirini destekleyen iki önemli karar verdi. 
 
 Hizmet tespiti davası; işçinin fiilen çalıştığı ancak SGK'ya eksik ya da hiç bildirilmediği dönemlerin resmi kayıtlara geçirilmesi için açılan davadır. Hukuki dayanağı 5510 sayılı Sosyal Sigortalar ve Genel Sağlık Sigortası Kanunu'nun 86. maddesidir.
 
-Dava işçi ile birlikte SGK'ya karşı açılır. Mahkeme, tanık beyanları, işyeri kayıtları ve diğer delillere dayanarak gerçek çalışma süresini tespit eder. Karar kesinleştiğinde SGK bu günleri sisteme işler.
+Dava işveren ile birlikte SGK'ya karşı açılır. Mahkeme, tanık beyanları, işyeri kayıtları ve diğer delillere dayanarak gerçek çalışma süresini tespit eder. Karar kesinleştiğinde SGK bu günleri sisteme işler.
 
 ## Yargıtay Bu Konuda Ne Dedi?
 
@@ -35,8 +35,6 @@ Dosya istinaf aşamasında beklenmedik bir kararla karşılaştı. Bölge Adliye
 Yargıtay 10. Hukuk Dairesi bu gerekçeyi kabul etmedi ve kararı bozdu. İstinaf mahkemesi kararında ısrar edince dosya Yargıtay Hukuk Genel Kurulu'na taşındı. HGK işçiyi haklı bularak şu tespitleri yaptı:
 
 Sigortalılık kamu düzenini ilgilendiren bir hukuki statüdür; kişi bu haktan kendi iradesiyle bile vazgeçemez. Emekli maaşının artmaması hizmet tespiti için tek kriter değildir. Bildirilmeyen dönemde işçi bir iş kazası geçirirse ya da ileride meslek hastalığı ortaya çıkarsa, kayıtlı sigorta günleri hayati önem taşır. Bu risk tek başına dava açmak için yeterli hukuki yarardır. Kıdem ve ihbar tazminatı da gerçek çalışma süresine göre hesaplanmak zorundadır; eksik bildirilen günler bu alacakların doğrudan azalmasına yol açar.
-
-*(Kararın künyesi UYAP üzerinden teyit edilmelidir; güncel bilgiye adalet.gov.tr adresinden ulaşılabilir.)*
 
 **Yargıtay 9. Hukuk Dairesi, E.2025/9481, K.2026/215 — 15.01.2026**
 
