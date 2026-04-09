@@ -1,5 +1,6 @@
 import { ArrowRight, Calendar, Check, Mail, Phone, Scale } from "lucide-react";
-import heroBg from "@/assets/hero-bg-1.webp";
+
+const heroBg = "/hero-bg-1.webp";
 
 const heroBadge = "Hukuk • Danışmanlık • Arabuluculuk";
 const heroTitleLead = "Stratejik, hızlı ve";
@@ -30,8 +31,11 @@ const HeroSection = () => {
           alt=""
           className="h-full w-full object-cover"
           decoding="async"
+          loading="eager"
           fetchPriority="high"
           sizes="100vw"
+          width="1920"
+          height="1080"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/85 via-background/50 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
