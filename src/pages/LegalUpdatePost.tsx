@@ -7,6 +7,7 @@ import { formatDateTr } from "@/lib/format-date";
 import { listBlogPosts } from "@/lib/blog-repository";
 import { enrichMarkdownContent, type LinkableContent } from "@/lib/internal-linking";
 import { getLegalUpdateBySlug, listLegalUpdates } from "@/lib/legal-updates-repository";
+import { SITE_URL } from "@/lib/site-config";
 import type { LegalUpdate } from "@/types/legal-update";
 
 const LegalUpdatePost = () => {
@@ -71,19 +72,19 @@ const LegalUpdatePost = () => {
             publisher: {
               "@type": "LegalService",
               name: "Vega Hukuk",
-              url: window.location.origin,
+              url: SITE_URL,
             },
             image: item.coverImage
-              ? `${window.location.origin}${item.coverImage}`
-              : `${window.location.origin}/og-image.svg`,
-            mainEntityOfPage: `${window.location.origin}/guncel-hukuk-gundemi/${item.slug}`,
+              ? `${SITE_URL}${item.coverImage}`
+              : `${SITE_URL}/og-image.svg`,
+            mainEntityOfPage: `${SITE_URL}/guncel-hukuk-gundemi/${item.slug}`,
           },
           {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: window.location.origin },
-              { "@type": "ListItem", position: 2, name: "Güncel Hukuk Gündemi", item: `${window.location.origin}/guncel-hukuk-gundemi` },
+              { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: SITE_URL },
+              { "@type": "ListItem", position: 2, name: "Güncel Hukuk Gündemi", item: `${SITE_URL}/guncel-hukuk-gundemi` },
               { "@type": "ListItem", position: 3, name: item.title },
             ],
           },
@@ -145,7 +146,7 @@ const LegalUpdatePost = () => {
             className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl object-cover object-top"
             loading="eager"
             decoding="async"
-            fetchPriority="high"
+            {...({ fetchpriority: "high" } as Record<string, string>)}
           />
         ) : (
           <div

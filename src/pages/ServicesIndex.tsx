@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useSeo } from "@/hooks/use-seo";
 import { listServices } from "@/lib/service-repository";
+import { SITE_URL } from "@/lib/site-config";
 import type { Service } from "@/types/service";
 
 const iconMap: Record<string, LucideIcon> = {
@@ -62,13 +63,13 @@ const ServicesIndex = () => {
           "@type": "ListItem",
           position: 1,
           name: "Ana Sayfa",
-          item: `${window.location.origin}/`,
+          item: `${SITE_URL}/`,
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "Hizmetler",
-          item: `${window.location.origin}/hizmetler`,
+          item: `${SITE_URL}/hizmetler`,
         },
       ],
     },

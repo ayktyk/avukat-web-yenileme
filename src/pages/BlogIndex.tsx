@@ -4,6 +4,7 @@ import { ArrowRight, CalendarDays } from "lucide-react";
 import { useSeo } from "@/hooks/use-seo";
 import { formatDateTr } from "@/lib/format-date";
 import { listBlogPosts } from "@/lib/blog-repository";
+import { SITE_URL } from "@/lib/site-config";
 import type { BlogPost } from "@/types/blog";
 
 const BlogIndex = () => {
@@ -22,13 +23,13 @@ const BlogIndex = () => {
           "@type": "ListItem",
           position: 1,
           name: "Ana Sayfa",
-          item: `${window.location.origin}/`,
+          item: `${SITE_URL}/`,
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "Blog",
-          item: `${window.location.origin}/blog`,
+          item: `${SITE_URL}/blog`,
         },
       ],
     },

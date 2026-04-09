@@ -7,6 +7,7 @@ import { formatDateTr } from "@/lib/format-date";
 import { getBlogPostBySlug, listBlogPosts } from "@/lib/blog-repository";
 import { enrichMarkdownContent, type LinkableContent } from "@/lib/internal-linking";
 import { listLegalUpdates } from "@/lib/legal-updates-repository";
+import { SITE_URL } from "@/lib/site-config";
 import type { BlogPost as BlogPostType } from "@/types/blog";
 
 const BlogPost = () => {
@@ -76,19 +77,19 @@ const BlogPost = () => {
             publisher: {
               "@type": "LegalService",
               name: "Vega Hukuk",
-              url: window.location.origin,
+              url: SITE_URL,
             },
             image: post.coverImage
-              ? `${window.location.origin}${post.coverImage}`
-              : `${window.location.origin}/og-image.svg`,
-            mainEntityOfPage: `${window.location.origin}/blog/${post.slug}`,
+              ? `${SITE_URL}${post.coverImage}`
+              : `${SITE_URL}/og-image.svg`,
+            mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
           },
           {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: window.location.origin },
-              { "@type": "ListItem", position: 2, name: "Blog", item: `${window.location.origin}/blog` },
+              { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: SITE_URL },
+              { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
               { "@type": "ListItem", position: 3, name: post.title },
             ],
           },
@@ -154,7 +155,7 @@ const BlogPost = () => {
             className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl object-cover object-top"
             loading="eager"
             decoding="async"
-            fetchPriority="high"
+            {...({ fetchpriority: "high" } as Record<string, string>)}
           />
         ) : (
           <div

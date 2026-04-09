@@ -17,6 +17,19 @@ export default defineConfig(() => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  ssgOptions: {
+    script: "async",
+    formatting: "none",
+    dirStyle: "nested",
+    includedRoutes: (paths) =>
+      paths.filter((p) => !p.includes(":") && !p.includes("*")),
+    beastiesOptions: {
+      preload: "swap",
+      pruneSource: false,
+      reduceInlineStyles: false,
+      mergeStylesheets: false,
+    },
+  },
   build: {
     target: "es2020",
     cssCodeSplit: true,

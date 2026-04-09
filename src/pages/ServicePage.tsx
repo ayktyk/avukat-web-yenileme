@@ -20,6 +20,7 @@ import MarkdownContent from "@/components/MarkdownContent";
 import { useSeo } from "@/hooks/use-seo";
 import { formatDateTr } from "@/lib/format-date";
 import { getServiceBySlug } from "@/lib/service-repository";
+import { SITE_URL } from "@/lib/site-config";
 import type { Service } from "@/types/service";
 
 const iconMap: Record<string, LucideIcon> = {
@@ -79,7 +80,7 @@ const ServicePage = () => {
             provider: {
               "@type": "LegalService",
               name: "Vega Hukuk İstanbul",
-              url: window.location.origin,
+              url: SITE_URL,
               address: {
                 "@type": "PostalAddress",
                 streetAddress: "Osmanağa Mahallesi, Karadut Sokak No:14/10",
@@ -93,14 +94,14 @@ const ServicePage = () => {
               "@type": "City",
               name: "İstanbul",
             },
-            url: `${window.location.origin}/hizmetler/${service.slug}`,
+            url: `${SITE_URL}/hizmetler/${service.slug}`,
           },
           {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: window.location.origin },
-              { "@type": "ListItem", position: 2, name: "Hizmetler", item: `${window.location.origin}/hizmetler` },
+              { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: SITE_URL },
+              { "@type": "ListItem", position: 2, name: "Hizmetler", item: `${SITE_URL}/hizmetler` },
               { "@type": "ListItem", position: 3, name: service.heading },
             ],
           },
@@ -182,7 +183,7 @@ const ServicePage = () => {
             className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl object-cover object-top"
             loading="eager"
             decoding="async"
-            fetchPriority="high"
+            {...({ fetchpriority: "high" } as Record<string, string>)}
           />
         ) : (
           <div className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl bg-gradient-to-br from-primary/[0.08] to-primary/[0.03]" />

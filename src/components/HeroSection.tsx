@@ -32,7 +32,7 @@ const HeroSection = () => {
           className="h-full w-full object-cover"
           decoding="async"
           loading="eager"
-          fetchPriority="high"
+          {...({ fetchpriority: "high" } as Record<string, string>)}
           sizes="100vw"
           width="1920"
           height="1080"

@@ -4,6 +4,7 @@ import { ArrowRight, CalendarDays } from "lucide-react";
 import { useSeo } from "@/hooks/use-seo";
 import { formatDateTr } from "@/lib/format-date";
 import { listLegalUpdates } from "@/lib/legal-updates-repository";
+import { SITE_URL } from "@/lib/site-config";
 import type { LegalUpdate } from "@/types/legal-update";
 
 const LegalUpdatesIndex = () => {
@@ -22,13 +23,13 @@ const LegalUpdatesIndex = () => {
           "@type": "ListItem",
           position: 1,
           name: "Ana Sayfa",
-          item: `${window.location.origin}/`,
+          item: `${SITE_URL}/`,
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "Güncel Hukuk Gündemi",
-          item: `${window.location.origin}/guncel-hukuk-gundemi`,
+          item: `${SITE_URL}/guncel-hukuk-gundemi`,
         },
       ],
     },
