@@ -64,7 +64,7 @@ const LegalUpdatesSection = () => {
                   <img
                     src={item.coverImage}
                     alt={item.title}
-                    className="mb-5 aspect-[16/8] w-full rounded-xl object-cover"
+                    className="mb-5 aspect-[16/8] w-full rounded-xl object-cover object-top"
                     loading="lazy"
                     decoding="async"
                   />

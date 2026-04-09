@@ -62,7 +62,7 @@ const ArticlesSection = () => {
                   <img
                     src={post.coverImage}
                     alt={post.title}
-                    className="mb-4 aspect-video w-full rounded-[10px] object-cover"
+                    className="mb-4 aspect-video w-full rounded-[10px] object-cover object-top"
                     loading="lazy"
                     decoding="async"
                   />

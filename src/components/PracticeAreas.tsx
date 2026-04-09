@@ -1,14 +1,55 @@
 import { Briefcase, FileSignature, Gavel, Handshake, Home, Phone, Scale, ShoppingCart, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const areas = [
-  { icon: Briefcase, title: "İş Hukuku", items: ["İşe iade • Kıdem/ihbar • Fazla mesai", "Mobbing • İş kazası tazminatı"] },
-  { icon: Scale, title: "İcra & İflas", items: ["İtirazın iptali • Menfi tespit", "Takip ve tahsilat yönetimi"] },
-  { icon: Handshake, title: "Ticaret & Sözleşmeler", items: ["Sözleşme tasarımı • Uyuşmazlık", "Şirketler hukuku danışmanlığı"] },
-  { icon: Home, title: "Kira & Gayrimenkul", items: ["Kiraya uyarlama • Tahliye • Alacak", "Tapu iptal tescil • İzaleyi şuyu"] },
-  { icon: Users, title: "Miras & Aile", items: ["Tereke • Tenkis • Mal rejimi", "Nafaka • Velayet • Vasi işlemleri"] },
-  { icon: ShoppingCart, title: "Tüketici & Sigorta", items: ["Ayıplı mal/hizmet • Poliçe uyuşmazlığı", "Tazminat • Hakem heyeti süreçleri"] },
-  { icon: Gavel, title: "Ceza Hukuku", items: ["Ceza davalarında savunma", "Soruşturma • Kovuşturma süreçleri"] },
-  { icon: FileSignature, title: "Sözleşmeler Hukuku", items: ["Sözleşme tasarımı • Müzakere", "Sözleşme uyuşmazlıkları • Revizyon"] },
+  {
+    icon: Briefcase,
+    title: "İş Hukuku",
+    slug: "is-hukuku",
+    items: ["İşe iade • Kıdem/ihbar • Fazla mesai", "Mobbing • İş kazası tazminatı"],
+  },
+  {
+    icon: Scale,
+    title: "İcra & İflas",
+    slug: "icra-iflas",
+    items: ["İtirazın iptali • Menfi tespit", "Takip ve tahsilat yönetimi"],
+  },
+  {
+    icon: Handshake,
+    title: "Ticaret & Sözleşmeler",
+    slug: "ticaret-sozlesmeler",
+    items: ["Sözleşme tasarımı • Uyuşmazlık", "Şirketler hukuku danışmanlığı"],
+  },
+  {
+    icon: Home,
+    title: "Kira & Gayrimenkul",
+    slug: "kira-gayrimenkul",
+    items: ["Kiraya uyarlama • Tahliye • Alacak", "Tapu iptal tescil • İzaleyi şuyu"],
+  },
+  {
+    icon: Users,
+    title: "Miras & Aile",
+    slug: "miras-aile",
+    items: ["Tereke • Tenkis • Mal rejimi", "Nafaka • Velayet • Vasi işlemleri"],
+  },
+  {
+    icon: ShoppingCart,
+    title: "Tüketici & Sigorta",
+    slug: "tuketici-sigorta",
+    items: ["Ayıplı mal/hizmet • Poliçe uyuşmazlığı", "Tazminat • Hakem heyeti süreçleri"],
+  },
+  {
+    icon: Gavel,
+    title: "Ceza Hukuku",
+    slug: "ceza-hukuku",
+    items: ["Ceza davalarında savunma", "Soruşturma • Kovuşturma süreçleri"],
+  },
+  {
+    icon: FileSignature,
+    title: "Sözleşmeler Hukuku",
+    slug: "sozlesmeler-hukuku",
+    items: ["Sözleşme tasarımı • Müzakere", "Sözleşme uyuşmazlıkları • Revizyon"],
+  },
 ];
 
 const scrollTo = (href: string) => {
@@ -42,9 +83,10 @@ const PracticeAreas = () => {
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {areas.map((area) => (
-            <div
+            <Link
               key={area.title}
-              className="group rounded-2xl border border-border bg-card p-7 transition-all duration-400 hover:-translate-y-1 hover:border-accent/25 hover:shadow-elegant-lg"
+              to={`/hizmetler/${area.slug}`}
+              className="group block rounded-2xl border border-border bg-card p-7 transition-all duration-400 hover:-translate-y-1 hover:border-accent/25 hover:shadow-elegant-lg"
             >
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[14px] border border-primary/[0.08] bg-gradient-to-br from-primary/[0.06] to-primary/[0.02] text-primary transition-all duration-300 group-hover:scale-105 group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-primary-deep group-hover:text-accent-light">
                 <area.icon className="h-5 w-5" />
@@ -58,7 +100,7 @@ const PracticeAreas = () => {
                   </li>
                 ))}
               </ul>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

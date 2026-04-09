@@ -256,6 +256,8 @@ const parseMarkdownPost = (path: string, raw: string): BlogPost | null => {
     seoDescription: toOptionalString(frontmatter.seoDescription),
     coverClass: toOptionalString(frontmatter.coverClass),
     coverImage: toOptionalString(frontmatter.coverImage),
+    internalLinkPriority: Array.isArray(frontmatter.internalLinkPriority) ? frontmatter.internalLinkPriority : undefined,
+    internalLinkMatches: Array.isArray(frontmatter.internalLinkMatches) ? frontmatter.internalLinkMatches : undefined,
   };
 };
 

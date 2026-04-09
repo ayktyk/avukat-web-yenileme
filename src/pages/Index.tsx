@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { DeferredRender } from "@/components/DeferredRender";
 import SiteHeader from "@/components/SiteHeader";
 import HeroSection from "@/components/HeroSection";
+import { useSeo } from "@/hooks/use-seo";
 
 const StatsBar = lazy(() => import("@/components/StatsBar"));
 const AboutSection = lazy(() => import("@/components/AboutSection"));
@@ -15,6 +16,13 @@ const SiteFooter = lazy(() => import("@/components/SiteFooter"));
 const FloatCTA = lazy(() => import("@/components/FloatCTA"));
 
 const Index = () => {
+  useSeo({
+    title: "Vega Hukuk İstanbul | Hukuk Bürosu ve Danışmanlık",
+    description:
+      "İstanbul Kadıköy'de iş hukuku, ceza hukuku, kira, miras, tüketici ve sigorta alanında hukuki danışmanlık ve dava takibi. Randevu için iletişime geçin.",
+    canonicalPath: "/",
+  });
+
   return (
     <div className="overflow-x-hidden">
       <SiteHeader />

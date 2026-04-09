@@ -14,6 +14,18 @@ const faqs = [
     q: "Danışmanlık sözleşmesi şart mı?",
     a: "Evet, tarafların hak ve yükümlülüklerini netleştirmek ve KVKK uyumu için yazılı sözleşme düzenlenir.",
   },
+  {
+    q: "Dosyanızda önce neye bakılır?",
+    a: "Talep, süreler (zamanaşımı/hak düşürücü), yetkili merci ve delil durumu öncelikli incelenir. Ardından strateji ve yol haritası sunulur.",
+  },
+  {
+    q: "İlk görüşme için belge getirmem gerekir mi?",
+    a: "Elinizde bulunan sözleşme, yazışma, ihtarname, tebligat ve resmî belgeleri (dijital veya basılı) getirmeniz süreci hızlandırır. Eksik belgeler sonradan tamamlanabilir.",
+  },
+  {
+    q: "Davayı açmadan önce alternatif çözüm yolları değerlendirilir mi?",
+    a: "Evet. Arabuluculuk, uzlaşma ve ihtar yoluyla çözüm; dava açmadan önce değerlendirilir. Bazı uyuşmazlıklarda arabuluculuk zaten dava şartıdır.",
+  },
 ];
 
 const faqStructuredData = {

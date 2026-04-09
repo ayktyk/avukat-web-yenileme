@@ -14,6 +14,24 @@ const LegalUpdatesIndex = () => {
     title: "Güncel Hukuk Gündemi | Vega Hukuk",
     description: "Önemli Yargıtay kararları, güncel hukuk haberleri ve uygulamaya dönük kısa değerlendirmeler.",
     canonicalPath: "/guncel-hukuk-gundemi",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Ana Sayfa",
+          item: `${window.location.origin}/`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Güncel Hukuk Gündemi",
+          item: `${window.location.origin}/guncel-hukuk-gundemi`,
+        },
+      ],
+    },
   });
 
   useEffect(() => {
@@ -62,7 +80,7 @@ const LegalUpdatesIndex = () => {
                   <img
                     src={item.coverImage}
                     alt={item.title}
-                    className="mb-5 aspect-[16/8] w-full rounded-xl object-cover"
+                    className="mb-5 aspect-[16/8] w-full rounded-xl object-cover object-top"
                     loading="lazy"
                     decoding="async"
                   />

@@ -10,6 +10,8 @@ const BlogPost = import.meta.env.MODE === "test" ? EagerBlogPost : lazy(() => im
 const LegalUpdatesIndex = lazy(() => import("./pages/LegalUpdatesIndex"));
 const LegalUpdatePost =
   import.meta.env.MODE === "test" ? EagerLegalUpdatePost : lazy(() => import("./pages/LegalUpdatePost"));
+const ServicesIndex = lazy(() => import("./pages/ServicesIndex"));
+const ServicePage = lazy(() => import("./pages/ServicePage"));
 const CerezPolitikasi = lazy(() => import("./pages/CerezPolitikasi"));
 const HukukiUyari = lazy(() => import("./pages/HukukiUyari"));
 const KvkkAydinlatma = lazy(() => import("./pages/KvkkAydinlatma"));
@@ -22,7 +24,7 @@ const App = () => (
       <Suspense
         fallback={
           <div className="flex min-h-screen items-center justify-center">
-            <p className="text-muted-foreground">YÃ¼kleniyor...</p>
+            <p className="text-muted-foreground">Yükleniyor...</p>
           </div>
         }
       >
@@ -32,6 +34,8 @@ const App = () => (
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/guncel-hukuk-gundemi" element={<LegalUpdatesIndex />} />
           <Route path="/guncel-hukuk-gundemi/:slug" element={<LegalUpdatePost />} />
+          <Route path="/hizmetler" element={<ServicesIndex />} />
+          <Route path="/hizmetler/:slug" element={<ServicePage />} />
           <Route path="/kvkk-aydinlatma" element={<KvkkAydinlatma />} />
           <Route path="/cerez-politikasi" element={<CerezPolitikasi />} />
           <Route path="/hukuki-uyari" element={<HukukiUyari />} />

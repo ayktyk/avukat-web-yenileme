@@ -151,7 +151,7 @@ const BlogPost = () => {
           <img
             src={post.coverImage}
             alt={post.title}
-            className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl object-cover"
+            className="mt-8 mb-9 aspect-[16/8] w-full rounded-2xl object-cover object-top"
             loading="eager"
             decoding="async"
             fetchPriority="high"

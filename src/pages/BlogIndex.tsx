@@ -14,6 +14,24 @@ const BlogIndex = () => {
     title: "Blog | Vega Hukuk",
     description: "Vega Hukuk blog yazıları: iş hukuku, icra, kira ve güncel hukuki değerlendirmeler.",
     canonicalPath: "/blog",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Ana Sayfa",
+          item: `${window.location.origin}/`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Blog",
+          item: `${window.location.origin}/blog`,
+        },
+      ],
+    },
   });
 
   useEffect(() => {
@@ -63,7 +81,7 @@ const BlogIndex = () => {
                   <img
                     src={post.coverImage}
                     alt={post.title}
-                    className="mb-5 aspect-[16/8] w-full rounded-xl object-cover"
+                    className="mb-5 aspect-[16/8] w-full rounded-xl object-cover object-top"
                     loading="lazy"
                     decoding="async"
                   />

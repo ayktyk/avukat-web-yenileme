@@ -39,7 +39,57 @@ collections:
       - { label: SEO Açıklaması, name: seoDescription, widget: text, required: false }
       - { label: Kapak Görseli, name: coverImage, widget: image, required: false }
       - { label: Kapak Gradient Sınıfı, name: coverClass, widget: string, required: false, hint: "Boş bırakırsan varsayılan görünüm kullanılır." }
+      - label: İç Link Öncelikleri
+        name: internalLinkPriority
+        widget: list
+        required: false
+        hint: "Bu yazıda öncelikli olarak link verilecek yazıların slug'ları. Örnek: ise-iade-arabuluculukta-kritik-noktalar"
+        field: { label: Slug, name: slug, widget: string }
+      - label: Manuel İç Linkler
+        name: internalLinkMatches
+        widget: list
+        required: false
+        hint: "İçerikte belirli bir ifadeyi başka bir yazıya linklemek için kullanın."
+        fields:
+          - { label: İfade, name: phrase, widget: string, hint: "İçerikte aranacak metin. Örnek: haklı fesih" }
+          - { label: Hedef Slug, name: target, widget: string, hint: "Linkin gideceği yazının slug'ı. Örnek: hakli-fesih-nedir" }
       - { label: İçerik, name: body, widget: markdown, hint: "Tek satırlık [Buton Metni](/blog) linkleri sitede CTA butonuna dönüşür. İç link için [[Yazı Başlığı]] veya [[slug|Özel metin]] kullanabilirsiniz." }
+
+  - name: services
+    label: Hizmet Alanları
+    label_singular: Hizmet Sayfası
+    folder: src/content/services
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    summary: "{{title}} - {{orderIndex}}"
+    sortable_fields: [orderIndex, title]
+    editor:
+      preview: false
+    fields:
+      - { label: Slug, name: slug, widget: string, hint: "Örnek: is-hukuku" }
+      - { label: SEO Başlığı (H1), name: title, widget: string, hint: "Sayfa başlığı ve SEO title olarak kullanılır. Örnek: İstanbul İş Hukuku Avukatı" }
+      - { label: Kart Başlığı, name: heading, widget: string, hint: "Liste ve kart görünümünde kullanılır. Örnek: İş Hukuku" }
+      - { label: Kısa Açıklama, name: description, widget: text, hint: "Kart ve hero bölümünde gösterilir." }
+      - { label: Sıra, name: orderIndex, widget: number, value_type: int, min: 1, max: 99, default: 99 }
+      - label: İkon
+        name: icon
+        widget: select
+        options: [Briefcase, Scale, Handshake, Home, Users, ShoppingCart, Gavel, FileSignature]
+        default: Briefcase
+      - { label: SEO Başlığı, name: seoTitle, widget: string, required: false }
+      - { label: SEO Açıklaması, name: seoDescription, widget: text, required: false }
+      - { label: Hero Görseli, name: heroImage, widget: image, required: false }
+      - { label: Yayın Tarihi, name: publishedAt, widget: datetime, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
+      - { label: Güncelleme Tarihi, name: updatedAt, widget: datetime, required: false, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
+      - label: SSS (JSON)
+        name: faqJson
+        widget: text
+        required: false
+        hint: "JSON formatında soru-cevap listesi. Örnek: [{\"question\":\"...\", \"answer\":\"...\"}]"
+      - { label: İçerik, name: body, widget: markdown, hint: "Hizmet alanının detaylı açıklaması. Markdown formatında yazın." }
 
   - name: legal_updates
     label: Hukuk Gündemi
@@ -65,4 +115,18 @@ collections:
       - { label: SEO Açıklaması, name: seoDescription, widget: text, required: false }
       - { label: Kapak Görseli, name: coverImage, widget: image, required: false }
       - { label: Kapak Gradient Sınıfı, name: coverClass, widget: string, required: false }
+      - label: İç Link Öncelikleri
+        name: internalLinkPriority
+        widget: list
+        required: false
+        hint: "Bu içerikte öncelikli olarak link verilecek yazıların slug'ları."
+        field: { label: Slug, name: slug, widget: string }
+      - label: Manuel İç Linkler
+        name: internalLinkMatches
+        widget: list
+        required: false
+        hint: "İçerikte belirli bir ifadeyi başka bir yazıya linklemek için kullanın."
+        fields:
+          - { label: İfade, name: phrase, widget: string, hint: "İçerikte aranacak metin." }
+          - { label: Hedef Slug, name: target, widget: string, hint: "Linkin gideceği yazının slug'ı." }
       - { label: İçerik, name: body, widget: markdown, hint: "Tek satırlık [Buton Metni](/blog) linkleri sitede CTA butonuna dönüşür. İç link için [[Yazı Başlığı]] veya [[slug|Özel metin]] kullanabilirsiniz." }

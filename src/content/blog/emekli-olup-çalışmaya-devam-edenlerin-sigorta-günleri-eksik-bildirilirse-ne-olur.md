@@ -10,7 +10,7 @@ seoTitle: Emekli Çalışanın Sigorta Günleri Eksik Bildirilirse 2026 Güncel 
 seoDescription: Emekli olup çalışmaya devam edenlerin SGK günleri eksik
   bildirildiğinde ne yapılır? Yargıtay kararları, hizmet tespiti davası şartları
   ve dikkat edilmesi gerekenler.
-coverImage: /uploads/blog/chatgpt-image-31-mar-2026-02_07_58.png
+coverImage: /uploads/blog/chatgpt-image-31-mar-2026-02_07_58.webp
 ---
 ## Emekli Olup Çalışmaya Devam Edenlerin Sigorta Günleri Eksik Bildirilirse Ne Olur?
 

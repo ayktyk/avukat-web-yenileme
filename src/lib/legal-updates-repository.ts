@@ -57,6 +57,8 @@ const parseLegalUpdate = (path: string, raw: string): LegalUpdate | null => {
     seoDescription: toOptionalString(data.seoDescription),
     coverClass: toOptionalString(data.coverClass),
     coverImage: toOptionalString(data.coverImage),
+    internalLinkPriority: Array.isArray(data.internalLinkPriority) ? data.internalLinkPriority : undefined,
+    internalLinkMatches: Array.isArray(data.internalLinkMatches) ? data.internalLinkMatches : undefined,
   };
 };
 

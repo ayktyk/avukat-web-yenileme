@@ -28,6 +28,7 @@ const collectSlugs = (dir, prefix) => {
 
 const staticPages = [
   { loc: `${SITE}/`, changefreq: "weekly", priority: "1.0" },
+  { loc: `${SITE}/hizmetler`, changefreq: "monthly", priority: "0.9" },
   { loc: `${SITE}/blog`, changefreq: "weekly", priority: "0.8" },
   { loc: `${SITE}/guncel-hukuk-gundemi`, changefreq: "daily", priority: "0.8" },
   { loc: `${SITE}/kvkk-aydinlatma`, changefreq: "monthly", priority: "0.3" },
@@ -47,7 +48,13 @@ const legalUrls = collectSlugs("legal-updates", "guncel-hukuk-gundemi").map((loc
   priority: "0.7",
 }));
 
-const allPages = [...staticPages, ...blogUrls, ...legalUrls];
+const serviceUrls = collectSlugs("services", "hizmetler").map((loc) => ({
+  loc,
+  changefreq: "monthly",
+  priority: "0.9",
+}));
+
+const allPages = [...staticPages, ...serviceUrls, ...blogUrls, ...legalUrls];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

@@ -11,7 +11,7 @@ publishedAt: 2026-04-02
 seoTitle: Apartman Borç Listesi Yasak 2026 | KVKK Kararı
 seoDescription: 31 Mart 2026 kararıyla apartman ortak alanlarına borç listesi
   asmayı yasakladı. Site yönetimleri ne yapmalı? Yaptırım riski nedir?
-coverImage: /uploads/blog/apartman-borç-listesi-kvkk.png
+coverImage: /uploads/blog/apartman-borç-listesi-kvkk.webp
 ---
 ## Apartmanda Borç Listesi Asmak Artık Yasak — KVKK Kararı Yürürlükte
 
