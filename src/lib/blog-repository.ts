@@ -1,4 +1,4 @@
-import { parseMarkdownDocument } from "@/lib/markdown-frontmatter";
+import { parseMarkdownDocument, unescapeOverEscapedMarkdown } from "@/lib/markdown-frontmatter";
 import type { BlogPost } from "@/types/blog";
 
 type RemoteBlogPayload = BlogPost[] | Record<string, unknown>;
@@ -121,24 +121,26 @@ const toOptionalString = (value: unknown): string | undefined => {
 
 const normalizeContent = (content: unknown): string => {
   if (Array.isArray(content)) {
-    return content
-      .map((item) => {
-        if (typeof item === "string") {
-          return item.trim();
-        }
+    return unescapeOverEscapedMarkdown(
+      content
+        .map((item) => {
+          if (typeof item === "string") {
+            return item.trim();
+          }
 
-        if (item && typeof item === "object") {
-          return toOptionalString((item as Record<string, unknown>).text) ?? "";
-        }
+          if (item && typeof item === "object") {
+            return toOptionalString((item as Record<string, unknown>).text) ?? "";
+          }
 
-        return "";
-      })
-      .filter(Boolean)
-      .join("\n\n");
+          return "";
+        })
+        .filter(Boolean)
+        .join("\n\n"),
+    );
   }
 
   if (typeof content === "string") {
-    return content.trim();
+    return unescapeOverEscapedMarkdown(content.trim());
   }
 
   return "";

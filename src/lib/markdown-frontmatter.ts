@@ -144,16 +144,28 @@ const parseFrontmatterBlock = <T extends Record<string, unknown>>(block: string)
   return data;
 };
 
+// Decap CMS'in zengin metin editoru, markdown'a geri seri hale getirirken
+// syntax karakterlerini asiri escape eder. Kullanici panele `**kalin**`
+// yapistirdiginda editor bunu `\*\*kalin\*\*` olarak kaydeder; bu da
+// yayinda goru­nu­r yildiz isaretleri olarak kalir. Asagidaki yardimci,
+// yalnizca markdown syntax karakterlerinin tek basli escape'lerini geri
+// alir; `\\` (literal backslash) ve satir sonu hard break'leri olan `\`
+// karakterleri listede olmadigi icin korunur.
+const OVER_ESCAPED_MARKDOWN_RE = /\\([*_#>+\-.!`~|[\]()])/g;
+
+export const unescapeOverEscapedMarkdown = (content: string): string =>
+  content.replace(OVER_ESCAPED_MARKDOWN_RE, "$1");
+
 export const parseMarkdownDocument = <T extends Record<string, unknown>>(raw: string) => {
   const normalizedRaw = raw.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
 
   if (!normalizedRaw.startsWith("---\n")) {
-    return { data: {} as Partial<T>, content: normalizedRaw.trim() };
+    return { data: {} as Partial<T>, content: unescapeOverEscapedMarkdown(normalizedRaw.trim()) };
   }
 
   const endIndex = normalizedRaw.indexOf("\n---\n", 4);
   if (endIndex === -1) {
-    return { data: {} as Partial<T>, content: normalizedRaw.trim() };
+    return { data: {} as Partial<T>, content: unescapeOverEscapedMarkdown(normalizedRaw.trim()) };
   }
 
   const frontmatterBlock = normalizedRaw.slice(4, endIndex);
@@ -161,6 +173,6 @@ export const parseMarkdownDocument = <T extends Record<string, unknown>>(raw: st
 
   return {
     data: parseFrontmatterBlock<T>(frontmatterBlock),
-    content,
+    content: unescapeOverEscapedMarkdown(content),
   };
 };

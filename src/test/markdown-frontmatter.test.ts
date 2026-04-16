@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseMarkdownDocument } from "@/lib/markdown-frontmatter";
+import { parseMarkdownDocument, unescapeOverEscapedMarkdown } from "@/lib/markdown-frontmatter";
 
 type TestFrontmatter = {
   title?: string;
@@ -28,5 +28,40 @@ publishedAt: 2026-03-14
     expect(data.excerpt).toBe("Karar özeti ilk satırdır.\n\nİkinci paragraf açıklaması burada devam eder.");
     expect(data.publishedAt).toBe("2026-03-14");
     expect(content).toBe("İçerik gövdesi.");
+  });
+
+  it("Decap CMS tarafindan asiri escape edilen markdown syntaxini temizler", () => {
+    const raw = `---
+title: Test
+excerpt: Ozet
+publishedAt: 2026-04-16
+---
+\\# Baslik
+
+> \\*\\*Kisa Yanit:\\*\\* Icerik.
+
+\\*"Italik alinti."\\*
+
+\\*\\*1- Liste maddesi\\*\\*`;
+
+    const { content } = parseMarkdownDocument<TestFrontmatter>(raw);
+
+    expect(content).toBe(
+      [
+        "# Baslik",
+        "",
+        "> **Kisa Yanit:** Icerik.",
+        "",
+        '*"Italik alinti."*',
+        "",
+        "**1- Liste maddesi**",
+      ].join("\n"),
+    );
+  });
+
+  it("literal backslash (\\\\) ve satir sonu hard break'lerini korur", () => {
+    const input = "Satir sonu hard break\\\nDevam\n\nIcinde \\\\ literal backslash kalir.";
+
+    expect(unescapeOverEscapedMarkdown(input)).toBe(input);
   });
 });
