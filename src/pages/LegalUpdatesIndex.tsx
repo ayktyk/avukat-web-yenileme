@@ -1,7 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, CalendarDays } from "lucide-react";
-import { useSeo } from "@/hooks/use-seo";
+import Seo from "@/components/Seo";
 import { formatDateTr } from "@/lib/format-date";
 import { listLegalUpdates } from "@/lib/legal-updates-repository";
 import { SITE_URL } from "@/lib/site-config";
@@ -10,30 +10,6 @@ import type { LegalUpdate } from "@/types/legal-update";
 const LegalUpdatesIndex = () => {
   const [items, setItems] = useState<LegalUpdate[]>([]);
   const [loading, setLoading] = useState(true);
-
-  useSeo({
-    title: "Güncel Hukuk Gündemi | Vega Hukuk",
-    description: "Önemli Yargıtay kararları, güncel hukuk haberleri ve uygulamaya dönük kısa değerlendirmeler.",
-    canonicalPath: "/guncel-hukuk-gundemi",
-    structuredData: {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Ana Sayfa",
-          item: `${SITE_URL}/`,
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Güncel Hukuk Gündemi",
-          item: `${SITE_URL}/guncel-hukuk-gundemi`,
-        },
-      ],
-    },
-  });
 
   useEffect(() => {
     let mounted = true;
@@ -55,6 +31,19 @@ const LegalUpdatesIndex = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <Seo
+        title="Güncel Hukuk Gündemi | Vega Hukuk"
+        description="Önemli Yargıtay kararları, güncel hukuk haberleri ve uygulamaya dönük kısa değerlendirmeler."
+        canonicalPath="/guncel-hukuk-gundemi"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: `${SITE_URL}/` },
+            { "@type": "ListItem", position: 2, name: "Güncel Hukuk Gündemi", item: `${SITE_URL}/guncel-hukuk-gundemi` },
+          ],
+        }}
+      />
       <section className="section-container pt-24 pb-6">
         <Link to="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
           Ana sayfaya dön

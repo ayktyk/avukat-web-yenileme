@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import MarkdownContent from "@/components/MarkdownContent";
-import { useSeo } from "@/hooks/use-seo";
+import Seo from "@/components/Seo";
 import { formatDateTr } from "@/lib/format-date";
 import { listBlogPosts } from "@/lib/blog-repository";
 import { enrichMarkdownContent, type LinkableContent } from "@/lib/internal-linking";
@@ -54,47 +54,52 @@ const LegalUpdatePost = () => {
       )
     : "";
 
-  useSeo({
-    title: item?.seoTitle ?? `${item?.title ?? "Gündem"} | Vega Hukuk`,
-    description: item?.seoDescription ?? item?.excerpt ?? "Güncel hukuk gelişmeleri ve karar notları.",
-    canonicalPath: `/guncel-hukuk-gundemi/${slug}`,
-    image: item?.coverImage,
-    type: "article",
-    structuredData: item
-      ? [
-          {
-            "@context": "https://schema.org",
-            "@type": "Article",
-            headline: item.title,
-            description: item.seoDescription ?? item.excerpt,
-            datePublished: item.publishedAt,
-            dateModified: item.updatedAt ?? item.publishedAt,
-            publisher: {
-              "@type": "LegalService",
-              name: "Vega Hukuk",
-              url: SITE_URL,
-            },
-            image: item.coverImage
-              ? `${SITE_URL}${item.coverImage}`
-              : `${SITE_URL}/og-image.svg`,
-            mainEntityOfPage: `${SITE_URL}/guncel-hukuk-gundemi/${item.slug}`,
+  const seoStructuredData = item
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: item.title,
+          description: item.seoDescription ?? item.excerpt,
+          datePublished: item.publishedAt,
+          dateModified: item.updatedAt ?? item.publishedAt,
+          publisher: {
+            "@type": "LegalService",
+            name: "Vega Hukuk",
+            url: SITE_URL,
           },
-          {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: SITE_URL },
-              { "@type": "ListItem", position: 2, name: "Güncel Hukuk Gündemi", item: `${SITE_URL}/guncel-hukuk-gundemi` },
-              { "@type": "ListItem", position: 3, name: item.title },
-            ],
-          },
-        ]
-      : undefined,
-  });
+          image: item.coverImage
+            ? `${SITE_URL}${item.coverImage}`
+            : `${SITE_URL}/og-image.svg`,
+          mainEntityOfPage: `${SITE_URL}/guncel-hukuk-gundemi/${item.slug}`,
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: SITE_URL },
+            { "@type": "ListItem", position: 2, name: "Güncel Hukuk Gündemi", item: `${SITE_URL}/guncel-hukuk-gundemi` },
+            { "@type": "ListItem", position: 3, name: item.title },
+          ],
+        },
+      ]
+    : undefined;
+
+  const seoElement = (
+    <Seo
+      title={item?.seoTitle ?? `${item?.title ?? "Gündem"} | Vega Hukuk`}
+      description={item?.seoDescription ?? item?.excerpt ?? "Güncel hukuk gelişmeleri ve karar notları."}
+      canonicalPath={`/guncel-hukuk-gundemi/${slug}`}
+      image={item?.coverImage}
+      type="article"
+      structuredData={seoStructuredData}
+    />
+  );
 
   if (loading) {
     return (
       <main className="min-h-screen bg-background">
+        {seoElement}
         <section className="section-container py-24">
           <p className="text-muted-foreground">İçerik yükleniyor...</p>
         </section>
@@ -105,6 +110,7 @@ const LegalUpdatePost = () => {
   if (!item) {
     return (
       <main className="min-h-screen bg-background">
+        {seoElement}
         <section className="section-container py-24">
           <h1 className="font-display text-4xl font-bold text-primary-deep">İçerik bulunamadı</h1>
           <p className="mt-3 text-muted-foreground">İlgili hukuk gündemi içeriği kaldırılmış olabilir veya bağlantı yanlış olabilir.</p>
@@ -118,6 +124,7 @@ const LegalUpdatePost = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      {seoElement}
       <article className="section-container max-w-[900px] pt-24 pb-16">
         <Link
           to="/guncel-hukuk-gundemi"

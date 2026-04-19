@@ -1,5 +1,6 @@
 ﻿import { Link } from "react-router-dom";
-import { useSeo } from "@/hooks/use-seo";
+import Seo from "@/components/Seo";
+import { SITE_URL } from "@/lib/site-config";
 
 type LegalPageLayoutProps = {
   title: string;
@@ -12,14 +13,21 @@ type LegalPageLayoutProps = {
 };
 
 const LegalPageLayout = ({ title, description, canonicalPath, sections }: LegalPageLayoutProps) => {
-  useSeo({
-    title: `${title} | Vega Hukuk`,
-    description,
-    canonicalPath,
-  });
-
   return (
     <main className="min-h-screen bg-background">
+      <Seo
+        title={`${title} | Vega Hukuk`}
+        description={description}
+        canonicalPath={canonicalPath}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: `${SITE_URL}/` },
+            { "@type": "ListItem", position: 2, name: title, item: `${SITE_URL}${canonicalPath}` },
+          ],
+        }}
+      />
       <section className="section-container max-w-[900px] pt-24 pb-16">
         <Link to="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
           Ana sayfaya dön

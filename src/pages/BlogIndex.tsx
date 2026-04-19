@@ -1,7 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, CalendarDays } from "lucide-react";
-import { useSeo } from "@/hooks/use-seo";
+import Seo from "@/components/Seo";
 import { formatDateTr } from "@/lib/format-date";
 import { listBlogPosts } from "@/lib/blog-repository";
 import { SITE_URL } from "@/lib/site-config";
@@ -10,30 +10,6 @@ import type { BlogPost } from "@/types/blog";
 const BlogIndex = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-
-  useSeo({
-    title: "Blog | Vega Hukuk",
-    description: "Vega Hukuk blog yazıları: iş hukuku, icra, kira ve güncel hukuki değerlendirmeler.",
-    canonicalPath: "/blog",
-    structuredData: {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Ana Sayfa",
-          item: `${SITE_URL}/`,
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Blog",
-          item: `${SITE_URL}/blog`,
-        },
-      ],
-    },
-  });
 
   useEffect(() => {
     let mounted = true;
@@ -55,6 +31,19 @@ const BlogIndex = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <Seo
+        title="Blog | Vega Hukuk"
+        description="Vega Hukuk blog yazıları: iş hukuku, icra, kira ve güncel hukuki değerlendirmeler."
+        canonicalPath="/blog"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: `${SITE_URL}/` },
+            { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
+          ],
+        }}
+      />
       <section className="section-container pt-24 pb-6">
         <Link to="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
           Ana sayfaya dön

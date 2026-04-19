@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import MarkdownContent from "@/components/MarkdownContent";
-import { useSeo } from "@/hooks/use-seo";
+import Seo from "@/components/Seo";
 import { formatDateTr } from "@/lib/format-date";
 import { getBlogPostBySlug, listBlogPosts } from "@/lib/blog-repository";
 import { enrichMarkdownContent, type LinkableContent } from "@/lib/internal-linking";
@@ -54,52 +54,76 @@ const BlogPost = () => {
       )
     : "";
 
-  useSeo({
-    title: post?.seoTitle ?? `${post?.title ?? "Yazı"} | Vega Hukuk`,
-    description:
-      post?.seoDescription ?? post?.excerpt ?? "Vega Hukuk blog yazısı: hukuki süreçler ve uygulamaya dönük değerlendirmeler.",
-    canonicalPath: `/blog/${slug}`,
-    image: post?.coverImage,
-    type: "article",
-    structuredData: post
-      ? [
-          {
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            headline: post.title,
-            description: post.seoDescription ?? post.excerpt,
-            datePublished: post.publishedAt,
-            dateModified: post.updatedAt ?? post.publishedAt,
-            author: {
-              "@type": "Organization",
-              name: post.author,
-            },
-            publisher: {
-              "@type": "LegalService",
-              name: "Vega Hukuk",
-              url: SITE_URL,
-            },
-            image: post.coverImage
-              ? `${SITE_URL}${post.coverImage}`
-              : `${SITE_URL}/og-image.svg`,
-            mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
+  const seoStructuredData = post
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          headline: post.title,
+          description: post.seoDescription ?? post.excerpt,
+          datePublished: post.publishedAt,
+          dateModified: post.updatedAt ?? post.publishedAt,
+          author: {
+            "@type": "Organization",
+            name: post.author,
           },
-          {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: SITE_URL },
-              { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
-              { "@type": "ListItem", position: 3, name: post.title },
-            ],
+          publisher: {
+            "@type": "LegalService",
+            name: "Vega Hukuk",
+            url: SITE_URL,
           },
-        ]
-      : undefined,
-  });
+          image: post.coverImage
+            ? `${SITE_URL}${post.coverImage}`
+            : `${SITE_URL}/og-image.svg`,
+          mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: SITE_URL },
+            { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
+            { "@type": "ListItem", position: 3, name: post.title },
+          ],
+        },
+        ...(post.faq && post.faq.length > 0
+          ? [
+              {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: post.faq.map((item) => ({
+                  "@type": "Question",
+                  name: item.question,
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: item.answer,
+                  },
+                })),
+              },
+            ]
+          : []),
+      ]
+    : undefined;
+
+  const seoElement = (
+    <Seo
+      title={post?.seoTitle ?? `${post?.title ?? "Yazı"} | Vega Hukuk`}
+      description={
+        post?.seoDescription ??
+        post?.excerpt ??
+        "Vega Hukuk blog yazısı: hukuki süreçler ve uygulamaya dönük değerlendirmeler."
+      }
+      canonicalPath={`/blog/${slug}`}
+      image={post?.coverImage}
+      type="article"
+      structuredData={seoStructuredData}
+    />
+  );
 
   if (loading) {
     return (
       <main className="min-h-screen bg-background">
+        {seoElement}
         <section className="section-container py-24">
           <p className="text-muted-foreground">Yazı yükleniyor...</p>
         </section>
@@ -110,6 +134,7 @@ const BlogPost = () => {
   if (!post) {
     return (
       <main className="min-h-screen bg-background">
+        {seoElement}
         <section className="section-container py-24">
           <h1 className="font-display text-4xl font-bold text-primary-deep">Yazı bulunamadı</h1>
           <p className="mt-3 text-muted-foreground">
@@ -125,6 +150,7 @@ const BlogPost = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      {seoElement}
       <article className="section-container max-w-[900px] pt-24 pb-16">
         <Link
           to="/blog"

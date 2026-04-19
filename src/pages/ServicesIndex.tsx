@@ -12,7 +12,7 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
-import { useSeo } from "@/hooks/use-seo";
+import Seo from "@/components/Seo";
 import { listServices } from "@/lib/service-repository";
 import { SITE_URL } from "@/lib/site-config";
 import type { Service } from "@/types/service";
@@ -50,33 +50,21 @@ const ServicesIndex = () => {
     };
   }, []);
 
-  useSeo({
-    title: "Hizmet Alanları | Vega Hukuk İstanbul",
-    description:
-      "İstanbul Kadıköy'de iş hukuku, icra-iflas, kira-gayrimenkul, miras-aile, tüketici-sigorta, ceza hukuku ve ticaret hukuku alanında hukuki danışmanlık ve dava takibi.",
-    canonicalPath: "/hizmetler",
-    structuredData: {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Ana Sayfa",
-          item: `${SITE_URL}/`,
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Hizmetler",
-          item: `${SITE_URL}/hizmetler`,
-        },
-      ],
-    },
-  });
-
   return (
     <main className="min-h-screen bg-background">
+      <Seo
+        title="Hizmet Alanları | Vega Hukuk İstanbul"
+        description="İstanbul Kadıköy'de iş hukuku, icra-iflas, kira-gayrimenkul, miras-aile, tüketici-sigorta, ceza hukuku ve ticaret hukuku alanında hukuki danışmanlık ve dava takibi."
+        canonicalPath="/hizmetler"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: `${SITE_URL}/` },
+            { "@type": "ListItem", position: 2, name: "Hizmetler", item: `${SITE_URL}/hizmetler` },
+          ],
+        }}
+      />
       <section className="section-container pt-24 pb-6">
         <Link to="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
           Ana sayfaya dön

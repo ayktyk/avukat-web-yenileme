@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import MarkdownContent from "@/components/MarkdownContent";
-import { useSeo } from "@/hooks/use-seo";
+import Seo from "@/components/Seo";
 import { formatDateTr } from "@/lib/format-date";
 import { getServiceBySlug } from "@/lib/service-repository";
 import { SITE_URL } from "@/lib/site-config";
@@ -60,74 +60,79 @@ const ServicePage = () => {
 
   const IconComponent = service ? iconMap[service.icon] ?? Briefcase : Briefcase;
 
-  useSeo({
-    title: service?.seoTitle ?? `${service?.title ?? "Hizmet"} | Vega Hukuk İstanbul`,
-    description:
-      service?.seoDescription ??
-      service?.description ??
-      "Vega Hukuk İstanbul hizmet alanı: hukuki danışmanlık ve dava takibi.",
-    canonicalPath: `/hizmetler/${slug}`,
-    image: service?.heroImage,
-    type: "website",
-    structuredData: service
-      ? [
-          {
-            "@context": "https://schema.org",
-            "@type": "Service",
-            name: service.title,
-            serviceType: service.heading,
-            description: service.seoDescription ?? service.description,
-            provider: {
-              "@type": "LegalService",
-              name: "Vega Hukuk İstanbul",
-              url: SITE_URL,
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "Osmanağa Mahallesi, Karadut Sokak No:14/10",
-                addressLocality: "Kadıköy",
-                addressRegion: "İstanbul",
-                addressCountry: "TR",
+  const seoStructuredData = service
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "Service",
+          name: service.title,
+          serviceType: service.heading,
+          description: service.seoDescription ?? service.description,
+          provider: {
+            "@type": "LegalService",
+            name: "Vega Hukuk İstanbul",
+            url: SITE_URL,
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "Osmanağa Mahallesi, Karadut Sokak No:14/10",
+              addressLocality: "Kadıköy",
+              addressRegion: "İstanbul",
+              addressCountry: "TR",
+            },
+            telephone: "+905519814937",
+          },
+          areaServed: {
+            "@type": "City",
+            name: "İstanbul",
+          },
+          url: `${SITE_URL}/hizmetler/${service.slug}`,
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: SITE_URL },
+            { "@type": "ListItem", position: 2, name: "Hizmetler", item: `${SITE_URL}/hizmetler` },
+            { "@type": "ListItem", position: 3, name: service.heading },
+          ],
+        },
+        ...(service.faq.length > 0
+          ? [
+              {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: service.faq.map((item) => ({
+                  "@type": "Question",
+                  name: item.question,
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: item.answer,
+                  },
+                })),
               },
-              telephone: "+905519814937",
-            },
-            areaServed: {
-              "@type": "City",
-              name: "İstanbul",
-            },
-            url: `${SITE_URL}/hizmetler/${service.slug}`,
-          },
-          {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: SITE_URL },
-              { "@type": "ListItem", position: 2, name: "Hizmetler", item: `${SITE_URL}/hizmetler` },
-              { "@type": "ListItem", position: 3, name: service.heading },
-            ],
-          },
-          ...(service.faq.length > 0
-            ? [
-                {
-                  "@context": "https://schema.org",
-                  "@type": "FAQPage",
-                  mainEntity: service.faq.map((item) => ({
-                    "@type": "Question",
-                    name: item.question,
-                    acceptedAnswer: {
-                      "@type": "Answer",
-                      text: item.answer,
-                    },
-                  })),
-                },
-              ]
-            : []),
-        ]
-      : undefined,
-  });
+            ]
+          : []),
+      ]
+    : undefined;
+
+  const seoElement = (
+    <Seo
+      title={service?.seoTitle ?? `${service?.title ?? "Hizmet"} | Vega Hukuk İstanbul`}
+      description={
+        service?.seoDescription ??
+        service?.description ??
+        "Vega Hukuk İstanbul hizmet alanı: hukuki danışmanlık ve dava takibi."
+      }
+      canonicalPath={`/hizmetler/${slug}`}
+      image={service?.heroImage}
+      structuredData={seoStructuredData}
+    />
+  );
 
   if (loading) {
     return (
       <main className="min-h-screen bg-background">
+        {seoElement}
         <section className="section-container py-24">
           <p className="text-muted-foreground">Hizmet sayfası yükleniyor...</p>
         </section>
@@ -138,6 +143,7 @@ const ServicePage = () => {
   if (!service) {
     return (
       <main className="min-h-screen bg-background">
+        {seoElement}
         <section className="section-container py-24">
           <h1 className="font-display text-4xl font-bold text-primary-deep">Hizmet bulunamadı</h1>
           <p className="mt-3 text-muted-foreground">
@@ -153,6 +159,7 @@ const ServicePage = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      {seoElement}
       <article className="section-container max-w-[900px] pt-24 pb-16">
         <Link
           to="/hizmetler"
