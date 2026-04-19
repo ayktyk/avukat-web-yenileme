@@ -6,7 +6,7 @@
   "scripts": {
     "optimize:images": "node scripts/run-image-optimizer.js",
     "dev": "node scripts/run-image-optimizer.js && vite",
-    "build": "node scripts/check-encoding.js && node scripts/run-image-optimizer.js && node scripts/generate-sitemap.js && vite-react-ssg build",
+    "build": "node scripts/check-encoding.js && node scripts/run-image-optimizer.js && node scripts/generate-sitemap.js && node scripts/generate-llms-txt.js && vite-react-ssg build",
     "check:encoding": "node scripts/check-encoding.js",
     "build:dev": "node scripts/run-image-optimizer.js && vite build --mode development",
     "lint": "eslint .",
