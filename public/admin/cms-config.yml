@@ -28,22 +28,87 @@ collections:
     editor:
       preview: false
     fields:
-      - { label: Başlık, name: title, widget: string }
-      - { label: Slug, name: slug, widget: string, hint: "Örnek: ise-iade-arabuluculukta-kritik-noktalar" }
-      - { label: Özet, name: excerpt, widget: text }
+      # --- Kimlik ---
+      - { label: Başlık, name: title, widget: string, hint: "Max 100 karakter. H1 değildir." }
+      - { label: Slug, name: slug, widget: string, hint: "ASCII kebab-case. Türkçe karakter yok (ı→i, ş→s, ç→c, ğ→g, ü→u, ö→o). Örnek: kidem-tazminati-istifa-hakli-fesih" }
+      - { label: Özet, name: excerpt, widget: text, hint: "150-180 karakter. Sosyal paylaşım özeti." }
       - { label: Kategori, name: category, widget: string, default: Genel }
-      - { label: Yazar, name: author, widget: string, default: Vega Hukuk }
+      - { label: Yazar, name: author, widget: string, default: Vega Hukuk, hint: "Görünen isim. Schema bağı için aşağıdaki 'Yazar Kimliği' alanı kullanılır." }
+      - { label: "Yazar Kimliği (slug)", name: authorSlug, widget: select, required: false, options: ["aykut-yesilkaya"], default: "aykut-yesilkaya", hint: "/ekip/[slug] ile eşleşir — Person schema @id" }
+
+      # --- Yayın ---
       - { label: Yayın Tarihi, name: publishedAt, widget: datetime, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
       - { label: Güncelleme Tarihi, name: updatedAt, widget: datetime, required: false, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
-      - { label: SEO Başlığı, name: seoTitle, widget: string, required: false }
-      - { label: SEO Açıklaması, name: seoDescription, widget: text, required: false }
-      - { label: Kapak Görseli, name: coverImage, widget: image, required: false }
+      - { label: "Gözden Geçiren", name: reviewedBy, widget: select, required: false, options: ["aykut-yesilkaya"], default: "aykut-yesilkaya", hint: "Review rozeti için." }
+      - { label: "Gözden Geçirme Tarihi", name: reviewedAt, widget: datetime, required: false, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
+      - { label: "Sonraki Gözden Geçirme", name: nextReviewAt, widget: datetime, required: false, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false, hint: "T3 için +90 gün." }
+
+      # --- SEO ---
+      - { label: SEO Başlığı, name: seoTitle, widget: string, required: false, hint: "Max 60 karakter. Format: {sorgu} | {modifier} | Vega Hukuk İstanbul" }
+      - { label: SEO Açıklaması, name: seoDescription, widget: text, required: false, hint: "150-160 karakter. CTA verb içersin." }
+      - { label: "Canonical URL (opsiyonel override)", name: canonical, widget: string, required: false, hint: "Boş bırak — otomatik üretilir." }
+
+      # --- Taksonomi (Ubermensch spec) ---
+      - { label: "Tür (type)", name: type, widget: hidden, default: "blog" }
+      - { label: "Seviye (tier)", name: tier, widget: select, options: ["T1","T2","T3","T4","T5","T6"], default: "T3", required: false, hint: "T3 = 1000-1500 kelime standart blog" }
+      - { label: "Intent", name: intent, widget: select, options: ["I1","I2","I3","I4","I5"], default: "I1", required: false, hint: "I1=info, I2=nasıl, I3=karşılaştırma, I4=emsal, I5=avukat ara" }
+      - label: "Topic Anahtarları"
+        name: topics
+        widget: list
+        required: false
+        hint: "Ontology key'leri — örn: is-hukuku, kidem-tazminati"
+        field: { label: Topic, name: topic, widget: string }
+      - label: "Pillar Bağlantıları"
+        name: pillars
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: "P1 (ana hizmet sayfası)", name: p1, widget: string, required: false, hint: "Örn: /hizmetler/is-hukuku" }
+          - { label: "P2 (alt konu sayfası)", name: p2, widget: string, required: false }
+
+      # --- İçerik Bileşenleri ---
+      - { label: "TL;DR (40-60 kelime direkt cevap)", name: tldr, widget: text, required: false, hint: "İlk cümle direkt cevap (evet/hayır + koşul). İkinci cümle karar referansı. SERT 40-60 kelime sınırı." }
+      - { label: "SSS (JSON)", name: faqJson, widget: text, required: false, hint: "Min 5 Q&A. Format: [{\"question\":\"...\", \"answer\":\"...\"}]. FAQPage schema bu alandan üretilir." }
+
+      # --- Citation ---
+      - label: "Kanun Referansları"
+        name: relatedLaws
+        widget: list
+        required: false
+        collapsed: true
+        hint: "Min 1 kanun referansı (T3 için)."
+        fields:
+          - { label: "Kanun No", name: code, widget: string, hint: "Örn: 4857" }
+          - { label: "Madde No", name: madde, widget: string, hint: "Örn: 17" }
+          - { label: "Başlık", name: title, widget: string, required: false, hint: "Örn: İhbar öneli" }
+      - label: "Yargı Kararları"
+        name: relatedCases
+        widget: list
+        required: false
+        collapsed: true
+        hint: "Min 1 Yargıtay kararı tam künyesiyle (T3 için)."
+        fields:
+          - { label: "Daire", name: daire, widget: string, hint: "Örn: 9. HD, HGK, İBK" }
+          - { label: "Esas No", name: esas, widget: string, hint: "Örn: 2024/1234" }
+          - { label: "Karar No", name: karar, widget: string, hint: "Örn: 2024/5678" }
+          - { label: "Karar Tarihi", name: date, widget: datetime, required: false, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
+          - { label: "Özet", name: summary, widget: text, required: false, hint: "1-2 cümle karar özeti." }
+          - { label: "Yargı MCP ID", name: yargiMcpId, widget: string, required: false }
+
+      # --- Görsel ---
+      - { label: Kapak Görseli, name: coverImage, widget: image, required: false, hint: "WebP formatı tercih et. 1600x900 önerilen." }
+      - { label: "Kapak Alt Text", name: coverAlt, widget: string, required: false, hint: "Açıklayıcı, keyword stuffing yasak." }
       - { label: Kapak Gradient Sınıfı, name: coverClass, widget: string, required: false, hint: "Boş bırakırsan varsayılan görünüm kullanılır." }
+      - { label: "OG Image", name: ogImage, widget: image, required: false, hint: "Sosyal paylaşım görseli. Boşsa kapak kullanılır." }
+      - { label: "OG Image Alt", name: ogImageAlt, widget: string, required: false }
+
+      # --- İç Linkleme ---
       - label: İç Link Öncelikleri
         name: internalLinkPriority
         widget: list
         required: false
-        hint: "Bu yazıda öncelikli olarak link verilecek yazıların slug'ları. Örnek: ise-iade-arabuluculukta-kritik-noktalar"
+        hint: "Bu yazıda öncelikli olarak link verilecek yazıların slug'ları."
         field: { label: Slug, name: slug, widget: string }
       - label: Manuel İç Linkler
         name: internalLinkMatches
@@ -52,7 +117,13 @@ collections:
         hint: "İçerikte belirli bir ifadeyi başka bir yazıya linklemek için kullanın."
         fields:
           - { label: İfade, name: phrase, widget: string, hint: "İçerikte aranacak metin. Örnek: haklı fesih" }
-          - { label: Hedef Slug, name: target, widget: string, hint: "Linkin gideceği yazının slug'ı. Örnek: hakli-fesih-nedir" }
+          - { label: Hedef Slug, name: target, widget: string, hint: "Linkin gideceği yazının slug'ı." }
+
+      # --- Durum ---
+      - { label: "Durum", name: status, widget: select, options: ["draft","reviewing","published","quarantine"], default: "published", required: false }
+      - { label: "Arama Motorlarından Gizle (noindex)", name: noindex, widget: boolean, default: false, required: false }
+
+      # --- Gövde ---
       - { label: İçerik, name: body, widget: markdown, hint: "Tek satırlık [Buton Metni](/blog) linkleri sitede CTA butonuna dönüşür. İç link için [[Yazı Başlığı]] veya [[slug|Özel metin]] kullanabilirsiniz." }
 
   - name: services
@@ -105,16 +176,96 @@ collections:
     editor:
       preview: false
     fields:
-      - { label: Başlık, name: title, widget: string }
-      - { label: Slug, name: slug, widget: string, hint: "Örnek: yargitay-fazla-mesai-karari-2026" }
-      - { label: Özet, name: excerpt, widget: text }
+      # --- Kimlik ---
+      - { label: Başlık, name: title, widget: string, hint: "Max 100 karakter." }
+      - { label: Slug, name: slug, widget: string, hint: "ASCII kebab-case. Örnek: yargitay-fazla-mesai-karari-2026" }
+      - { label: Özet, name: excerpt, widget: text, hint: "150-180 karakter." }
       - { label: Tür, name: category, widget: string, default: Hukuk Gündemi, hint: "Örnek: Önemli Karar, Hukuk Gündemi, Pratik Not" }
+      - { label: "Yazar Kimliği (slug)", name: authorSlug, widget: select, required: false, options: ["aykut-yesilkaya"], default: "aykut-yesilkaya" }
+
+      # --- Yayın ---
       - { label: Yayın Tarihi, name: publishedAt, widget: datetime, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
       - { label: Güncelleme Tarihi, name: updatedAt, widget: datetime, required: false, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
-      - { label: SEO Başlığı, name: seoTitle, widget: string, required: false }
-      - { label: SEO Açıklaması, name: seoDescription, widget: text, required: false }
-      - { label: Kapak Görseli, name: coverImage, widget: image, required: false }
+      - { label: "Gözden Geçiren", name: reviewedBy, widget: select, required: false, options: ["aykut-yesilkaya"], default: "aykut-yesilkaya" }
+      - { label: "Gözden Geçirme Tarihi", name: reviewedAt, widget: datetime, required: false, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
+      - { label: "Sonraki Gözden Geçirme", name: nextReviewAt, widget: datetime, required: false, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false, hint: "T4 için +180 gün önerilir." }
+
+      # --- SEO ---
+      - { label: SEO Başlığı, name: seoTitle, widget: string, required: false, hint: "Max 60 karakter." }
+      - { label: SEO Açıklaması, name: seoDescription, widget: text, required: false, hint: "150-160 karakter." }
+      - { label: "Canonical URL (opsiyonel)", name: canonical, widget: string, required: false }
+
+      # --- Taksonomi ---
+      - { label: "Tür (type)", name: type, widget: hidden, default: "legal-update" }
+      - { label: "Seviye (tier)", name: tier, widget: select, options: ["T3","T4","T6"], default: "T4", required: false, hint: "T4 = karar analizi standardı." }
+      - { label: "Intent", name: intent, widget: select, options: ["I1","I2","I3","I4","I5"], default: "I4", required: false, hint: "I4 = emsal karar." }
+      - label: "Topic Anahtarları"
+        name: topics
+        widget: list
+        required: false
+        field: { label: Topic, name: topic, widget: string }
+      - label: "Pillar Bağlantıları"
+        name: pillars
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: "P1", name: p1, widget: string, required: false }
+          - { label: "P2", name: p2, widget: string, required: false }
+
+      # --- Karar Meta (T4 özel) ---
+      - label: "Karar Bilgisi (T4)"
+        name: decision
+        widget: object
+        required: false
+        collapsed: true
+        hint: "Karar analizi yazısı ise doldur. LegalCase schema bu alandan üretilir."
+        fields:
+          - { label: "Mahkeme", name: court, widget: string, required: false, default: "Yargıtay" }
+          - { label: "Daire", name: chamber, widget: string, required: false, hint: "Örn: 9. HD, HGK, İBK" }
+          - { label: "Esas No", name: esasNo, widget: string, required: false }
+          - { label: "Karar No", name: kararNo, widget: string, required: false }
+          - { label: "Karar Tarihi", name: decisionDate, widget: datetime, required: false, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
+          - { label: "Yargı MCP ID", name: yargiMcpId, widget: string, required: false }
+          - { label: "Sonuç", name: outcome, widget: select, required: false, options: ["onama","bozma","duzeltme","ek-karar"] }
+          - { label: "Emsal Değeri", name: precedentValue, widget: select, required: false, options: ["high","medium","low"] }
+          - { label: "Aykut'un Davası mı?", name: authorIsCounsel, widget: boolean, required: false, default: false }
+
+      # --- İçerik Bileşenleri ---
+      - { label: "TL;DR (40-60 kelime)", name: tldr, widget: text, required: false }
+      - { label: "SSS (JSON)", name: faqJson, widget: text, required: false, hint: "Min 5 Q&A. Format: [{\"question\":\"...\", \"answer\":\"...\"}]" }
+
+      # --- Citation ---
+      - label: "Kanun Referansları"
+        name: relatedLaws
+        widget: list
+        required: false
+        collapsed: true
+        fields:
+          - { label: "Kanun No", name: code, widget: string }
+          - { label: "Madde No", name: madde, widget: string }
+          - { label: "Başlık", name: title, widget: string, required: false }
+      - label: "İlgili Diğer Kararlar"
+        name: relatedCases
+        widget: list
+        required: false
+        collapsed: true
+        fields:
+          - { label: "Daire", name: daire, widget: string }
+          - { label: "Esas No", name: esas, widget: string }
+          - { label: "Karar No", name: karar, widget: string }
+          - { label: "Karar Tarihi", name: date, widget: datetime, required: false, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
+          - { label: "Özet", name: summary, widget: text, required: false }
+          - { label: "Yargı MCP ID", name: yargiMcpId, widget: string, required: false }
+
+      # --- Görsel ---
+      - { label: Kapak Görseli, name: coverImage, widget: image, required: false, hint: "WebP tercih et." }
+      - { label: "Kapak Alt Text", name: coverAlt, widget: string, required: false }
       - { label: Kapak Gradient Sınıfı, name: coverClass, widget: string, required: false }
+      - { label: "OG Image", name: ogImage, widget: image, required: false }
+      - { label: "OG Image Alt", name: ogImageAlt, widget: string, required: false }
+
+      # --- İç Linkleme ---
       - label: İç Link Öncelikleri
         name: internalLinkPriority
         widget: list
@@ -125,8 +276,13 @@ collections:
         name: internalLinkMatches
         widget: list
         required: false
-        hint: "İçerikte belirli bir ifadeyi başka bir yazıya linklemek için kullanın."
         fields:
-          - { label: İfade, name: phrase, widget: string, hint: "İçerikte aranacak metin." }
-          - { label: Hedef Slug, name: target, widget: string, hint: "Linkin gideceği yazının slug'ı." }
+          - { label: İfade, name: phrase, widget: string }
+          - { label: Hedef Slug, name: target, widget: string }
+
+      # --- Durum ---
+      - { label: "Durum", name: status, widget: select, options: ["draft","reviewing","published","quarantine"], default: "published", required: false }
+      - { label: "noindex", name: noindex, widget: boolean, default: false, required: false }
+
+      # --- Gövde ---
       - { label: İçerik, name: body, widget: markdown, hint: "Tek satırlık [Buton Metni](/blog) linkleri sitede CTA butonuna dönüşür. İç link için [[Yazı Başlığı]] veya [[slug|Özel metin]] kullanabilirsiniz." }
