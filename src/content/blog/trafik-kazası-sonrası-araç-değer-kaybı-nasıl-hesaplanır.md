@@ -13,7 +13,7 @@ seoTitle: Araç Değer Kaybı Hesaplama 2026 | Vega Hukuk
 seoDescription: Trafik kazası sonrası araç değer kaybı tazminatı nasıl
   hesaplanır? Yargıtay formülü, sigorta başvurusu, Tahkim Komisyonu süreci ve
   dikkat edilecek hususlar.
-coverImage: /uploads/blog/araç-değer-kaybı.png
+coverImage: /uploads/blog/araç-değer-kaybı.webp
 internalLinkPriority:
   - arac-deger-kaybi-trafik-kazasi-hesaplama-trafik-kazası-sigorta
 ---

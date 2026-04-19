@@ -13,7 +13,7 @@ seoTitle: Kredi Kartı Aidat İadesi ve Haksız Şart 2026 | Hukuki Rehber
 seoDescription: >
   Kredi kartı aidatı haksız şart mıdır? Yargıtay kararları ışığında aidat iadesi
   süreci, başvuru yolları ve tüketici hakları hakkında bilgi edinin.
-coverImage: /uploads/blog/kredi-kartı-blog.png
+coverImage: /uploads/blog/kredi-kartı-blog.webp
 internalLinkPriority:
   - kredi-karti-aidat-iadesi-haksiz-sart-iptali-iade-sureci-tuketici-haklari
 ---

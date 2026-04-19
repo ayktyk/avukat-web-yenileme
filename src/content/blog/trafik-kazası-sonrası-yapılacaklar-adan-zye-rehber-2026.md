@@ -14,7 +14,7 @@ seoTitle: Trafik Kazası Sonrası Yapılacaklar 2026 | Hukuki Rehber
 seoDescription: |-
   Trafik kazası sonrası ilk 24 saatte ne yapmalı, tazminat türleri, zamanaşımı
   ve sigorta süreci hakkında adım adım hukuki rehber. Bilgi edinin.
-coverImage: /uploads/blog/trafik-kazası-rehber-yazısı.png
+coverImage: /uploads/blog/trafik-kazası-rehber-yazısı.webp
 internalLinkPriority:
   - trafik kazası sigorta tazminat
 ---
