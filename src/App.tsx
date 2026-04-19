@@ -56,6 +56,20 @@ export const routes: RouteRecord[] = [
         },
       },
       {
+        path: "ekip",
+        lazy: async () => {
+          const mod = await import("./pages/TeamIndex");
+          return { Component: mod.default };
+        },
+      },
+      {
+        path: "ekip/:slug",
+        lazy: async () => {
+          const mod = await import("./pages/TeamMemberPage");
+          return { Component: mod.default };
+        },
+      },
+      {
         path: "kvkk-aydinlatma",
         lazy: async () => {
           const mod = await import("./pages/KvkkAydinlatma");

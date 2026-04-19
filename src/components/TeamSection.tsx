@@ -1,8 +1,10 @@
 import { useEffect } from "react";
-import { Star } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const teamMembers = [
   {
+    slug: "aykut-yesilkaya",
     name: "Av. Aykut Yeşilkaya",
     jobTitle: "Kurucu Avukat",
     description:
@@ -10,6 +12,7 @@ const teamMembers = [
     knowsAbout: ["İş Hukuku", "Kira Hukuku", "Gayrimenkul Hukuku", "Miras Hukuku", "Aile Hukuku", "Tüketici Hukuku", "Sigorta Hukuku", "Arabuluculuk"],
   },
   {
+    slug: "mucahit-islam-keskun",
     name: "Av. Mücahit İslam Keskün",
     jobTitle: "Kurucu Avukat",
     description:
@@ -17,6 +20,7 @@ const teamMembers = [
     knowsAbout: ["Ceza Hukuku", "Ceza Davası", "Soruşturma", "Kovuşturma", "Savunma"],
   },
   {
+    slug: "busra-yesilkaya",
     name: "Av. Büşra Yeşilkaya",
     jobTitle: "Avukat",
     description:
@@ -93,6 +97,12 @@ const TeamSection = () => {
             </div>
             <h4 className="font-display text-[22px] font-bold text-accent-light">Av. Aykut Yeşilkaya</h4>
             <p className="mt-1 text-primary-foreground/75">Kurucu Avukat • Arabulucu • Özel Hukuk</p>
+            <Link
+              to="/ekip/aykut-yesilkaya"
+              className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-accent-light hover:text-accent"
+            >
+              Profili incele <ArrowRight className="h-4 w-4" />
+            </Link>
 
             <div className="relative mt-5 pl-7">
               <div className="absolute bottom-1.5 left-[10px] top-1.5 w-[1.5px] bg-accent/30" />
@@ -121,6 +131,12 @@ const TeamSection = () => {
               <p className="text-[14.5px] leading-relaxed text-muted-foreground">
                 Ceza davalarında savunma, soruşturma ve kovuşturma süreçlerinde etkin temsil ve stratejik savunma hizmeti sunar.
               </p>
+              <Link
+                to="/ekip/mucahit-islam-keskun"
+                className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-accent"
+              >
+                Profili incele <ArrowRight className="h-4 w-4" />
+              </Link>
             </article>
 
             <article className="rounded-2xl border border-border bg-card p-7 transition-all duration-400 hover:-translate-y-1 hover:shadow-elegant-lg">
@@ -133,6 +149,12 @@ const TeamSection = () => {
               <p className="text-[14.5px] leading-relaxed text-muted-foreground">
                 Sözleşme tasarımı, müzakeresi ve uyuşmazlık çözümünde titiz ve detay odaklı hukuki destek sağlar.
               </p>
+              <Link
+                to="/ekip/busra-yesilkaya"
+                className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-accent"
+              >
+                Profili incele <ArrowRight className="h-4 w-4" />
+              </Link>
             </article>
           </div>
         </div>

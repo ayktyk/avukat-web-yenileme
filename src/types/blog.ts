@@ -1,5 +1,10 @@
 ﻿import type { InternalLinkRule } from "@/lib/internal-linking";
 
+export interface BlogFAQ {
+  question: string;
+  answer: string;
+}
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -15,4 +20,8 @@ export interface BlogPost {
   coverImage?: string;
   internalLinkPriority?: string[];
   internalLinkMatches?: InternalLinkRule[];
+  faq?: BlogFAQ[];
+  reviewedBy?: string;
+  reviewedAt?: string;
+  tldr?: string;
 }

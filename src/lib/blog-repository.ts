@@ -1,5 +1,32 @@
 import { parseMarkdownDocument, unescapeOverEscapedMarkdown } from "@/lib/markdown-frontmatter";
-import type { BlogPost } from "@/types/blog";
+import type { BlogFAQ, BlogPost } from "@/types/blog";
+
+const parseBlogFaqJson = (raw?: string): BlogFAQ[] | undefined => {
+  if (typeof raw !== "string") return undefined;
+  const trimmed = raw.trim();
+  if (!trimmed) return undefined;
+  try {
+    const parsed = JSON.parse(trimmed);
+    if (!Array.isArray(parsed)) return undefined;
+    const cleaned = parsed
+      .filter(
+        (item): item is { question: string; answer: string } =>
+          !!item &&
+          typeof item === "object" &&
+          typeof (item as Record<string, unknown>).question === "string" &&
+          typeof (item as Record<string, unknown>).answer === "string",
+      )
+      .map((item) => ({
+        question: String(item.question).trim(),
+        answer: String(item.answer).trim(),
+      }))
+      .filter((item) => item.question.length > 0 && item.answer.length > 0);
+    return cleaned.length > 0 ? cleaned : undefined;
+  } catch (error) {
+    console.error("Blog FAQ JSON parse hatası", error);
+    return undefined;
+  }
+};
 
 type RemoteBlogPayload = BlogPost[] | Record<string, unknown>;
 
@@ -260,6 +287,12 @@ const parseMarkdownPost = (path: string, raw: string): BlogPost | null => {
     coverImage: toOptionalString(frontmatter.coverImage),
     internalLinkPriority: Array.isArray(frontmatter.internalLinkPriority) ? frontmatter.internalLinkPriority : undefined,
     internalLinkMatches: Array.isArray(frontmatter.internalLinkMatches) ? frontmatter.internalLinkMatches : undefined,
+    faq: parseBlogFaqJson(
+      toOptionalString((frontmatter as Record<string, unknown>).faqJson),
+    ),
+    reviewedBy: toOptionalString((frontmatter as Record<string, unknown>).reviewedBy),
+    reviewedAt: toOptionalString((frontmatter as Record<string, unknown>).reviewedAt),
+    tldr: toOptionalString((frontmatter as Record<string, unknown>).tldr),
   };
 };
 
