@@ -11,7 +11,20 @@ export default defineConfig(() => ({
       overlay: false,
     },
   },
-  plugins: [react()],
+  plugins: [
+    {
+      name: "admin-index-rewrite",
+      configureServer(server) {
+        server.middlewares.use((req, _res, next) => {
+          if (req.url === "/admin" || req.url === "/admin/") {
+            req.url = "/admin/index.html";
+          }
+          next();
+        });
+      },
+    },
+    react(),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
