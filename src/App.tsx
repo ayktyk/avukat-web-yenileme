@@ -63,6 +63,13 @@ export const routes: RouteRecord[] = [
         },
       },
       {
+        path: "e-tahsilat",
+        lazy: async () => {
+          const mod = await import("./pages/ETahsilat");
+          return { Component: mod.default };
+        },
+      },
+      {
         path: "hesaplamalar",
         lazy: async () => {
           const mod = await import("./pages/CalculatorsIndex");
@@ -87,6 +94,48 @@ export const routes: RouteRecord[] = [
         path: "hesaplamalar/infaz",
         lazy: async () => {
           const mod = await import("./pages/InfazCalculator");
+          return { Component: mod.default };
+        },
+      },
+      {
+        path: "hesaplamalar/vekalet-ucreti",
+        lazy: async () => {
+          const mod = await import("./pages/VekaletCalculator");
+          return { Component: mod.default };
+        },
+      },
+      {
+        path: "hesaplamalar/arabuluculuk-ucreti",
+        lazy: async () => {
+          const mod = await import("./pages/ArabuluculukCalculator");
+          return { Component: mod.default };
+        },
+      },
+      {
+        path: "hesaplamalar/faiz",
+        lazy: async () => {
+          const mod = await import("./pages/FaizCalculator");
+          return { Component: mod.default };
+        },
+      },
+      {
+        path: "hesaplamalar/harc",
+        lazy: async () => {
+          const mod = await import("./pages/HarcCalculator");
+          return { Component: mod.default };
+        },
+      },
+      {
+        path: "hesaplamalar/kira-sureleri",
+        lazy: async () => {
+          const mod = await import("./pages/KiraSureleriCalculator");
+          return { Component: mod.default };
+        },
+      },
+      {
+        path: "hesaplamalar/kaza-tazminati",
+        lazy: async () => {
+          const mod = await import("./pages/KazaTazminatiCalculator");
           return { Component: mod.default };
         },
       },

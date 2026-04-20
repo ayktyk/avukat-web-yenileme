@@ -13,8 +13,7 @@ const navLinks = [
 
 const HOME_PATH = "/";
 const CALCULATORS_PATH = "/hesaplamalar";
-const PAYMENT_URL =
-  "https://pos.mokaunited.com/tr/customerpos/payment-request?uppc=6fksucpuSNKx66xa7eakmA==";
+const PAYMENT_PATH = "/e-tahsilat";
 
 const scrollToSection = (href: string) => {
   const el = document.querySelector(href);
@@ -137,29 +136,27 @@ const SiteHeader = () => {
             >
               İletişim
             </button>
-            <a
-              href={PAYMENT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Online ödeme — e-Baro POS tahsilat sayfası (yeni sekmede açılır)"
+            <Link
+              to={PAYMENT_PATH}
+              onClick={() => setMobileOpen(false)}
+              aria-label="E-Tahsilat — kredi kartı ile güvenli online ödeme"
               className="ml-2 inline-flex items-center gap-1.5 rounded-[10px] border border-emerald-600 bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-elegant"
             >
               <CreditCard className="h-4 w-4" />
-              Online Ödeme
-            </a>
+              E-Tahsilat
+            </Link>
           </nav>
 
           <div className="flex items-center gap-2 lg:hidden">
-            <a
-              href={PAYMENT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Online ödeme — e-Baro POS tahsilat sayfası (yeni sekmede açılır)"
+            <Link
+              to={PAYMENT_PATH}
+              onClick={() => setMobileOpen(false)}
+              aria-label="E-Tahsilat — kredi kartı ile güvenli online ödeme"
               className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-600 bg-emerald-600 px-3 py-2 text-xs font-semibold text-white transition-all hover:bg-emerald-700"
             >
               <CreditCard className="h-4 w-4" />
               Ödeme
-            </a>
+            </Link>
             <button
               className="rounded-lg border border-border p-2 transition-colors hover:bg-cream"
               onClick={() => setMobileOpen(true)}
@@ -192,17 +189,15 @@ const SiteHeader = () => {
           >
             İletişim
           </button>
-          <a
-            href={PAYMENT_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to={PAYMENT_PATH}
             onClick={() => setMobileOpen(false)}
-            aria-label="Online ödeme — e-Baro POS tahsilat sayfası (yeni sekmede açılır)"
+            aria-label="E-Tahsilat — kredi kartı ile güvenli online ödeme"
             className="mt-4 inline-flex items-center gap-2 rounded-xl border border-emerald-600 bg-emerald-600 px-6 py-3 font-display text-[22px] font-semibold text-white transition-all hover:bg-emerald-700"
           >
             <CreditCard className="h-5 w-5" />
-            Online Ödeme
-          </a>
+            E-Tahsilat
+          </Link>
         </div>
       ) : null}
     </>

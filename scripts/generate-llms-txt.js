@@ -96,10 +96,28 @@ lines.push(
   `- [İşçilik Alacakları Hesaplama](${SITE}/hesaplamalar/iscilik-alacaklari): Kıdem, ihbar, fazla mesai, UBGT, hafta tatili ve yıllık izin alacaklarını dönem bazlı tavan ve kademeli vergi kurallarıyla hesaplama aracı.`,
 );
 lines.push(
-  `- [Miras Payı Hesaplama](${SITE}/hesaplamalar/miras-payi): Türk Medeni Kanunu zümre sistemine göre mirasçı paylarını ve saklı pay oranlarını hesaplama aracı (yakında).`,
+  `- [Vekalet Ücreti Hesaplama](${SITE}/hesaplamalar/vekalet-ucreti): 2026 yılı AAÜT tarifesine göre nispi ve maktu vekalet ücretini; mahkeme türü, dava aşaması ve seri dava indirimiyle hesaplama aracı.`,
 );
 lines.push(
-  `- [İnfaz Hesaplama](${SITE}/hesaplamalar/infaz): 5275 sayılı Kanun kapsamında koşullu salıverme ve denetimli serbestlik sürelerini hesaplama aracı (yakında).`,
+  `- [Arabuluculuk Ücreti Hesaplama](${SITE}/hesaplamalar/arabuluculuk-ucreti): Arabuluculuk Asgari Ücret Tarifesi uyarınca saatlik ve nispi ücretten yüksek olanı, KDV ve stopaj hesabıyla net ödeme tutarını gösteren araç.`,
+);
+lines.push(
+  `- [Faiz Hesaplama](${SITE}/hesaplamalar/faiz): 3095 sayılı Kanun kapsamında yasal, ticari (TCMB avans) veya özel oran üzerinden dönem değişikliklerini dikkate alan kümülatif faiz hesaplama aracı.`,
+);
+lines.push(
+  `- [Harç ve Gider Avansı Hesaplama](${SITE}/hesaplamalar/harc): 492 sayılı Harçlar Kanunu ve Gider Avansı Tarifesi kapsamında başvurma harcı, peşin harç, vekalet ve gider avansını topluca hesaplama aracı.`,
+);
+lines.push(
+  `- [Kira Süreleri ve Artış Hesaplama](${SITE}/hesaplamalar/kira-sureleri): TBK m.315-352 tahliye nedenleri için ihtar, dava ve fesih sürelerini; m.344 kapsamında TÜFE ortalamasına göre kira artış üst sınırını hesaplama aracı.`,
+);
+lines.push(
+  `- [Kaza (Maluliyet) Tazminatı Hesaplama](${SITE}/hesaplamalar/kaza-tazminati): Trafik ve iş kazalarında TRH2010 ömür tablosu ve %10 progresif rant yöntemiyle sürekli maluliyet tazminatını aktif-pasif dönem ayrımıyla hesaplama aracı.`,
+);
+lines.push(
+  `- [İnfaz Hesaplama](${SITE}/hesaplamalar/infaz): 5275/7242/7456 sayılı Kanunlar kapsamında koşullu salıverilme, denetimli serbestlik, açık cezaevi ve bihakkin tahliye tarihlerini hesaplama aracı.`,
+);
+lines.push(
+  `- [Miras Payı Hesaplama](${SITE}/hesaplamalar/miras-payi): Türk Medeni Kanunu zümre sistemine göre mirasçı paylarını ve saklı pay oranlarını hesaplama aracı (yakında).`,
 );
 lines.push("");
 lines.push("## Blog");
@@ -125,6 +143,12 @@ lines.push("");
 lines.push(`- [KVKK Aydınlatma Metni](${SITE}/kvkk-aydinlatma)`);
 lines.push(`- [Çerez Politikası](${SITE}/cerez-politikasi)`);
 lines.push(`- [Hukuki Uyarı](${SITE}/hukuki-uyari)`);
+lines.push("");
+lines.push("## Ödeme");
+lines.push("");
+lines.push(
+  `- [E-Tahsilat](${SITE}/e-tahsilat): Kredi kartı ile güvenli online ödeme sayfası. Moka POS altyapısı (BDDK lisanslı) üzerinden vekâlet ücreti, danışmanlık bedeli ve yargılama gideri avansı tahsilatı.`,
+);
 lines.push("");
 lines.push("## İletişim");
 lines.push("");
