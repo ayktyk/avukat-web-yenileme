@@ -21,6 +21,12 @@ E-posta: vegalaw.contact@gmail.com
 - [Ceza Hukuku](https://vegahukukistanbul.com/hizmetler/ceza-hukuku): Soruşturma ve kovuşturma aşamalarında şüpheli, sanık, mağdur ve müşteki müdafiliği. Uzlaştırma, tutukluluk, adli kontrol, istinaf ve temyiz süreçlerinde hukuki destek.
 - [Sözleşmeler Hukuku](https://vegahukukistanbul.com/hizmetler/sozlesmeler-hukuku): Sözleşme tasarımı, müzakere, ifa ve temerrüt uyuşmazlıkları, cezai şart, sözleşme feshi, irade sakatlıkları ve genel işlem koşulları denetimi alanında hukuki destek.
 
+## Hesaplama Araçları
+
+- [İşçilik Alacakları Hesaplama](https://vegahukukistanbul.com/hesaplamalar/iscilik-alacaklari): Kıdem, ihbar, fazla mesai, UBGT, hafta tatili ve yıllık izin alacaklarını dönem bazlı tavan ve kademeli vergi kurallarıyla hesaplama aracı.
+- [Miras Payı Hesaplama](https://vegahukukistanbul.com/hesaplamalar/miras-payi): Türk Medeni Kanunu zümre sistemine göre mirasçı paylarını ve saklı pay oranlarını hesaplama aracı (yakında).
+- [İnfaz Hesaplama](https://vegahukukistanbul.com/hesaplamalar/infaz): 5275 sayılı Kanun kapsamında koşullu salıverme ve denetimli serbestlik sürelerini hesaplama aracı (yakında).
+
 ## Blog
 
 - [Kredi Kartı Aidat İadesi: Haksız Şart İptali ve İade Süreci 2026](https://vegahukukistanbul.com/blog/kredi-karti-aidat-iadesi-haksiz-sart-iptali-iade-sureci): Bankalar kredi kartı üyelik aidatını tek taraflı olarak sözleşmeye koyduğunda bu hüküm haksız şart niteliğindedir. Yargıtay, aidatın bir süre ödenmesinin dahi tüketicinin hakların…

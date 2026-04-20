@@ -90,6 +90,18 @@ for (const s of services) {
   lines.push(`- [${s.title}](${SITE}/hizmetler/${s.slug}): ${truncate(s.description, 180)}`);
 }
 lines.push("");
+lines.push("## Hesaplama Araçları");
+lines.push("");
+lines.push(
+  `- [İşçilik Alacakları Hesaplama](${SITE}/hesaplamalar/iscilik-alacaklari): Kıdem, ihbar, fazla mesai, UBGT, hafta tatili ve yıllık izin alacaklarını dönem bazlı tavan ve kademeli vergi kurallarıyla hesaplama aracı.`,
+);
+lines.push(
+  `- [Miras Payı Hesaplama](${SITE}/hesaplamalar/miras-payi): Türk Medeni Kanunu zümre sistemine göre mirasçı paylarını ve saklı pay oranlarını hesaplama aracı (yakında).`,
+);
+lines.push(
+  `- [İnfaz Hesaplama](${SITE}/hesaplamalar/infaz): 5275 sayılı Kanun kapsamında koşullu salıverme ve denetimli serbestlik sürelerini hesaplama aracı (yakında).`,
+);
+lines.push("");
 lines.push("## Blog");
 lines.push("");
 for (const b of blog) {

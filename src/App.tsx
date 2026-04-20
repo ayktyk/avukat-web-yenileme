@@ -63,6 +63,34 @@ export const routes: RouteRecord[] = [
         },
       },
       {
+        path: "hesaplamalar",
+        lazy: async () => {
+          const mod = await import("./pages/CalculatorsIndex");
+          return { Component: mod.default };
+        },
+      },
+      {
+        path: "hesaplamalar/iscilik-alacaklari",
+        lazy: async () => {
+          const mod = await import("./pages/IscilikCalculator");
+          return { Component: mod.default };
+        },
+      },
+      {
+        path: "hesaplamalar/miras-payi",
+        lazy: async () => {
+          const mod = await import("./pages/MirasCalculator");
+          return { Component: mod.default };
+        },
+      },
+      {
+        path: "hesaplamalar/infaz",
+        lazy: async () => {
+          const mod = await import("./pages/InfazCalculator");
+          return { Component: mod.default };
+        },
+      },
+      {
         path: "ekip/:slug",
         lazy: async () => {
           const mod = await import("./pages/TeamMemberPage");

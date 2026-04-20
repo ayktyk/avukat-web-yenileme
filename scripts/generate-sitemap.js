@@ -29,6 +29,10 @@ const collectSlugs = (dir, prefix) => {
 const staticPages = [
   { loc: `${SITE}/`, changefreq: "weekly", priority: "1.0" },
   { loc: `${SITE}/hizmetler`, changefreq: "monthly", priority: "0.9" },
+  { loc: `${SITE}/hesaplamalar`, changefreq: "monthly", priority: "0.8" },
+  { loc: `${SITE}/hesaplamalar/iscilik-alacaklari`, changefreq: "monthly", priority: "0.8" },
+  { loc: `${SITE}/hesaplamalar/miras-payi`, changefreq: "monthly", priority: "0.6" },
+  { loc: `${SITE}/hesaplamalar/infaz`, changefreq: "monthly", priority: "0.6" },
   { loc: `${SITE}/blog`, changefreq: "weekly", priority: "0.8" },
   { loc: `${SITE}/guncel-hukuk-gundemi`, changefreq: "daily", priority: "0.8" },
   { loc: `${SITE}/ekip`, changefreq: "monthly", priority: "0.6" },

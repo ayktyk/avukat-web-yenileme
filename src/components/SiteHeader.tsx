@@ -1,4 +1,4 @@
-import { Menu, Scale, X } from "lucide-react";
+import { Calculator, CreditCard, Menu, Scale, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -12,6 +12,9 @@ const navLinks = [
 ];
 
 const HOME_PATH = "/";
+const CALCULATORS_PATH = "/hesaplamalar";
+const PAYMENT_URL =
+  "https://pos.mokaunited.com/tr/customerpos/payment-request?uppc=6fksucpuSNKx66xa7eakmA==";
 
 const scrollToSection = (href: string) => {
   const el = document.querySelector(href);
@@ -116,6 +119,17 @@ const SiteHeader = () => {
 
           <nav className="hidden items-center gap-1 lg:flex">
             {navLinks.map((link) => renderNavLink(link.label, link.href))}
+            <Link
+              to={CALCULATORS_PATH}
+              onClick={() => setMobileOpen(false)}
+              className="group relative rounded-lg px-3.5 py-2 text-[14.5px] font-medium text-foreground transition-all hover:bg-primary/[0.04] hover:text-primary"
+            >
+              <span className="inline-flex items-center gap-1.5">
+                <Calculator className="h-4 w-4" />
+                Hesaplamalar
+              </span>
+              <span className="absolute bottom-1 left-1/2 right-1/2 h-[1.5px] bg-accent transition-all duration-300 group-hover:left-3.5 group-hover:right-3.5" />
+            </Link>
             <button
               type="button"
               onClick={() => navigateToSection("#iletisim")}
@@ -123,15 +137,37 @@ const SiteHeader = () => {
             >
               İletişim
             </button>
+            <a
+              href={PAYMENT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Online ödeme — e-Baro POS tahsilat sayfası (yeni sekmede açılır)"
+              className="ml-2 inline-flex items-center gap-1.5 rounded-[10px] border border-emerald-600 bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-elegant"
+            >
+              <CreditCard className="h-4 w-4" />
+              Online Ödeme
+            </a>
           </nav>
 
-          <button
-            className="rounded-lg border border-border p-2 transition-colors hover:bg-cream lg:hidden"
-            onClick={() => setMobileOpen(true)}
-            aria-label="Menüyü aç"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
+          <div className="flex items-center gap-2 lg:hidden">
+            <a
+              href={PAYMENT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Online ödeme — e-Baro POS tahsilat sayfası (yeni sekmede açılır)"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-600 bg-emerald-600 px-3 py-2 text-xs font-semibold text-white transition-all hover:bg-emerald-700"
+            >
+              <CreditCard className="h-4 w-4" />
+              Ödeme
+            </a>
+            <button
+              className="rounded-lg border border-border p-2 transition-colors hover:bg-cream"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Menüyü aç"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -141,6 +177,14 @@ const SiteHeader = () => {
             <X className="h-7 w-7" />
           </button>
           {navLinks.map((link) => renderNavLink(link.label, link.href, true))}
+          <Link
+            to={CALCULATORS_PATH}
+            onClick={() => setMobileOpen(false)}
+            className="inline-flex items-center gap-2 rounded-xl px-6 py-3 font-display text-[28px] font-semibold text-foreground transition-all hover:bg-primary/[0.05] hover:text-primary"
+          >
+            <Calculator className="h-6 w-6" />
+            Hesaplamalar
+          </Link>
           <button
             type="button"
             onClick={() => navigateToSection("#iletisim")}
@@ -148,6 +192,17 @@ const SiteHeader = () => {
           >
             İletişim
           </button>
+          <a
+            href={PAYMENT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileOpen(false)}
+            aria-label="Online ödeme — e-Baro POS tahsilat sayfası (yeni sekmede açılır)"
+            className="mt-4 inline-flex items-center gap-2 rounded-xl border border-emerald-600 bg-emerald-600 px-6 py-3 font-display text-[22px] font-semibold text-white transition-all hover:bg-emerald-700"
+          >
+            <CreditCard className="h-5 w-5" />
+            Online Ödeme
+          </a>
         </div>
       ) : null}
     </>
