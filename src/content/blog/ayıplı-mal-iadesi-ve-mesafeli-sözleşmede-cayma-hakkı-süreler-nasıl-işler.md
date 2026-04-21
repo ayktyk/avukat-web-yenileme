@@ -71,13 +71,13 @@ noindex: false
 ---
 # Ayıplı Mal İadesi ve Mesafeli Sözleşmede Cayma Hakkı: Süreler Nasıl İşler?
 
-<aside class="tldr">
+
 Mesafeli sözleşmede tüketici, malı teslim aldığı tarihten itibaren 14 gün
 içinde hiçbir gerekçe göstermeden cayabilir. Ayıplı malda süre iki yıldır;
 tüketici onarım, değişim, bedel indirimi veya sözleşmeden dönme haklarından
 birini seçer. 6502 sayılı Kanun m. 11 ve m. 48 yerleşik uygulamanın
 dayanağıdır.
-</aside>
+
 
 Yerleşik uygulamada internetten yapılan alışverişlerde iade iki farklı hukuki
 rejime tabidir. İlki, 6502 sayılı Tüketicinin Korunması Hakkında Kanun m. 48
