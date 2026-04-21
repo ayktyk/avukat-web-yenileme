@@ -4,7 +4,7 @@ slug: ayipli-mal-iadesi-mesafeli-sozlesme-cayma-hakki
 excerpt: Mesafeli sözleşmede 14 günlük cayma hakkı ile ayıplı malda 2 yıllık
   zamanaşımı iki ayrı rejimdir. Tüketici hangi seçimlik haklara sahip, iade
   süreci nasıl yürür?
-category: "\tTüketici Hukuku"
+category: Tüketici Hukuku
 author: Vega Hukuk
 authorSlug: aykut-yesilkaya
 publishedAt: 2026-04-21
