@@ -38,10 +38,15 @@ export default defineConfig(() => ({
       paths.filter((p) => !p.includes(":") && !p.includes("*")),
     beastiesOptions: {
       preload: "swap",
-      pruneSource: false,
-      reduceInlineStyles: false,
+      pruneSource: true,
+      reduceInlineStyles: true,
       mergeStylesheets: false,
+      compress: true,
     },
+  },
+  esbuild: {
+    drop: ["console", "debugger"],
+    legalComments: "none",
   },
   build: {
     target: "es2020",
@@ -83,6 +88,15 @@ export default defineConfig(() => ({
           }
           if (id.includes("react-markdown") || id.includes("remark") || id.includes("micromark") || id.includes("mdast")) {
             return "markdown-vendor";
+          }
+          if (id.includes("@tanstack")) {
+            return "query-vendor";
+          }
+          if (id.includes("sonner") || id.includes("vaul") || id.includes("cmdk") || id.includes("input-otp")) {
+            return "ui-vendor";
+          }
+          if (id.includes("class-variance-authority") || id.includes("clsx") || id.includes("tailwind-merge")) {
+            return "util-vendor";
           }
 
           return "vendor";

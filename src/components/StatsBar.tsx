@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const stats = [
   { value: 10, label: "Yıllık Deneyim", suffix: "+" },
@@ -9,30 +9,65 @@ const stats = [
 
 const Counter = ({ target, suffix }: { target: number; suffix: string }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const duration = 2000;
-    const start = performance.now();
+    const el = ref.current;
+    if (!el) return;
 
-    const animate = (now: number) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.round(target * eased));
+    let rafId: number | null = null;
+    let observer: IntersectionObserver | null = null;
+    let started = false;
 
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
+    const runAnimation = () => {
+      if (started) return;
+      started = true;
+
+      const duration = 1500;
+      const start = performance.now();
+
+      const animate = (now: number) => {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = Math.round(target * eased);
+        // Direct DOM write — bypass React re-render to avoid 4×125-frame state churn
+        el.textContent = `${value}${suffix}`;
+        if (progress < 1) {
+          rafId = requestAnimationFrame(animate);
+        }
+      };
+
+      rafId = requestAnimationFrame(animate);
     };
 
-    requestAnimationFrame(animate);
-  }, [target]);
+    // Only start when visible
+    if (typeof IntersectionObserver === "undefined") {
+      runAnimation();
+    } else {
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            runAnimation();
+            observer?.disconnect();
+          }
+        },
+        { rootMargin: "0px 0px 100px 0px" },
+      );
+      observer.observe(el);
+    }
+
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      observer?.disconnect();
+    };
+  }, [target, suffix]);
 
   return (
-    <div ref={ref} className="mb-2 font-display text-[clamp(36px,4vw,52px)] font-bold leading-none text-accent-light">
-      {count}
-      {suffix}
+    <div
+      ref={ref}
+      className="mb-2 font-display text-[clamp(36px,4vw,52px)] font-bold leading-none text-accent-light"
+    >
+      0{suffix}
     </div>
   );
 };
