@@ -24,7 +24,7 @@ const scrollTo = (href: string) => {
 
 const SiteFooter = () => {
   return (
-    <footer className="relative bg-primary-deep pt-14 text-primary-foreground/60">
+    <footer className="relative bg-primary-deep pt-14 text-primary-foreground/85">
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-accent to-primary" />
 
       <div className="section-container grid grid-cols-1 gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
@@ -35,7 +35,7 @@ const SiteFooter = () => {
             </div>
             <div>
               <strong className="block font-display text-lg text-primary-foreground">Vega Hukuk</strong>
-              <small className="text-[11px] uppercase tracking-[2px] text-primary-foreground/35">
+              <small className="text-[11px] uppercase tracking-[2px] text-primary-foreground/70">
                 Danışmanlık & Arabuluculuk
               </small>
             </div>
@@ -94,7 +94,7 @@ const SiteFooter = () => {
         </div>
       </div>
 
-      <div className="section-container mt-10 border-t border-primary-foreground/[0.08] py-5 text-center text-[13px] text-primary-foreground/35">
+      <div className="section-container mt-10 border-t border-primary-foreground/[0.08] py-5 text-center text-[13px] text-primary-foreground/70">
         &copy; {new Date().getFullYear()} Vega Hukuk & Danışmanlık Arabuluculuk. Tüm hakları saklıdır.
       </div>
     </footer>

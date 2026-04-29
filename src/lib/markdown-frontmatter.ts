@@ -81,7 +81,9 @@ const parseFrontmatterBlock = <T extends Record<string, unknown>>(block: string)
     const key = keyMatch[1] as keyof T;
     const initialValue = keyMatch[2].trim();
 
-    if (initialValue === ">" || initialValue === "|") {
+    const blockScalarMatch = initialValue.match(/^([>|])[-+]?$/);
+    if (blockScalarMatch) {
+      const mode = blockScalarMatch[1] as ">" | "|";
       const blockLines: string[] = [];
       index += 1;
 
@@ -106,7 +108,7 @@ const parseFrontmatterBlock = <T extends Record<string, unknown>>(block: string)
         break;
       }
 
-      const value = foldBlockScalar(blockLines, initialValue);
+      const value = foldBlockScalar(blockLines, mode);
       if (value) {
         data[key] = value as T[keyof T];
       }

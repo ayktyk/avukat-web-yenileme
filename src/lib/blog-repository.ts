@@ -22,8 +22,8 @@ const parseBlogFaqJson = (raw?: string): BlogFAQ[] | undefined => {
       }))
       .filter((item) => item.question.length > 0 && item.answer.length > 0);
     return cleaned.length > 0 ? cleaned : undefined;
-  } catch (error) {
-    console.error("Blog FAQ JSON parse hatası", error);
+  } catch {
+    // Sessiz fail — geçersiz FAQ JSON varsa FAQ schema'yı atla, kalan içeriği bozma
     return undefined;
   }
 };
