@@ -1,4 +1,5 @@
-import { Compass, Cpu, Target } from "lucide-react";
+import { ArrowRight, Compass, Cpu, Target } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const cards = [
   {
@@ -81,6 +82,16 @@ const AboutSection = () => {
               <p className="mx-auto max-w-[18ch] text-[13px] text-muted-foreground">{step.desc}</p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <Link
+            to="/hakkimizda"
+            className="group inline-flex items-center gap-2 rounded-[10px] border border-primary bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-deep hover:shadow-elegant"
+          >
+            Hakkımızda sayfası
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
         </div>
       </div>
     </section>

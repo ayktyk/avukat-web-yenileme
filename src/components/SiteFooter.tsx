@@ -1,6 +1,19 @@
 ﻿import { Scale } from "lucide-react";
 import { Link } from "react-router-dom";
 
+type FooterLink =
+  | { label: string; kind: "route"; to: string }
+  | { label: string; kind: "anchor"; href: string };
+
+const navLinks: FooterLink[] = [
+  { label: "Hakkımızda", kind: "route", to: "/hakkimizda" },
+  { label: "Çalışma Alanları", kind: "route", to: "/hizmetler" },
+  { label: "Ekibimiz", kind: "route", to: "/ekip" },
+  { label: "Yayınlar", kind: "route", to: "/blog" },
+  { label: "Hukuk Gündemi", kind: "route", to: "/guncel-hukuk-gundemi" },
+  { label: "İletişim", kind: "anchor", href: "#iletisim" },
+];
+
 const scrollTo = (href: string) => {
   const el = document.querySelector(href);
   if (el) {
@@ -36,24 +49,24 @@ const SiteFooter = () => {
         <div>
           <h5 className="mb-4 font-display text-base font-bold tracking-wide text-primary-foreground">Bağlantılar</h5>
           <ul className="space-y-2.5">
-            {[
-              { label: "Hakkımızda", href: "#hakkimizda" },
-              { label: "Çalışma Alanları", href: "#calisma-alanlari" },
-              { label: "Yayınlar", href: "#yayinlar" },
-              { label: "Hukuk Gündemi", href: "#hukuk-gundemi" },
-              { label: "İletişim", href: "#iletisim" },
-            ].map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollTo(link.href);
-                  }}
-                  className="text-sm transition-colors hover:text-accent-light"
-                >
-                  {link.label}
-                </a>
+            {navLinks.map((link) => (
+              <li key={link.kind === "route" ? link.to : link.href}>
+                {link.kind === "route" ? (
+                  <Link to={link.to} className="text-sm transition-colors hover:text-accent-light">
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    href={link.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollTo(link.href);
+                    }}
+                    className="text-sm transition-colors hover:text-accent-light"
+                  >
+                    {link.label}
+                  </a>
+                )}
               </li>
             ))}
           </ul>

@@ -28,6 +28,7 @@ const collectSlugs = (dir, prefix) => {
 
 const staticPages = [
   { loc: `${SITE}/`, changefreq: "weekly", priority: "1.0" },
+  { loc: `${SITE}/hakkimizda`, changefreq: "monthly", priority: "0.8" },
   { loc: `${SITE}/hizmetler`, changefreq: "monthly", priority: "0.9" },
   { loc: `${SITE}/e-tahsilat`, changefreq: "monthly", priority: "0.7" },
   { loc: `${SITE}/hesaplamalar`, changefreq: "monthly", priority: "0.8" },

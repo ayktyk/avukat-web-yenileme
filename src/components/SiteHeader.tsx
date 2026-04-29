@@ -2,13 +2,17 @@ import { Calculator, CreditCard, Menu, Scale, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const navLinks = [
-  { label: "Hakkımızda", href: "#hakkimizda" },
-  { label: "Çalışma Alanları", href: "#calisma-alanlari" },
-  { label: "Ekibimiz", href: "#ekibimiz" },
-  { label: "Yayınlar", href: "#yayinlar" },
-  { label: "Hukuk Gündemi", href: "#hukuk-gundemi" },
-  { label: "SSS", href: "#sss" },
+type NavItem =
+  | { label: string; kind: "route"; to: string }
+  | { label: string; kind: "anchor"; href: string };
+
+const navLinks: NavItem[] = [
+  { label: "Hakkımızda", kind: "route", to: "/hakkimizda" },
+  { label: "Çalışma Alanları", kind: "route", to: "/hizmetler" },
+  { label: "Ekibimiz", kind: "route", to: "/ekip" },
+  { label: "Yayınlar", kind: "route", to: "/blog" },
+  { label: "Hukuk Gündemi", kind: "route", to: "/guncel-hukuk-gundemi" },
+  { label: "SSS", kind: "anchor", href: "#sss" },
 ];
 
 const HOME_PATH = "/";
@@ -63,23 +67,43 @@ const SiteHeader = () => {
     void navigate({ pathname: HOME_PATH, hash: href });
   };
 
-  const renderNavLink = (label: string, href: string, mobile = false) => (
-    <button
-      key={href}
-      type="button"
-      onClick={() => navigateToSection(href)}
-      className={
-        mobile
-          ? "rounded-xl px-6 py-3 font-display text-[28px] font-semibold text-foreground transition-all hover:bg-primary/[0.05] hover:text-primary"
-          : "group relative rounded-lg px-3.5 py-2 text-[14.5px] font-medium text-foreground transition-all hover:bg-primary/[0.04] hover:text-primary"
-      }
-    >
-      {label}
-      {!mobile ? (
-        <span className="absolute bottom-1 left-1/2 right-1/2 h-[1.5px] bg-accent transition-all duration-300 group-hover:left-3.5 group-hover:right-3.5" />
-      ) : null}
-    </button>
-  );
+  const desktopClass =
+    "group relative rounded-lg px-3.5 py-2 text-[14.5px] font-medium text-foreground transition-all hover:bg-primary/[0.04] hover:text-primary";
+  const mobileClass =
+    "rounded-xl px-6 py-3 font-display text-[28px] font-semibold text-foreground transition-all hover:bg-primary/[0.05] hover:text-primary";
+
+  const renderNavItem = (item: NavItem, mobile = false) => {
+    const className = mobile ? mobileClass : desktopClass;
+    const underline = !mobile ? (
+      <span className="absolute bottom-1 left-1/2 right-1/2 h-[1.5px] bg-accent transition-all duration-300 group-hover:left-3.5 group-hover:right-3.5" />
+    ) : null;
+
+    if (item.kind === "route") {
+      return (
+        <Link
+          key={item.to}
+          to={item.to}
+          onClick={() => setMobileOpen(false)}
+          className={className}
+        >
+          {item.label}
+          {underline}
+        </Link>
+      );
+    }
+
+    return (
+      <button
+        key={item.href}
+        type="button"
+        onClick={() => navigateToSection(item.href)}
+        className={className}
+      >
+        {item.label}
+        {underline}
+      </button>
+    );
+  };
 
   return (
     <>
@@ -117,7 +141,7 @@ const SiteHeader = () => {
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex">
-            {navLinks.map((link) => renderNavLink(link.label, link.href))}
+            {navLinks.map((link) => renderNavItem(link))}
             <Link
               to={CALCULATORS_PATH}
               onClick={() => setMobileOpen(false)}
@@ -173,7 +197,7 @@ const SiteHeader = () => {
           <button className="absolute top-5 right-6 p-2" onClick={() => setMobileOpen(false)} aria-label="Kapat">
             <X className="h-7 w-7" />
           </button>
-          {navLinks.map((link) => renderNavLink(link.label, link.href, true))}
+          {navLinks.map((link) => renderNavItem(link, true))}
           <Link
             to={CALCULATORS_PATH}
             onClick={() => setMobileOpen(false)}

@@ -1,4 +1,12 @@
 {
+  "redirects": [
+    { "source": "/calisma-alanlari", "destination": "/hizmetler", "permanent": true },
+    { "source": "/calisma-alanlari/:slug", "destination": "/hizmetler/:slug", "permanent": true },
+    { "source": "/hukuk-gundemi", "destination": "/guncel-hukuk-gundemi", "permanent": true },
+    { "source": "/hukuk-gundemi/:slug", "destination": "/guncel-hukuk-gundemi/:slug", "permanent": true },
+    { "source": "/yayinlar", "destination": "/blog", "permanent": true },
+    { "source": "/yayinlar/:slug", "destination": "/blog/:slug", "permanent": true }
+  ],
   "rewrites": [
     {
       "source": "/blog/:path*",
