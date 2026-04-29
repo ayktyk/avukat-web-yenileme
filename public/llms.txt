@@ -10,6 +10,11 @@ Adres: Osmanağa Mah., Karadut Sok. No:14/10, Kadıköy/İstanbul
 Telefon: +90 551 981 4937
 E-posta: vegalaw.contact@gmail.com
 
+## Kurum
+
+- [Hakkımızda](https://vegahukukistanbul.com/hakkimizda): Vega Hukuk İstanbul kurumsal sayfa — kuruluş, çalışma ilkeleri (misyon, yaklaşım, teknoloji, etik), 4 adımlı süreç, ekip özeti, sekiz çalışma alanı ve iletişim bilgileri.
+- [Ekibimiz](https://vegahukukistanbul.com/ekip): Üç avukat — kurucu Av. Aykut Yeşilkaya (sicil 61223), kurucu Av. Mücahit İslam Keskün (ceza hukuku) ve Av. Büşra Yeşilkaya (miras, aile, gayrimenkul).
+
 ## Hizmetler
 
 - [İş Hukuku](https://vegahukukistanbul.com/hizmetler/is-hukuku): İşe iade, kıdem ve ihbar tazminatı, fazla mesai alacakları, mobbing ve iş kazası süreçlerinde işçi ve işveren tarafına hukuki danışmanlık ve dava takibi.
@@ -35,6 +40,7 @@ E-posta: vegalaw.contact@gmail.com
 
 ## Blog
 
+- [Ayıplı Mal İadesi ve Mesafeli Sözleşmede Cayma Hakkı: Süreler Nasıl İşler?](https://vegahukukistanbul.com/blog/ayipli-mal-iadesi-mesafeli-sozlesme-cayma-hakki): Mesafeli sözleşmede 14 günlük cayma hakkı ile ayıplı malda 2 yıllık
 - [Kredi Kartı Aidat İadesi: Haksız Şart İptali ve İade Süreci 2026](https://vegahukukistanbul.com/blog/kredi-karti-aidat-iadesi-haksiz-sart-iptali-iade-sureci): Bankalar kredi kartı üyelik aidatını tek taraflı olarak sözleşmeye koyduğunda bu hüküm haksız şart niteliğindedir. Yargıtay, aidatın bir süre ödenmesinin dahi tüketicinin hakların…
 - [Trafik Kazası Sonrası Araç Değer Kaybı Nasıl Hesaplanır?](https://vegahukukistanbul.com/blog/arac-deger-kaybi-trafik-kazasi-hesaplama): Trafik kazasında hasar gören bir araç, onarılsa bile ikinci el piyasasında eski değerini koruyamaz. Bu fark, hukuki olarak "araç değer kaybı" olarak adlandırılır ve kusurlu tarafı…
 - [Trafik Kazası Sonrası Yapılacaklar: A'dan Z'ye Rehber 2026](https://vegahukukistanbul.com/blog/trafik-kazasi-sonrasi-yapilacaklar-a-z-rehber): Trafik kazası sonrası ilk saatlerde atılan adımlar, sonraki tazminat sürecinin

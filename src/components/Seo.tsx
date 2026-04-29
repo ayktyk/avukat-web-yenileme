@@ -11,6 +11,7 @@ type SeoProps = {
   image?: string;
   type?: "website" | "article";
   structuredData?: SeoStructuredData;
+  noindex?: boolean;
 };
 
 const buildAbsoluteUrl = (path: string) => {
@@ -18,8 +19,16 @@ const buildAbsoluteUrl = (path: string) => {
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 };
 
-const Seo = ({ title, description, canonicalPath, image, type = "website", structuredData }: SeoProps) => {
+const buildMarkdownPath = (path: string) => {
+  const normalized = path.startsWith("/") ? path : `/${path}`;
+  if (normalized === "/" || normalized === "") return "/index.md";
+  const trimmed = normalized.endsWith("/") ? normalized.slice(0, -1) : normalized;
+  return `${trimmed}.md`;
+};
+
+const Seo = ({ title, description, canonicalPath, image, type = "website", structuredData, noindex = false }: SeoProps) => {
   const canonical = buildAbsoluteUrl(canonicalPath);
+  const markdownUrl = buildAbsoluteUrl(buildMarkdownPath(canonicalPath));
   const imageUrl = buildAbsoluteUrl(image ?? "/og-image.svg");
   const structuredPayload = Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [];
 
@@ -28,6 +37,8 @@ const Seo = ({ title, description, canonicalPath, image, type = "website", struc
       <Head>
         <title>{title}</title>
         <link rel="canonical" href={canonical} />
+        <link rel="alternate" type="text/markdown" href={markdownUrl} />
+        {noindex ? <meta name="robots" content="noindex, nofollow" /> : null}
         <meta name="description" content={description} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />

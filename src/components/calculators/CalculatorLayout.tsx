@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { Link } from "react-router-dom";
-import { AlertTriangle, ChevronRight } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { AlertTriangle, ChevronRight, ExternalLink } from "lucide-react";
 import Seo, { type SeoStructuredData } from "@/components/Seo";
 import { SITE_URL } from "@/lib/site-config";
 
@@ -25,6 +25,8 @@ const CalculatorLayout = ({
   extraStructuredData,
   children,
 }: CalculatorLayoutProps) => {
+  const location = useLocation();
+  const isEmbed = location.pathname.startsWith("/embed/");
   const breadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -61,6 +63,64 @@ const CalculatorLayout = ({
   if (extraStructuredData) {
     const extras = Array.isArray(extraStructuredData) ? extraStructuredData : [extraStructuredData];
     structuredData.push(...extras);
+  }
+
+  if (isEmbed) {
+    return (
+      <main className="min-h-screen bg-background">
+        <Seo
+          title={seoTitle ?? `${title} | Vega Hukuk İstanbul`}
+          description={seoDescription ?? description}
+          canonicalPath={canonicalPath}
+          structuredData={structuredData}
+          noindex
+        />
+
+        <section className="section-container py-6">
+          <h1 className="font-display text-[clamp(22px,3vw,30px)] font-bold leading-tight text-primary-deep">
+            {title}
+          </h1>
+          <p className="mt-2 max-w-[70ch] text-sm leading-relaxed text-muted-foreground">{description}</p>
+          <div
+            role="note"
+            className="mt-4 flex gap-2 rounded-lg border border-accent/30 bg-accent/5 p-3 text-xs leading-relaxed text-foreground/90"
+          >
+            <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent" />
+            <p>
+              <strong className="font-semibold text-primary-deep">Bilgilendirme amaçlıdır.</strong> Sonuçlar
+              dosyaya özel değildir; profesyonel danışmanlık için avukata başvurun.
+            </p>
+          </div>
+        </section>
+
+        <section className="section-container pb-6">{children}</section>
+
+        <footer className="border-t border-border bg-cream/50 py-4">
+          <div className="section-container flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
+            <span>
+              Bu hesaplama aracı{" "}
+              <a
+                href={`${SITE_URL}${canonicalPath}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-primary underline-offset-2 hover:underline"
+              >
+                Vega Hukuk İstanbul
+              </a>{" "}
+              tarafından sağlanmaktadır.
+            </span>
+            <a
+              href={`${SITE_URL}${canonicalPath}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 font-semibold text-primary hover:underline"
+            >
+              Tam sürüm <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
+        </footer>
+      </main>
+    );
   }
 
   return (

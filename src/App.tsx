@@ -77,6 +77,13 @@ export const routes: RouteRecord[] = [
         },
       },
       {
+        path: "embed/:tool",
+        lazy: async () => {
+          const mod = await import("./pages/EmbedTool");
+          return { Component: mod.default };
+        },
+      },
+      {
         path: "hesaplamalar",
         lazy: async () => {
           const mod = await import("./pages/CalculatorsIndex");

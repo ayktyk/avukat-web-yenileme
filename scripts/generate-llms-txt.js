@@ -84,6 +84,13 @@ lines.push("Adres: Osmanağa Mah., Karadut Sok. No:14/10, Kadıköy/İstanbul");
 lines.push("Telefon: +90 551 981 4937");
 lines.push("E-posta: vegalaw.contact@gmail.com");
 lines.push("");
+lines.push("## Kurum");
+lines.push("");
+lines.push(
+  `- [Hakkımızda](${SITE}/hakkimizda): Vega Hukuk İstanbul kurumsal sayfa — kuruluş, çalışma ilkeleri (misyon, yaklaşım, teknoloji, etik), 4 adımlı süreç, ekip özeti, sekiz çalışma alanı ve iletişim bilgileri.`,
+);
+lines.push(`- [Ekibimiz](${SITE}/ekip): Üç avukat — kurucu Av. Aykut Yeşilkaya (sicil 61223), kurucu Av. Mücahit İslam Keskün (ceza hukuku) ve Av. Büşra Yeşilkaya (miras, aile, gayrimenkul).`);
+lines.push("");
 lines.push("## Hizmetler");
 lines.push("");
 for (const s of services) {
