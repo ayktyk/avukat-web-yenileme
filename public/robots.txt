@@ -57,11 +57,11 @@ Allow: /
 # --- Genel botlar ---
 
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 Disallow: /admin/
 Disallow: /_drafts/
 Disallow: /quarantine/
-Disallow: /embed/?*
 Disallow: /*?utm_*
 Disallow: /*?ref=
 

@@ -1,4 +1,5 @@
 import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
+import { createHash } from "crypto";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -16,6 +17,20 @@ const writeJson = (relPath, data) => {
   const target = join(distDir, relPath);
   mkdirSync(dirname(target), { recursive: true });
   writeFileSync(target, JSON.stringify(data, null, 2), "utf-8");
+};
+
+const writeText = (relPath, content) => {
+  const target = join(distDir, relPath);
+  mkdirSync(dirname(target), { recursive: true });
+  writeFileSync(target, content, "utf-8");
+};
+
+const sha256 = (content) => createHash("sha256").update(content, "utf-8").digest("hex");
+
+const sha256OfFile = (relPath) => {
+  const file = join(distDir, relPath);
+  if (!existsSync(file)) return null;
+  return sha256(readFileSync(file, "utf-8"));
 };
 
 const readFm = (filePath) => {
@@ -230,6 +245,170 @@ const agentSkills = {
 };
 
 writeJson(".well-known/agent-skills.json", agentSkills);
+
+// 1b) Agent Skills Discovery RFC v0.2.0 — /.well-known/agent-skills/index.json
+// https://github.com/cloudflare/agent-skills-discovery-rfc
+const skillsIndex = {
+  $schema: "https://raw.githubusercontent.com/cloudflare/agent-skills-discovery-rfc/main/schemas/v0.2.0/index.json",
+  version: "0.2.0",
+  publisher: {
+    name: "Vega Hukuk İstanbul",
+    url: SITE,
+    contact: "vegalaw.contact@gmail.com",
+  },
+  skills: [
+    ...calculators.map((c) => {
+      const slug = c.name.replace("-hesaplama", "");
+      const mdPath = `hesaplamalar/${slug}.md`;
+      const hash = sha256OfFile(mdPath);
+      return {
+        name: c.name,
+        type: "calculator",
+        description: c.description,
+        url: `${SITE}/hesaplamalar/${slug}.md`,
+        htmlUrl: `${SITE}/hesaplamalar/${slug}`,
+        embedUrl: `${SITE}/embed/${slug}`,
+        inputSchema: {
+          type: "object",
+          properties: Object.fromEntries(c.inputs.map((i) => [i, { type: "string" }])),
+        },
+        outputSchema: {
+          type: "object",
+          properties: Object.fromEntries(c.outputs.map((o) => [o, { type: "number" }])),
+        },
+        sha256: hash || sha256(c.description),
+        inLanguage: "tr-TR",
+      };
+    }),
+    ...services.map((s) => {
+      const mdPath = `hizmetler/${s.slug}.md`;
+      const hash = sha256OfFile(mdPath);
+      return {
+        name: `service-${s.slug}`,
+        type: "knowledge",
+        description: s.description || s.heading,
+        url: `${SITE}/hizmetler/${s.slug}.md`,
+        htmlUrl: `${SITE}/hizmetler/${s.slug}`,
+        sha256: hash || sha256(s.description || ""),
+        inLanguage: "tr-TR",
+      };
+    }),
+    {
+      name: "blog-feed",
+      type: "feed",
+      description: `Vega Hukuk blog yazıları arşivi (${blog.length} yazı).`,
+      url: `${SITE}/blog.json`,
+      htmlUrl: `${SITE}/blog`,
+      markdownUrl: `${SITE}/blog.md`,
+      sha256: sha256OfFile("blog.json") || sha256("blog-feed"),
+      inLanguage: "tr-TR",
+    },
+    {
+      name: "legal-updates-feed",
+      type: "feed",
+      description: `Güncel Yargıtay kararı analizleri (${legal.length} yazı).`,
+      url: `${SITE}/guncel-hukuk-gundemi.json`,
+      htmlUrl: `${SITE}/guncel-hukuk-gundemi`,
+      markdownUrl: `${SITE}/guncel-hukuk-gundemi.md`,
+      sha256: sha256OfFile("guncel-hukuk-gundemi.json") || sha256("legal-feed"),
+      inLanguage: "tr-TR",
+    },
+    {
+      name: "team-feed",
+      type: "feed",
+      description: "Üç avukatlı ekip profilleri (Aykut Yeşilkaya, Mücahit İslam Keskün, Büşra Yeşilkaya).",
+      url: `${SITE}/ekip.json`,
+      htmlUrl: `${SITE}/ekip`,
+      markdownUrl: `${SITE}/ekip.md`,
+      sha256: sha256OfFile("ekip.json") || sha256("team-feed"),
+      inLanguage: "tr-TR",
+    },
+  ],
+};
+writeJson(".well-known/agent-skills/index.json", skillsIndex);
+
+// 1c) MCP Server Card — /.well-known/mcp/server-card.json
+// https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2127
+// Note: This site does not run an MCP server endpoint; we publish a discovery card
+// with capabilities pointing to the agent-skills index for compatibility.
+const mcpServerCard = {
+  schemaVersion: "0.1",
+  serverInfo: {
+    name: "vega-hukuk-istanbul",
+    version: "0.1.0",
+    title: "Vega Hukuk İstanbul",
+    description: "Türk hukuku alanında 9 hesaplama aracı, hizmet katalogu ve içerik feed'leri sunan hukuk bürosu.",
+    homepage: SITE,
+    contact: "vegalaw.contact@gmail.com",
+  },
+  transport: {
+    type: "static",
+    note: "This site does not currently expose a live MCP transport. Discovery via agent-skills index and markdown content negotiation.",
+    discoveryUrl: `${SITE}/.well-known/agent-skills/index.json`,
+  },
+  capabilities: {
+    tools: {
+      listChanged: false,
+      count: 9,
+      indexUrl: `${SITE}/.well-known/agent-skills/index.json`,
+    },
+    resources: {
+      listChanged: false,
+      indexUrl: `${SITE}/.well-known/agent-skills/index.json`,
+      formats: ["text/html", "text/markdown", "application/json"],
+    },
+    prompts: {
+      listChanged: false,
+      count: 0,
+    },
+    logging: false,
+    completion: false,
+  },
+  meta: {
+    license: "© Vega Hukuk İstanbul. Bilgilendirme amaçlıdır.",
+    inLanguage: "tr-TR",
+  },
+};
+writeJson(".well-known/mcp/server-card.json", mcpServerCard);
+
+// 1d) OAuth/OIDC Discovery — minimal "no-auth" metadata
+// While this site does not host protected APIs, declarative metadata signals
+// that no OAuth flow is required for content access.
+const openidConfig = {
+  issuer: SITE,
+  authorization_endpoint: `${SITE}/.well-known/oauth-not-required`,
+  token_endpoint: `${SITE}/.well-known/oauth-not-required`,
+  jwks_uri: `${SITE}/.well-known/jwks.json`,
+  response_types_supported: [],
+  subject_types_supported: ["public"],
+  id_token_signing_alg_values_supported: ["none"],
+  grant_types_supported: [],
+  scopes_supported: ["openid"],
+  service_documentation: `${SITE}/.well-known/agent-skills/index.json`,
+  note: "This site does not host protected APIs. Public content is freely accessible via HTML/markdown without authentication.",
+};
+writeJson(".well-known/openid-configuration", openidConfig);
+writeJson(".well-known/oauth-authorization-server", openidConfig);
+
+// 1e) OAuth Protected Resource Metadata (RFC 9728)
+const protectedResource = {
+  resource: SITE,
+  authorization_servers: [],
+  scopes_supported: [],
+  bearer_methods_supported: [],
+  resource_documentation: `${SITE}/.well-known/agent-skills/index.json`,
+  resource_signing_alg_values_supported: ["none"],
+  note: "Public content — no authentication required. Agent capabilities described in /.well-known/agent-skills/index.json.",
+};
+writeJson(".well-known/oauth-protected-resource", protectedResource);
+
+// 1f) JWKS — empty key set (Web Bot Auth informational only)
+const jwks = {
+  keys: [],
+  note: "Vega Hukuk İstanbul does not currently sign outbound bot/agent requests. This empty JWKS satisfies discovery requirements.",
+};
+writeJson(".well-known/jwks.json", jwks);
+writeJson(".well-known/http-message-signatures-directory", jwks);
 
 // 2) API Catalog (RFC 9727)
 const apiCatalog = {

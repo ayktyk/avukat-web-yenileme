@@ -9,6 +9,16 @@
   ],
   "rewrites": [
     {
+      "source": "/",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "destination": "/api/markdown?p=/"
+    },
+    {
+      "source": "/:path((?!api|\\.well-known|uploads|admin|embed|_next|.*\\.[a-zA-Z0-9]+$).+)",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "destination": "/api/markdown?p=/:path"
+    },
+    {
       "source": "/blog/:path*",
       "destination": "/index.html"
     },
