@@ -1,20 +1,23 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
+import { MemoryRouter, Route, Routes, RouterProvider, createMemoryRouter } from "react-router-dom";
 import BlogIndex from "@/pages/BlogIndex";
-import BlogPost from "@/pages/BlogPost";
+import BlogPost, { loader as blogPostLoader } from "@/pages/BlogPost";
 import LegalUpdatesIndex from "@/pages/LegalUpdatesIndex";
 import KvkkAydinlatma from "@/pages/KvkkAydinlatma";
 import NotFound from "@/pages/NotFound";
 
 const renderAt = (path: string, element: React.ReactElement, routePath: string) => {
   return render(
-    <MemoryRouter initialEntries={[path]}>
-      <Routes>
-        <Route path={routePath} element={element} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </MemoryRouter>,
+    <HelmetProvider>
+      <MemoryRouter initialEntries={[path]}>
+        <Routes>
+          <Route path={routePath} element={element} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </MemoryRouter>
+    </HelmetProvider>,
   );
 };
 
@@ -35,7 +38,24 @@ describe("app routing", () => {
   });
 
   it("renders a blog detail route", async () => {
-    renderAt("/blog/ise-iade-arabuluculukta-kritik-noktalar", <BlogPost />, "/blog/:slug");
+    const slug = "ise-iade-arabuluculukta-kritik-noktalar";
+    const loaderData = await blogPostLoader({
+      params: { slug },
+      request: undefined as unknown as Request,
+      context: undefined,
+    });
+    const router = createMemoryRouter(
+      [{ id: "blog-post", path: "/blog/:slug", element: <BlogPost />, loader: blogPostLoader }],
+      {
+        initialEntries: [`/blog/${slug}`],
+        hydrationData: { loaderData: { "blog-post": loaderData } },
+      },
+    );
+    render(
+      <HelmetProvider>
+        <RouterProvider router={router} />
+      </HelmetProvider>,
+    );
 
     expect(await screen.findByRole("heading", { name: "İşe İade Arabuluculukta Kritik Noktalar" })).toBeInTheDocument();
     expect(screen.getAllByText("Blog listesine dön")[0]).toBeInTheDocument();

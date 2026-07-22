@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ArrowLeft,
   Briefcase,
@@ -15,7 +15,8 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLoaderData, useParams } from "react-router-dom";
+import type { LoaderFunctionArgs } from "react-router-dom";
 import MarkdownContent from "@/components/MarkdownContent";
 import Seo from "@/components/Seo";
 import { formatDateTr } from "@/lib/format-date";
@@ -34,29 +35,19 @@ const iconMap: Record<string, LucideIcon> = {
   FileSignature,
 };
 
+type ServiceLoaderData = {
+  service: Service | null;
+};
+
+export const loader = async ({ params }: LoaderFunctionArgs): Promise<ServiceLoaderData> => {
+  const service = await getServiceBySlug(params.slug ?? "");
+  return { service };
+};
+
 const ServicePage = () => {
   const { slug = "" } = useParams();
-  const [service, setService] = useState<Service | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { service } = useLoaderData() as ServiceLoaderData;
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-
-  useEffect(() => {
-    let mounted = true;
-
-    const loadService = async () => {
-      const result = await getServiceBySlug(slug);
-      if (mounted) {
-        setService(result);
-        setLoading(false);
-      }
-    };
-
-    void loadService();
-
-    return () => {
-      mounted = false;
-    };
-  }, [slug]);
 
   const IconComponent = service ? iconMap[service.icon] ?? Briefcase : Briefcase;
 
@@ -126,19 +117,9 @@ const ServicePage = () => {
       canonicalPath={`/hizmetler/${slug}`}
       image={service?.heroImage}
       structuredData={seoStructuredData}
+      noindex={!service}
     />
   );
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-background">
-        {seoElement}
-        <section className="section-container py-24">
-          <p className="text-muted-foreground">Hizmet sayfası yükleniyor...</p>
-        </section>
-      </main>
-    );
-  }
 
   if (!service) {
     return (

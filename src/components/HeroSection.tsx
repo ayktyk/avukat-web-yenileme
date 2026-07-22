@@ -61,11 +61,11 @@ const HeroSection = () => {
             {heroBadge}
           </span>
 
-          <h2 className="mt-6 mb-5 font-display text-[clamp(38px,5vw,62px)] font-bold leading-[1.08] text-primary-deep">
+          <h1 className="mt-6 mb-5 font-display text-[clamp(38px,5vw,62px)] font-bold leading-[1.08] text-primary-deep">
             {heroTitleLead}
             <br />
             güvenilir <em className="text-accent italic">{heroTitleAccent}</em>
-          </h2>
+          </h1>
 
           <p className="max-w-[54ch] text-[17px] leading-[1.7] text-muted-foreground">{heroDescription}</p>
 

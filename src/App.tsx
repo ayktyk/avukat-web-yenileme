@@ -24,7 +24,12 @@ export const routes: RouteRecord[] = [
         path: "blog/:slug",
         lazy: async () => {
           const mod = await import("./pages/BlogPost");
-          return { Component: mod.default };
+          return { Component: mod.default, loader: mod.loader };
+        },
+        getStaticPaths: async () => {
+          const { listBlogPosts } = await import("@/lib/blog-repository");
+          const posts = await listBlogPosts();
+          return posts.map((post) => `blog/${post.slug}`);
         },
       },
       {
@@ -38,7 +43,12 @@ export const routes: RouteRecord[] = [
         path: "guncel-hukuk-gundemi/:slug",
         lazy: async () => {
           const mod = await import("./pages/LegalUpdatePost");
-          return { Component: mod.default };
+          return { Component: mod.default, loader: mod.loader };
+        },
+        getStaticPaths: async () => {
+          const { listLegalUpdates } = await import("@/lib/legal-updates-repository");
+          const updates = await listLegalUpdates();
+          return updates.map((update) => `guncel-hukuk-gundemi/${update.slug}`);
         },
       },
       {
@@ -52,7 +62,12 @@ export const routes: RouteRecord[] = [
         path: "hizmetler/:slug",
         lazy: async () => {
           const mod = await import("./pages/ServicePage");
-          return { Component: mod.default };
+          return { Component: mod.default, loader: mod.loader };
+        },
+        getStaticPaths: async () => {
+          const { listServices } = await import("@/lib/service-repository");
+          const services = await listServices();
+          return services.map((service) => `hizmetler/${service.slug}`);
         },
       },
       {
@@ -158,6 +173,10 @@ export const routes: RouteRecord[] = [
         lazy: async () => {
           const mod = await import("./pages/TeamMemberPage");
           return { Component: mod.default };
+        },
+        getStaticPaths: async () => {
+          const { teamMembers } = await import("@/lib/team-data");
+          return teamMembers.map((member) => `ekip/${member.slug}`);
         },
       },
       {

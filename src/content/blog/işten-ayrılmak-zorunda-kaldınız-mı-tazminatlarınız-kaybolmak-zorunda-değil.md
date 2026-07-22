@@ -1,6 +1,6 @@
 ---
 title: İşten Ayrılmak Zorunda Kaldınız mı? Tazminatlarınız Kaybolmak Zorunda Değil
-slug: " isten-ayrilmak-zorunda-kaldiniz-tazminatlarinizi-alin"
+slug: isten-ayrilmak-zorunda-kaldiniz-tazminatlarinizi-alin
 excerpt: İşveren baskısı, ödenmemiş alacaklar ya da kötü çalışma koşulları
   işçiyi köşeye sıkıştırabilir. Haklı nedenle fesih hakkı ve diğer işçilik
   alacakları hakkında bilmeniz gerekenler.

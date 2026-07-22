@@ -1,58 +1,67 @@
-import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLoaderData, useParams } from "react-router-dom";
+import type { LoaderFunctionArgs } from "react-router-dom";
 import MarkdownContent from "@/components/MarkdownContent";
 import Seo from "@/components/Seo";
 import { formatDateTr } from "@/lib/format-date";
 import { getBlogPostBySlug, listBlogPosts } from "@/lib/blog-repository";
 import { enrichMarkdownContent, type LinkableContent } from "@/lib/internal-linking";
 import { listLegalUpdates } from "@/lib/legal-updates-repository";
+import { getTeamMemberBySlug } from "@/lib/team-data";
 import { SITE_URL } from "@/lib/site-config";
 import type { BlogPost as BlogPostType } from "@/types/blog";
 
+type BlogPostLoaderData = {
+  post: Omit<BlogPostType, "content"> | null;
+  renderedContent: string;
+};
+
+const toLinkableEntry = (entry: { slug: string; title: string; excerpt?: string; category?: string }, href: string): LinkableContent => ({
+  slug: entry.slug,
+  title: entry.title,
+  href,
+  excerpt: entry.excerpt,
+  category: entry.category,
+});
+
+export const loader = async ({ params }: LoaderFunctionArgs): Promise<BlogPostLoaderData> => {
+  const slug = params.slug ?? "";
+  const [post, blogPosts, legalUpdates] = await Promise.all([
+    getBlogPostBySlug(slug),
+    listBlogPosts(),
+    listLegalUpdates(),
+  ]);
+
+  if (!post) {
+    return { post: null, renderedContent: "" };
+  }
+
+  const linkableEntries: LinkableContent[] = [
+    ...blogPosts.map((entry) => toLinkableEntry(entry, `/blog/${entry.slug}`)),
+    ...legalUpdates.map((entry) => toLinkableEntry(entry, `/guncel-hukuk-gundemi/${entry.slug}`)),
+  ];
+
+  const renderedContent = enrichMarkdownContent(
+    {
+      ...post,
+      href: `/blog/${post.slug}`,
+      content: post.content,
+    },
+    linkableEntries,
+  );
+
+  const { content: _content, ...postMeta } = post;
+
+  return { post: postMeta, renderedContent };
+};
+
+const DEFAULT_AUTHOR_SLUG = "aykut-yesilkaya";
+
 const BlogPost = () => {
   const { slug = "" } = useParams();
-  const [post, setPost] = useState<BlogPostType | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [linkableEntries, setLinkableEntries] = useState<LinkableContent[]>([]);
+  const { post, renderedContent } = useLoaderData() as BlogPostLoaderData;
 
-  useEffect(() => {
-    let mounted = true;
-
-    const loadPost = async () => {
-      const [result, blogPosts, legalUpdates] = await Promise.all([
-        getBlogPostBySlug(slug),
-        listBlogPosts(),
-        listLegalUpdates(),
-      ]);
-
-      if (mounted) {
-        setPost(result);
-        setLinkableEntries([
-          ...blogPosts.map((entry) => ({ ...entry, href: `/blog/${entry.slug}` })),
-          ...legalUpdates.map((entry) => ({ ...entry, href: `/guncel-hukuk-gundemi/${entry.slug}` })),
-        ]);
-        setLoading(false);
-      }
-    };
-
-    void loadPost();
-
-    return () => {
-      mounted = false;
-    };
-  }, [slug]);
-
-  const renderedContent = post
-    ? enrichMarkdownContent(
-        {
-          ...post,
-          href: `/blog/${post.slug}`,
-          content: post.content,
-        },
-        linkableEntries,
-      )
-    : "";
+  const authorMember = getTeamMemberBySlug(post?.reviewedBy ?? DEFAULT_AUTHOR_SLUG);
 
   const seoStructuredData = post
     ? [
@@ -63,18 +72,30 @@ const BlogPost = () => {
           description: post.seoDescription ?? post.excerpt,
           datePublished: post.publishedAt,
           dateModified: post.updatedAt ?? post.publishedAt,
-          author: {
-            "@type": "Organization",
-            name: post.author,
-          },
+          inLanguage: "tr",
+          author: authorMember
+            ? {
+                "@type": "Person",
+                name: authorMember.name,
+                jobTitle: authorMember.jobTitle,
+                url: `${SITE_URL}/ekip/${authorMember.slug}`,
+              }
+            : {
+                "@type": "Organization",
+                name: post.author,
+              },
           publisher: {
             "@type": "LegalService",
             name: "Vega Hukuk",
             url: SITE_URL,
+            logo: {
+              "@type": "ImageObject",
+              url: `${SITE_URL}/og-image.png`,
+            },
           },
           image: post.coverImage
             ? `${SITE_URL}${post.coverImage}`
-            : `${SITE_URL}/og-image.svg`,
+            : `${SITE_URL}/og-image.png`,
           mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
         },
         {
@@ -117,19 +138,9 @@ const BlogPost = () => {
       image={post?.coverImage}
       type="article"
       structuredData={seoStructuredData}
+      noindex={!post}
     />
   );
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-background">
-        {seoElement}
-        <section className="section-container py-24">
-          <p className="text-muted-foreground">Yazı yükleniyor...</p>
-        </section>
-      </main>
-    );
-  }
 
   if (!post) {
     return (
@@ -170,7 +181,7 @@ const BlogPost = () => {
             <CalendarDays className="h-4 w-4" />
             <span>{formatDateTr(post.publishedAt)}</span>
             <span>&middot;</span>
-            <span>{post.author}</span>
+            <span>{authorMember ? authorMember.name : post.author}</span>
           </div>
         </div>
 

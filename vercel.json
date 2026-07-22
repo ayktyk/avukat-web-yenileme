@@ -9,30 +9,6 @@
   ],
   "rewrites": [
     {
-      "source": "/blog/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/guncel-hukuk-gundemi/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/hizmetler/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/kvkk-aydinlatma",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/cerez-politikasi",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/hukuki-uyari",
-      "destination": "/index.html"
-    },
-    {
       "source": "/embed/:path*",
       "destination": "/index.html"
     }

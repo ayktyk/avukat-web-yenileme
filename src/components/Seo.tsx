@@ -29,7 +29,7 @@ const buildMarkdownPath = (path: string) => {
 const Seo = ({ title, description, canonicalPath, image, type = "website", structuredData, noindex = false }: SeoProps) => {
   const canonical = buildAbsoluteUrl(canonicalPath);
   const markdownUrl = buildAbsoluteUrl(buildMarkdownPath(canonicalPath));
-  const imageUrl = buildAbsoluteUrl(image ?? "/og-image.svg");
+  const imageUrl = buildAbsoluteUrl(image ?? "/og-image.png");
   const structuredPayload = Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [];
 
   return (
@@ -53,7 +53,6 @@ const Seo = ({ title, description, canonicalPath, image, type = "website", struc
         <script
           key={`seo-ld-${index}`}
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
         />
       ))}

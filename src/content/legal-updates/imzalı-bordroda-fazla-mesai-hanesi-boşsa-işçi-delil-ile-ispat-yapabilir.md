@@ -1,6 +1,6 @@
 ---
 title: " İmzalı Bordroda Fazla Mesai Hanesi Boşsa, İşçi Delil ile İspat Yapabilir"
-slug: " imzali-bordroda-fazla-mesai-hanesi-bossa-isci-delil-ile-ispat"
+slug: imzali-bordroda-fazla-mesai-hanesi-bossa-isci-delil-ile-ispat
 excerpt: İmzalı bordroda fazla mesai tahakkuku hiç yer almıyorsa, işçi ihtirazi
   kayıt koymamış olsa bile fazla çalışmayı tanık dahil her türlü delille ispat
   edebilir.
