@@ -1,6 +1,6 @@
 ---
 title: "Tüketici Hakem Heyeti 2026: Parasal Limit ve Başvuru Usulü Nasıl İşler?"
-slug: "\ttuketici-hakem-heyeti-2026-parasal-limit-basvuru-usulu"
+slug: tuketici-hakem-heyeti-2026-parasal-limit-basvuru-usulu
 excerpt: 2026 yılında tüketici hakem heyetinin parasal sınırı, başvuru kanalları
   ve karara itiraz süreci. Hangi uyuşmazlık nereye gider, hangi şart hangi
   dosyayı bekletir, somut adımlarla.
