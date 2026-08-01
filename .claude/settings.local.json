@@ -4,7 +4,11 @@
       "Bash(npm run:*)",
       "Bash(git push:*)",
       "Bash(git pull:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(node -e \"try { require\\('sharp'\\); console.log\\('sharp OK'\\) } catch\\(e\\) { console.log\\('no sharp'\\) }\")",
+      "Bash(node -e \"try { const s = require\\('sharp'\\); console.log\\('sharp OK', s.versions\\) } catch\\(e\\) { console.log\\('no sharp:', e.code\\) }\")",
+      "Bash(ls src/components/seo* src/components/Seo*)",
+      "Bash(grep -l \"SITE_URL\" src/lib/site-config.*)"
     ]
   }
 }
