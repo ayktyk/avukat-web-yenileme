@@ -61,7 +61,7 @@ relatedLaws:
   - code: "6502"
     madde: "73"
     title: Tüketici Mahkemesi Görev Alanı
-coverImage: /uploads/blog/blog.png
+coverImage: /uploads/blog/blog.webp
 coverAlt: Tüketici hakem heyeti başvuru dilekçesi ve ekleri masa üstünde
 ogImage: /uploads/blog/blog.png
 ogImageAlt: Vega Hukuk İstanbul — Tüketici hakem heyeti 2026

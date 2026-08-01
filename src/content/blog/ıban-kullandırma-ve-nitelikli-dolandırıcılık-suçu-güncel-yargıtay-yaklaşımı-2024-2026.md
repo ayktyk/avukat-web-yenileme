@@ -8,7 +8,7 @@ excerpt: Bilişim sistemleri ve banka aracılığıyla işlenen nitelikli
 category: Ceza Hukuku / Bilişim Hukuku
 author: Vega Hukuk
 publishedAt: 2026-03-13
-seoTitle: IBAN Kullandırma Suç mu? TCK 158/1-f Güncel Yargıtay Kararları
+seoTitle: IBAN Kullandırma Suç mu? TCK 158/1-f ve Yargıtay
 seoDescription: Hesap veya IBAN numarasını başkasına kullandıran kişinin cezai
   sorumluluğu nedir? TCK 158/1-f kapsamında nitelikli dolandırıcılık suçu ve
   2025 yılı güncel beraat kriterleri.

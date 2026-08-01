@@ -120,7 +120,7 @@ relatedCases:
     date: 2023-12-25
     summary: "'Bilmiyordum' savunması öğrenmeden sonra devam edilmişse korumaz —
       mahkûmiyet gerekir."
-coverImage: /uploads/blog/gemini_generated_image_b0oghib0oghib0og.png
+coverImage: /uploads/blog/gemini_generated_image_b0oghib0oghib0og.webp
 internalLinkPriority:
   - sahte-icra-mesaji-dolandiriciligi
 status: draft

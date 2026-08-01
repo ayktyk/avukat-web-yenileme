@@ -5,7 +5,7 @@ heading: Miras & Aile
 description: Boşanma, nafaka, velayet, mal rejimi tasfiyesi, miras paylaşımı, tenkis, muris muvazaası ve vasi-kayyım işlemlerinde hukuki danışmanlık ve dava takibi.
 orderIndex: 5
 icon: Users
-seoTitle: İstanbul Miras ve Aile Hukuku Avukatı | Boşanma ve Miras Davaları
+seoTitle: İstanbul Miras ve Aile Avukatı | Boşanma ve Miras Davası
 seoDescription: İstanbul Kadıköy'de aile ve miras hukuku danışmanlığı. Boşanma, nafaka, velayet, mal rejimi, miras paylaşımı ve muris muvazaası davalarında dosya bazlı destek.
 publishedAt: 2026-04-09
 updatedAt: 2026-04-09

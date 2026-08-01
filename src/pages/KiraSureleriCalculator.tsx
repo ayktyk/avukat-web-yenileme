@@ -86,7 +86,7 @@ const KiraSureleriCalculator = () => {
       shortTitle={meta.shortTitle}
       description={meta.description}
       canonicalPath="/hesaplamalar/kira-sureleri"
-      seoTitle="Kira Süreleri ve Artış Hesaplama 2026 — TBK m.315-352 | Vega Hukuk"
+      seoTitle="Kira Süreleri ve Artış Hesaplama 2026 — TBK m.315-352"
       seoDescription="Tahliye nedenine göre ihtar, dava ve fesih sürelerini; TBK m.344 kapsamında TÜFE ortalamasına göre yıllık kira artış üst sınırını hesaplayın."
     >
       <form onSubmit={handleSubmit} className="space-y-6">

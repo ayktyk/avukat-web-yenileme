@@ -5,7 +5,7 @@ heading: Ticaret & Sözleşmeler
 description: Şirketler hukuku, ticari sözleşme tasarımı ve müzakereleri, ticari uyuşmazlıklar, haksız rekabet ve ortaklıktan çıkarma süreçlerinde hukuki danışmanlık.
 orderIndex: 3
 icon: Handshake
-seoTitle: İstanbul Ticaret Hukuku Avukatı | Şirketler ve Sözleşme Danışmanlığı
+seoTitle: İstanbul Ticaret Hukuku Avukatı | Şirketler ve Sözleşme
 seoDescription: İstanbul Kadıköy'de ticaret hukuku ve sözleşme danışmanlığı. Şirketler hukuku, ticari sözleşme tasarımı, haksız rekabet ve ticari uyuşmazlık süreçlerinde destek.
 publishedAt: 2026-04-09
 updatedAt: 2026-04-09

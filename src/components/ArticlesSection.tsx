@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, CalendarDays, Newspaper } from "lucide-react";
-import { listLatestBlogPosts } from "@/lib/blog-repository";
+import { listLatestBlogPosts, listLatestBlogPostsSync } from "@/lib/blog-repository";
 import { formatDateTr } from "@/lib/format-date";
 import type { BlogPost } from "@/types/blog";
 
 const ArticlesSection = () => {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Senkron baslangic degeri: yazilar prerendered HTML'e girer, hydration uyusmazligi olusmaz.
+  const [posts, setPosts] = useState<BlogPost[]>(() => listLatestBlogPostsSync(3));
 
   useEffect(() => {
     let mounted = true;
@@ -16,7 +16,6 @@ const ArticlesSection = () => {
       const result = await listLatestBlogPosts(3);
       if (mounted) {
         setPosts(result);
-        setLoading(false);
       }
     };
 
@@ -49,7 +48,7 @@ const ArticlesSection = () => {
           </div>
         </div>
 
-        {loading ? (
+        {posts.length === 0 ? (
           <p className="text-muted-foreground">Yazılar yükleniyor...</p>
         ) : (
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">

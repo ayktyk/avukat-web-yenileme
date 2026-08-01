@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, CalendarDays, Scale } from "lucide-react";
-import { listLatestLegalUpdates } from "@/lib/legal-updates-repository";
+import { listLatestLegalUpdates, listLatestLegalUpdatesSync } from "@/lib/legal-updates-repository";
 import { formatDateTr } from "@/lib/format-date";
 import type { LegalUpdate } from "@/types/legal-update";
 
 const LegalUpdatesSection = () => {
-  const [items, setItems] = useState<LegalUpdate[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Senkron baslangic degeri: gundem kartlari prerendered HTML'e girer.
+  const [items, setItems] = useState<LegalUpdate[]>(() => listLatestLegalUpdatesSync(3));
 
   useEffect(() => {
     let mounted = true;
@@ -16,7 +16,6 @@ const LegalUpdatesSection = () => {
       const result = await listLatestLegalUpdates(3);
       if (mounted) {
         setItems(result);
-        setLoading(false);
       }
     };
 
@@ -51,7 +50,7 @@ const LegalUpdatesSection = () => {
           </Link>
         </div>
 
-        {loading ? (
+        {items.length === 0 ? (
           <p className="text-muted-foreground">Gündem yükleniyor...</p>
         ) : (
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">

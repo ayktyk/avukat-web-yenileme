@@ -17,7 +17,7 @@ export const routes: RouteRecord[] = [
         path: "blog",
         lazy: async () => {
           const mod = await import("./pages/BlogIndex");
-          return { Component: mod.default };
+          return { Component: mod.default, loader: mod.loader };
         },
       },
       {
@@ -36,7 +36,7 @@ export const routes: RouteRecord[] = [
         path: "guncel-hukuk-gundemi",
         lazy: async () => {
           const mod = await import("./pages/LegalUpdatesIndex");
-          return { Component: mod.default };
+          return { Component: mod.default, loader: mod.loader };
         },
       },
       {
@@ -55,7 +55,7 @@ export const routes: RouteRecord[] = [
         path: "hizmetler",
         lazy: async () => {
           const mod = await import("./pages/ServicesIndex");
-          return { Component: mod.default };
+          return { Component: mod.default, loader: mod.loader };
         },
       },
       {

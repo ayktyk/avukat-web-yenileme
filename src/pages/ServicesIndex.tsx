@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import {
   ArrowRight,
   Briefcase,
@@ -28,27 +27,16 @@ const iconMap: Record<string, LucideIcon> = {
   FileSignature,
 };
 
+type ServiceListItem = Omit<Service, "content">;
+
+/** Router loader — bkz. BlogIndex.loader. Hizmet kartlari prerendered HTML'e girer. */
+export const loader = async (): Promise<ServiceListItem[]> => {
+  const services = await listServices();
+  return services.map(({ content: _content, ...rest }) => rest);
+};
+
 const ServicesIndex = () => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let mounted = true;
-
-    const loadServices = async () => {
-      const result = await listServices();
-      if (mounted) {
-        setServices(result);
-        setLoading(false);
-      }
-    };
-
-    void loadServices();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  const services = (useLoaderData() as ServiceListItem[] | undefined) ?? [];
 
   return (
     <main className="min-h-screen bg-background">
@@ -80,8 +68,8 @@ const ServicesIndex = () => {
       </section>
 
       <section className="section-container pb-16">
-        {loading ? (
-          <p className="text-muted-foreground">Hizmetler yükleniyor...</p>
+        {services.length === 0 ? (
+          <p className="text-muted-foreground">Hizmet alanları henüz tanımlanmamış.</p>
         ) : (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((service) => {

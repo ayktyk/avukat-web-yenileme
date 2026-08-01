@@ -1,5 +1,4 @@
-﻿import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+﻿import { Link, useLoaderData } from "react-router-dom";
 import { ArrowRight, CalendarDays } from "lucide-react";
 import Seo from "@/components/Seo";
 import { formatDateTr } from "@/lib/format-date";
@@ -7,27 +6,21 @@ import { listBlogPosts } from "@/lib/blog-repository";
 import { SITE_URL } from "@/lib/site-config";
 import type { BlogPost } from "@/types/blog";
 
+type BlogListItem = Omit<BlogPost, "content">;
+
+/**
+ * Router loader: liste build sirasinda cozulur ve prerendered HTML'e yazilir.
+ * useEffect ile cekilseydi Googlebot ve JS calistirmayan AI botlari yalnizca
+ * "Yazilar yukleniyor..." gorur, yazilara giden ic baglantilarin hicbirini goremezdi.
+ * `content` disarida birakilir — liste icin gereksiz, statik loader verisini sisirir.
+ */
+export const loader = async (): Promise<BlogListItem[]> => {
+  const posts = await listBlogPosts();
+  return posts.map(({ content: _content, ...rest }) => rest);
+};
+
 const BlogIndex = () => {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let mounted = true;
-
-    const loadPosts = async () => {
-      const result = await listBlogPosts();
-      if (mounted) {
-        setPosts(result);
-        setLoading(false);
-      }
-    };
-
-    void loadPosts();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  const posts = (useLoaderData() as BlogListItem[] | undefined) ?? [];
 
   return (
     <main className="min-h-screen bg-background">
@@ -58,8 +51,8 @@ const BlogIndex = () => {
       </section>
 
       <section className="section-container pb-16">
-        {loading ? (
-          <p className="text-muted-foreground">Yazılar yükleniyor...</p>
+        {posts.length === 0 ? (
+          <p className="text-muted-foreground">Henüz yayınlanmış yazı bulunmuyor.</p>
         ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {posts.map((post) => (

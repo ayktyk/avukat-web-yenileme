@@ -89,7 +89,7 @@ const InfazCalculator = () => {
       shortTitle={meta.shortTitle}
       description={meta.description}
       canonicalPath="/hesaplamalar/infaz"
-      seoTitle="İnfaz Hesaplama 2026 — 5275/7242/7456 SK Güncel | Vega Hukuk İstanbul"
+      seoTitle="İnfaz Hesaplama 2026 — 5275/7242/7456 SK | Vega Hukuk"
       seoDescription="5275 sayılı Kanun ve 7242/7456 sayılı değişikliklere göre koşullu salıverilme, denetimli serbestlik, açık cezaevine ayrılma ve bihakkin tahliye tarihlerini hesaplayın."
     >
       <form onSubmit={handleSubmit} className="space-y-6">

@@ -4,7 +4,7 @@ title: Kira Uyarlama Davalarında Emsal Kira Verileri Daha da Önem Kazanıyor
 excerpt: Son dönemde uyarlama dosyalarında emsal veri seti ve bilirkişi incelemesine hazırlık öne çıkıyor.
 category: Hukuk Gündemi
 publishedAt: 2026-03-05
-seoTitle: Kira Uyarlama Davalarında Emsal Kira Verileri Daha da Önem Kazanıyor | Vega Hukuk
+seoTitle: Kira Uyarlama Davalarında Emsal Kira Verilerinin Ağırlığı
 seoDescription: Kira uyarlama uyuşmazlıklarında emsal kira verileri ve bilirkişi hazırlığına ilişkin kısa değerlendirme.
 coverClass: from-accent/[0.12] to-muted/50
 ---

@@ -69,7 +69,7 @@ const KazaTazminatiCalculator = () => {
       shortTitle={meta.shortTitle}
       description={meta.description}
       canonicalPath="/hesaplamalar/kaza-tazminati"
-      seoTitle="Kaza (Maluliyet) Tazminatı Hesaplama 2026 — Progresif Rant | Vega Hukuk"
+      seoTitle="Kaza Tazminatı Hesaplama 2026 — Maluliyet ve Progresif Rant"
       seoDescription="Trafik ve iş kazalarında TRH2010 ömür tablosu ve %10 progresif rant yöntemiyle sürekli maluliyet tazminatını; aktif-pasif dönem ve kusur indirimiyle hesaplayın."
     >
       <form onSubmit={handleSubmit} className="space-y-6">

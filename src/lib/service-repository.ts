@@ -1,4 +1,4 @@
-import { parseMarkdownDocument } from "@/lib/markdown-frontmatter";
+import { parseMarkdownDocument, stripDuplicateLeadingH1 } from "@/lib/markdown-frontmatter";
 import type { Service, ServiceFAQ } from "@/types/service";
 
 type ServiceFrontmatter = Partial<{
@@ -79,7 +79,7 @@ const parseServiceDocument = (path: string, raw: string): Service | null => {
     title,
     heading,
     description,
-    content: content.trim(),
+    content: stripDuplicateLeadingH1(content.trim(), heading || title),
     icon: trim(frontmatter.icon) || "Briefcase",
     orderIndex: Number.isFinite(orderIndex) ? orderIndex : 99,
     seoTitle: trim(frontmatter.seoTitle),
@@ -109,6 +109,14 @@ export const listServices = async (): Promise<Service[]> => {
 export const getServiceBySlug = async (slug: string): Promise<Service | null> => {
   const services = await listServices();
   return services.find((service) => service.slug === slug) ?? null;
+};
+
+/** SSR/prerender icin senkron erisim — bkz. blog-repository.listBlogPostsSync */
+export const listServicesSync = (): Service[] => {
+  if (!servicesCache) {
+    servicesCache = loadServices();
+  }
+  return servicesCache;
 };
 
 export const resetServiceRepositoryCache = () => {

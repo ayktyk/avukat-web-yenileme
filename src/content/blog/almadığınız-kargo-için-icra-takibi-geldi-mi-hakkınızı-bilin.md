@@ -7,7 +7,7 @@ excerpt: Online alışverişte siparişi teslim almadığınız hâlde kargo üc
 category: Genel
 author: Vega Hukuk
 publishedAt: 2026-03-11
-seoTitle: Almadığınız Kargo İçin İcra Takibi | Cayma Hakkı ve Tüketici Hakları 2026
+seoTitle: Almadığınız Kargo İçin İcra Takibi | Cayma Hakkı 2026
 seoDescription: Online alışverişte kargoyu teslim almadınız ama icra takibi
   geldi mi? Mesafeli sözleşmelerde cayma hakkı, kargo ücreti sorumluluğu ve icra
   takibine itiraz yollarını öğrenin. Güncel mevzuat ve Yargıtay kararları

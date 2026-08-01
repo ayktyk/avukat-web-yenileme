@@ -67,7 +67,7 @@ const ArabuluculukCalculator = () => {
       shortTitle={meta.shortTitle}
       description={meta.description}
       canonicalPath="/hesaplamalar/arabuluculuk-ucreti"
-      seoTitle="Arabuluculuk Ücreti Hesaplama 2026 — Saatlik + Nispi | Vega Hukuk"
+      seoTitle="Arabuluculuk Ücreti Hesaplama 2026 — Saatlik ve Nispi"
       seoDescription="Arabuluculuk Asgari Ücret Tarifesi'ne göre saatlik ve nispi arabuluculuk ücretini, KDV ve stopaj dahil net ödemeyi hesaplayın."
     >
       <form onSubmit={handleSubmit} className="space-y-6">

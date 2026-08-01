@@ -5,7 +5,7 @@ heading: Kira & Gayrimenkul
 description: Kira uyuşmazlıkları, tahliye davaları, kira bedeli uyarlama ve tespiti, tapu iptal-tescil, izaleyi şuyu ve gayrimenkul satış süreçlerinde hukuki danışmanlık.
 orderIndex: 4
 icon: Home
-seoTitle: İstanbul Kira ve Gayrimenkul Avukatı | Tahliye ve Tapu İşlemleri
+seoTitle: İstanbul Kira ve Gayrimenkul Avukatı | Tahliye ve Tapu
 seoDescription: İstanbul Kadıköy'de kira ve gayrimenkul hukuku danışmanlığı. Tahliye, kira tespiti, kira uyarlama, tapu iptal-tescil ve izaleyi şuyu davalarında dosya bazlı destek.
 publishedAt: 2026-04-09
 updatedAt: 2026-04-09

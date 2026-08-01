@@ -5,7 +5,7 @@ heading: Sözleşmeler Hukuku
 description: Sözleşme tasarımı, müzakere, ifa ve temerrüt uyuşmazlıkları, cezai şart, sözleşme feshi, irade sakatlıkları ve genel işlem koşulları denetimi alanında hukuki destek.
 orderIndex: 8
 icon: FileSignature
-seoTitle: İstanbul Sözleşmeler Hukuku Avukatı | Sözleşme Tasarımı ve Uyuşmazlık
+seoTitle: İstanbul Sözleşme Avukatı | Tasarım ve Uyuşmazlık Yönetimi
 seoDescription: İstanbul Kadıköy'de sözleşme hukuku danışmanlığı. Sözleşme tasarımı, müzakere, ifa, cezai şart, fesih ve irade sakatlığı süreçlerinde dosya bazlı destek.
 publishedAt: 2026-04-09
 updatedAt: 2026-04-09

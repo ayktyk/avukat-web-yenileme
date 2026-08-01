@@ -64,7 +64,7 @@ const VekaletCalculator = () => {
       shortTitle={meta.shortTitle}
       description={meta.description}
       canonicalPath="/hesaplamalar/vekalet-ucreti"
-      seoTitle="Vekalet Ücreti Hesaplama 2026 — AAÜT Tarifesi | Vega Hukuk İstanbul"
+      seoTitle="Vekalet Ücreti Hesaplama 2026 — AAÜT Tarifesi | Vega Hukuk"
       seoDescription="Avukatlık Asgari Ücret Tarifesi (AAÜT) 2026 kapsamında nispi/maktu vekalet ücretini, mahkeme türü ve dava aşamasına göre hesaplayın."
     >
       <form onSubmit={handleSubmit} className="space-y-6">

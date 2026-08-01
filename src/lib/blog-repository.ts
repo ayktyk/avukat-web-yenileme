@@ -1,4 +1,4 @@
-import { parseMarkdownDocument, unescapeOverEscapedMarkdown } from "@/lib/markdown-frontmatter";
+import { parseMarkdownDocument, stripDuplicateLeadingH1, unescapeOverEscapedMarkdown } from "@/lib/markdown-frontmatter";
 import type { BlogFAQ, BlogPost } from "@/types/blog";
 
 const parseBlogFaqJson = (raw?: string): BlogFAQ[] | undefined => {
@@ -78,6 +78,7 @@ const DEFAULT_FIELD_MAP: BlogFieldMap = {
 };
 
 let postsPromise: Promise<BlogPost[]> | null = null;
+let resolvedPosts: BlogPost[] | null = null;
 
 const readEnv = (key: keyof ImportMetaEnv) => {
   const value = import.meta.env[key];
@@ -276,7 +277,7 @@ const parseMarkdownPost = (path: string, raw: string): BlogPost | null => {
     slug,
     title,
     excerpt,
-    content: content.trim(),
+    content: stripDuplicateLeadingH1(content.trim(), title),
     category: toOptionalString(frontmatter.category) || "Genel",
     author: toOptionalString(frontmatter.author) || "Vega Hukuk",
     publishedAt,
@@ -296,12 +297,14 @@ const parseMarkdownPost = (path: string, raw: string): BlogPost | null => {
   };
 };
 
-const loadLocalPosts = async (): Promise<BlogPost[]> =>
+const loadLocalPostsSync = (): BlogPost[] =>
   sortByDateDesc(
     Object.entries(markdownModules)
       .map(([path, raw]) => parseMarkdownPost(path, raw))
       .filter((post): post is BlogPost => post !== null),
   );
+
+const loadLocalPosts = async (): Promise<BlogPost[]> => loadLocalPostsSync();
 
 const loadRemotePosts = async (): Promise<BlogPost[]> => {
   const { url, token } = getRemoteConfig();
@@ -343,10 +346,15 @@ const loadRemotePosts = async (): Promise<BlogPost[]> => {
 
 export const listBlogPosts = async (): Promise<BlogPost[]> => {
   if (!postsPromise) {
-    postsPromise = loadRemotePosts().catch((error) => {
-      console.error("Blog API okunamadi, yerel yedek veriye geciliyor.", error);
-      return loadLocalPosts();
-    });
+    postsPromise = loadRemotePosts()
+      .catch((error) => {
+        console.error("Blog API okunamadi, yerel yedek veriye geciliyor.", error);
+        return loadLocalPosts();
+      })
+      .then((posts) => {
+        resolvedPosts = posts;
+        return posts;
+      });
   }
 
   return postsPromise;
@@ -357,6 +365,16 @@ export const listLatestBlogPosts = async (limit = 3): Promise<BlogPost[]> => {
   return posts.slice(0, limit);
 };
 
+/**
+ * SSR/prerender sirasinda senkron veri erisimi.
+ * Markdown kaynagi eager glob ile zaten bellekte oldugundan Promise beklemeye gerek yok;
+ * boylece liste bilesenleri prerendered HTML'e girer (Googlebot + JS calistirmayan AI botlari icin sart).
+ * Uzak API yapilandirilmissa cozulmus onbellek, degilse yerel markdown kullanilir.
+ */
+export const listBlogPostsSync = (): BlogPost[] => resolvedPosts ?? loadLocalPostsSync();
+
+export const listLatestBlogPostsSync = (limit = 3): BlogPost[] => listBlogPostsSync().slice(0, limit);
+
 export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
   const posts = await listBlogPosts();
   return posts.find((post) => post.slug === slug) ?? null;
@@ -364,4 +382,5 @@ export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> 
 
 export const resetBlogRepositoryCache = () => {
   postsPromise = null;
+  resolvedPosts = null;
 };

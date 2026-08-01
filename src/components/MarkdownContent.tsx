@@ -63,6 +63,9 @@ const MarkdownContent = ({ content, className }: MarkdownContentProps) => (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
       components={{
+        // Sayfa kendi H1'ini render ediyor; govdede kalan herhangi bir H1 h2'ye indirilir
+        // ki baslik hiyerarsisi tek H1 kuralini bozmasin (stripDuplicateLeadingH1 icin emniyet agi).
+        h1: ({ node, ...props }) => <h2 className="mt-10 font-display text-3xl font-bold text-primary-deep" {...props} />,
         h2: ({ node, ...props }) => <h2 className="mt-10 font-display text-3xl font-bold text-primary-deep" {...props} />,
         h3: ({ node, ...props }) => <h3 className="mt-8 font-display text-2xl font-bold text-primary-deep" {...props} />,
         p: ({ node, children, ...props }) => {

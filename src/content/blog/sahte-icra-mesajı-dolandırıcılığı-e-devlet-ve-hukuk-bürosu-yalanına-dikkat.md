@@ -94,7 +94,7 @@ relatedCases:
     esas: 2026/220
     karar: 2026/206
     date: 2026-04-07
-coverImage: /uploads/blog/chatgpt-image-17-may-2026-19_18_01.png
+coverImage: /uploads/blog/chatgpt-image-17-may-2026-19_18_01.webp
 coverAlt: Sahte icra mesajı dolandırıcılığına karşı uyarı
 internalLinkPriority:
   - sahte-icra-mesaji-dolandiriciligi

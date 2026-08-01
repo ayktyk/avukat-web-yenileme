@@ -4,7 +4,7 @@ title: Yargıtay'dan Fazla Mesai Hesabına İlişkin Yeni Değerlendirme
 excerpt: Fazla mesai ispatı ve bordro kayıtlarının değeri konusunda öne çıkan yeni yaklaşımı kısaca özetliyoruz.
 category: Önemli Karar
 publishedAt: 2026-03-07
-seoTitle: Yargıtay'dan Fazla Mesai Hesabına İlişkin Yeni Değerlendirme | Vega Hukuk
+seoTitle: Yargıtay'dan Fazla Mesai Hesabına İlişkin Yeni Değerlendirme
 seoDescription: Fazla mesai ispatı ve bordro kayıtlarının delil değerine ilişkin dikkat çeken Yargıtay değerlendirmesi.
 coverClass: from-primary/[0.08] to-accent/[0.08]
 ---

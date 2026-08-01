@@ -4,7 +4,7 @@ title: Sigorta Uyuşmazlıklarında Eksper Raporuna Körü Körüne Bağlı Kal�
 excerpt: Tazminat dosyalarında eksper raporunun yanında poliçe, hasar dosyası ve yazışmalar birlikte okunmalı.
 category: Pratik Not
 publishedAt: 2026-03-02
-seoTitle: Sigorta Uyuşmazlıklarında Eksper Raporuna Körü Körüne Bağlı Kalınmamalı | Vega Hukuk
+seoTitle: Sigorta Uyuşmazlığında Eksper Raporu Nasıl Değerlendirilir?
 seoDescription: Sigorta tazminat uyuşmazlıklarında eksper raporunun sınırları ve tamamlayıcı deliller hakkında pratik notlar.
 coverClass: from-primary/[0.05] to-muted/60
 ---

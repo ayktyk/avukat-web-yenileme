@@ -1,4 +1,4 @@
-import { parseMarkdownDocument } from "@/lib/markdown-frontmatter";
+import { parseMarkdownDocument, stripDuplicateLeadingH1 } from "@/lib/markdown-frontmatter";
 import type { LegalUpdate } from "@/types/legal-update";
 
 type MarkdownModuleMap = Record<string, string>;
@@ -49,7 +49,7 @@ const parseLegalUpdate = (path: string, raw: string): LegalUpdate | null => {
     slug,
     title,
     excerpt,
-    content,
+    content: stripDuplicateLeadingH1(content, title),
     category: toOptionalString(data.category) || "Hukuk Gündemi",
     publishedAt,
     updatedAt: toOptionalString(data.updatedAt),
@@ -62,12 +62,14 @@ const parseLegalUpdate = (path: string, raw: string): LegalUpdate | null => {
   };
 };
 
-const loadLocalUpdates = async (): Promise<LegalUpdate[]> =>
+const loadLocalUpdatesSync = (): LegalUpdate[] =>
   sortByDateDesc(
     Object.entries(markdownModules)
       .map(([path, raw]) => parseLegalUpdate(path, raw))
       .filter((item): item is LegalUpdate => item !== null),
   );
+
+const loadLocalUpdates = async (): Promise<LegalUpdate[]> => loadLocalUpdatesSync();
 
 export const listLegalUpdates = async (): Promise<LegalUpdate[]> => {
   if (!updatesPromise) {
@@ -81,6 +83,11 @@ export const listLatestLegalUpdates = async (limit = 3): Promise<LegalUpdate[]> 
   const items = await listLegalUpdates();
   return items.slice(0, limit);
 };
+
+/** SSR/prerender icin senkron erisim — bkz. blog-repository.listBlogPostsSync */
+export const listLegalUpdatesSync = (): LegalUpdate[] => loadLocalUpdatesSync();
+
+export const listLatestLegalUpdatesSync = (limit = 3): LegalUpdate[] => listLegalUpdatesSync().slice(0, limit);
 
 export const getLegalUpdateBySlug = async (slug: string): Promise<LegalUpdate | null> => {
   const items = await listLegalUpdates();

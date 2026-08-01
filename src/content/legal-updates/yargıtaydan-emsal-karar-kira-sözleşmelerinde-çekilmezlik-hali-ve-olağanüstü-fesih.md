@@ -16,7 +16,10 @@ excerpt: >
   . Bu hak hem ev sahiplerine hem de kiracılara tanınmış olup, mahkemelerin bu gerekçeyle açılan davaları doğrudan reddetmeyip "çekilmezlik halini" esastan incelemesi gerektiğine hükmedilmiştir
 category: Güncel Hukuk Gelişmeleri Kira Hukuku
 publishedAt: 2026-03-14
-seoTitle: "Kira Sözleşmesinde Olağanüstü Fesih: Yargıtay'dan Çekilmezlik Hali Kararı"
+seoTitle: "Kira Sözleşmesinde Olağanüstü Fesih: Çekilmezlik Hali Kararı"
+seoDescription: Yargıtay 3. HD'nin emsal kararına göre kira ilişkisi çekilmez hale
+  gelirse süre dolmadan olağanüstü fesih mümkün. TBK m.331 kapsamında ne anlama
+  geliyor?
 coverImage: /uploads/blog/12.webp
 ---
 **Yargıtay'dan Kira Hukukunda Emsal Nitelikte "Olağanüstü Fesih" Kararı**

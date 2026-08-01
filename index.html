@@ -7,10 +7,17 @@
     <meta property="og:locale" content="tr_TR" />
     <meta property="og:site_name" content="Vega Hukuk İstanbul" />
     <meta name="theme-color" content="#0b3d91" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
-    <link rel="mask-icon" href="/favicon.svg" color="#0f2b56" />
+    <!--
+      Google arama sonuclarindaki ikon ana sayfadaki rel="icon" baglantisindan alinir.
+      Kare, 48px ustu ve taranabilir olmali. Tum boyutlar Vega Hukuk amblemidir
+      (scripts/generate-favicons.mjs ile marka gorselinden uretilir).
+      SVG ikon bilerek kullanilmiyor: farkli bir cizim oldugu icin tarayici sekmesi ile
+      arama sonucunda iki ayri logo gorunuyordu.
+    -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="preload" as="image" href="/hero-bg-1.webp" fetchpriority="high" type="image/webp" />
     <script type="application/ld+json">
       {
@@ -20,7 +27,8 @@
         "alternateName": ["Vega Hukuk", "Vega Hukuk İstanbul"],
         "description": "İstanbul'da iş hukuku, ceza hukuku, sözleşmeler, kira, gayrimenkul, miras, tüketici ve sigorta alanlarında hukuki danışmanlık ve dava takibi.",
         "url": "https://vegahukukistanbul.com",
-        "logo": "https://vegahukukistanbul.com/og-image.png",
+        "logo": "https://vegahukukistanbul.com/logo.png",
+        "image": "https://vegahukukistanbul.com/logo.png",
         "telephone": "+905519814937",
         "email": "vegalaw.contact@gmail.com",
         "priceRange": "$$",

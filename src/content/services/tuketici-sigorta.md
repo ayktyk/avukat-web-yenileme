@@ -5,7 +5,7 @@ heading: Tüketici & Sigorta
 description: Ayıplı mal ve hizmet, cayma hakkı, abonelik sözleşmeleri, tüketici hakem heyeti, sigorta tazminatı, kasko ve trafik sigortası uyuşmazlıklarında hukuki destek.
 orderIndex: 6
 icon: ShoppingCart
-seoTitle: İstanbul Tüketici ve Sigorta Avukatı | Tüketici Hakem Heyeti ve Tazminat
+seoTitle: İstanbul Tüketici ve Sigorta Avukatı | Hakem Heyeti, Tazminat
 seoDescription: İstanbul Kadıköy'de tüketici ve sigorta hukuku danışmanlığı. Ayıplı mal, cayma hakkı, tüketici hakem heyeti, sigorta tazminatı ve trafik kazası süreçlerinde destek.
 publishedAt: 2026-04-09
 updatedAt: 2026-04-09

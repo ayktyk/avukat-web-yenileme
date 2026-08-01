@@ -73,7 +73,7 @@ const FaizCalculator = () => {
       shortTitle={meta.shortTitle}
       description={meta.description}
       canonicalPath="/hesaplamalar/faiz"
-      seoTitle="Faiz Hesaplama 2026 — Yasal, Ticari, Özel Oran | Vega Hukuk İstanbul"
+      seoTitle="Faiz Hesaplama 2026 — Yasal, Ticari, Özel Oran | Vega Hukuk"
       seoDescription="3095 sayılı Kanun kapsamında yasal faiz, TCMB avans oranı ile ticari temerrüt faizi veya özel oran üzerinden dönem kesişimli faiz hesaplama."
     >
       <form onSubmit={handleSubmit} className="space-y-6">

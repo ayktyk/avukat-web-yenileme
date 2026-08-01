@@ -5,7 +5,7 @@ heading: Ceza Hukuku
 description: Soruşturma ve kovuşturma aşamalarında şüpheli, sanık, mağdur ve müşteki müdafiliği. Uzlaştırma, tutukluluk, adli kontrol, istinaf ve temyiz süreçlerinde hukuki destek.
 orderIndex: 7
 icon: Gavel
-seoTitle: İstanbul Ceza Hukuku Avukatı | Soruşturma ve Ağır Ceza Savunması
+seoTitle: İstanbul Ceza Avukatı | Soruşturma ve Ağır Ceza Savunması
 seoDescription: İstanbul Kadıköy'de ceza hukuku danışmanlığı. Şüpheli-sanık müdafiliği, mağdur vekilliği, uzlaştırma, tutukluluk ve istinaf süreçlerinde dosya bazlı destek.
 publishedAt: 2026-04-09
 updatedAt: 2026-04-09

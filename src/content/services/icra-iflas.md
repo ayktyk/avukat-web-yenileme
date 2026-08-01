@@ -5,7 +5,7 @@ heading: İcra & İflas
 description: İlamlı ve ilamsız icra takibi, itirazın iptali, menfi tespit, istirdat, haciz ve iflas süreçlerinde alacaklı ve borçlu tarafına hukuki destek.
 orderIndex: 2
 icon: Scale
-seoTitle: İstanbul İcra ve İflas Avukatı | Alacak Tahsili ve Takip Hukuku
+seoTitle: İstanbul İcra İflas Avukatı | Alacak Tahsili ve Takip
 seoDescription: İstanbul Kadıköy'de icra takibi, itirazın iptali, menfi tespit ve iflas süreçlerinde hukuki danışmanlık. Alacaklı ve borçlu tarafına dosya bazlı destek.
 publishedAt: 2026-04-09
 updatedAt: 2026-04-09

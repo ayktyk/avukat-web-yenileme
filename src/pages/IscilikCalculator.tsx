@@ -40,7 +40,7 @@ const IscilikCalculator = () => {
       shortTitle={meta.shortTitle}
       description={meta.description}
       canonicalPath="/hesaplamalar/iscilik-alacaklari"
-      seoTitle="İşçilik Alacakları Hesaplama 2026 — Kıdem, İhbar, Fazla Mesai | Vega Hukuk"
+      seoTitle="İşçilik Alacakları Hesaplama 2026 — Kıdem, İhbar, Mesai"
       seoDescription="Kıdem tazminatı, ihbar tazminatı, fazla mesai, UBGT, hafta tatili ve yıllık izin alacaklarını dönem bazlı tavan ve kademeli vergi kurallarıyla hesaplayın."
     >
       <IscilikForm onSubmit={handleSubmit} onReset={handleReset} />

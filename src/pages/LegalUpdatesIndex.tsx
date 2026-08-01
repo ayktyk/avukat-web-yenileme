@@ -1,5 +1,4 @@
-﻿import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+﻿import { Link, useLoaderData } from "react-router-dom";
 import { ArrowRight, CalendarDays } from "lucide-react";
 import Seo from "@/components/Seo";
 import { formatDateTr } from "@/lib/format-date";
@@ -7,27 +6,16 @@ import { listLegalUpdates } from "@/lib/legal-updates-repository";
 import { SITE_URL } from "@/lib/site-config";
 import type { LegalUpdate } from "@/types/legal-update";
 
+type LegalUpdateListItem = Omit<LegalUpdate, "content">;
+
+/** Router loader — bkz. BlogIndex.loader. Liste prerendered HTML'e girer. */
+export const loader = async (): Promise<LegalUpdateListItem[]> => {
+  const items = await listLegalUpdates();
+  return items.map(({ content: _content, ...rest }) => rest);
+};
+
 const LegalUpdatesIndex = () => {
-  const [items, setItems] = useState<LegalUpdate[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let mounted = true;
-
-    const loadItems = async () => {
-      const result = await listLegalUpdates();
-      if (mounted) {
-        setItems(result);
-        setLoading(false);
-      }
-    };
-
-    void loadItems();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  const items = (useLoaderData() as LegalUpdateListItem[] | undefined) ?? [];
 
   return (
     <main className="min-h-screen bg-background">
@@ -57,8 +45,8 @@ const LegalUpdatesIndex = () => {
       </section>
 
       <section className="section-container pb-16">
-        {loading ? (
-          <p className="text-muted-foreground">Gündem yükleniyor...</p>
+        {items.length === 0 ? (
+          <p className="text-muted-foreground">Henüz yayınlanmış gündem içeriği bulunmuyor.</p>
         ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {items.map((item) => (

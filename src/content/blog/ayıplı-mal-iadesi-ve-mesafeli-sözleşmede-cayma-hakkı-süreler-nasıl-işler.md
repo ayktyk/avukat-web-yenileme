@@ -62,7 +62,7 @@ relatedLaws:
   - code: "6502"
     madde: "68"
     title: " Tüketici Hakem Heyeti başvuru sınırları"
-coverImage: /uploads/blog/iade.png
+coverImage: /uploads/blog/iade.webp
 coverAlt: Kargo kutusunu açan tüketici ve iade formu
 internalLinkPriority:
   - ayipli-mal-iadesi-mesafeli-sozlesme-cayma-hakki

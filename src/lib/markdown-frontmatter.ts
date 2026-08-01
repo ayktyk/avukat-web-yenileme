@@ -135,12 +135,30 @@ const parseFrontmatterBlock = <T extends Record<string, unknown>>(block: string)
       continue;
     }
 
-    const value = stripMatchingQuotes(initialValue);
+    // YAML "plain scalar" birden fazla satira yayilabilir: deger anahtar satirinda
+    // baslar ve daha girintili satirlarla devam eder. Onceki surum yalnizca ilk
+    // satiri aliyor, devamini sessizce dusuruyordu; bu yuzden excerpt/seoDescription/
+    // title alanlari cumle ortasinda kesiliyor ve Google'a yarim meta description
+    // gidiyordu. Liste ogeleri (`- deger`) plain scalar degildir, dokunulmaz.
+    const plainLines = [initialValue];
+    index += 1;
+
+    if (initialValue) {
+      while (index < lines.length) {
+        const nextLine = lines[index];
+        if (!nextLine.trim()) break;
+        if (!/^\s/.test(nextLine)) break;
+        if (/^\s*-\s/.test(nextLine)) break;
+
+        plainLines.push(nextLine.trim());
+        index += 1;
+      }
+    }
+
+    const value = stripMatchingQuotes(plainLines.join(" ").replace(/\s+/g, " ").trim());
     if (value) {
       data[key] = value as T[keyof T];
     }
-
-    index += 1;
   }
 
   return data;
@@ -157,6 +175,37 @@ const OVER_ESCAPED_MARKDOWN_RE = /\\([*_#>+\-.!`~|[\]()])/g;
 
 export const unescapeOverEscapedMarkdown = (content: string): string =>
   content.replace(OVER_ESCAPED_MARKDOWN_RE, "$1");
+
+// Karsilastirma icin basligi sadelestirir: kucuk harf, noktalama ve fazla bosluk atilir.
+const normalizeHeadingForCompare = (value: string) =>
+  value
+    .toLocaleLowerCase("tr")
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim();
+
+/**
+ * Markdown govdesinin basindaki, sayfa basligini tekrarlayan `# Baslik` satirini kaldirir.
+ * Detay sayfalari kendi H1'ini render ettigi icin bu satir ikinci bir H1 (bozuk baslik
+ * hiyerarsisi) ve ekranda gorunur bir tekrar uretiyordu.
+ * Yalnizca govdenin ilk ogesi H1 ise ve metin sayfa basligiyla ortusuyorsa silinir;
+ * baslik farkliysa icerik korunur.
+ */
+export const stripDuplicateLeadingH1 = (content: string, title?: string): string => {
+  const trimmed = content.trimStart();
+  const match = /^#\s+(.+?)\s*$/m.exec(trimmed);
+  if (!match || match.index !== 0) return content;
+
+  const heading = normalizeHeadingForCompare(match[1]);
+  if (!heading) return content;
+
+  if (title) {
+    const normalizedTitle = normalizeHeadingForCompare(title);
+    const overlaps = normalizedTitle.startsWith(heading) || heading.startsWith(normalizedTitle);
+    if (!overlaps) return content;
+  }
+
+  return trimmed.slice(match[0].length).trimStart();
+};
 
 export const parseMarkdownDocument = <T extends Record<string, unknown>>(raw: string) => {
   const normalizedRaw = raw.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");

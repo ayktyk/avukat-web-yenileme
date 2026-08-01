@@ -6,7 +6,7 @@ excerpt: emekli-calisanin-sigorta-gunu-eksik-bildirilmesi
 category: İş Hukuku
 author: Vega Hukuk
 publishedAt: 2026-03-31
-seoTitle: Emekli Çalışanın Sigorta Günleri Eksik Bildirilirse 2026 Güncel Rehber
+seoTitle: Emekli Çalışanın Sigorta Günü Eksik Bildirilirse 2026
 seoDescription: Emekli olup çalışmaya devam edenlerin SGK günleri eksik
   bildirildiğinde ne yapılır? Yargıtay kararları, hizmet tespiti davası şartları
   ve dikkat edilmesi gerekenler.
