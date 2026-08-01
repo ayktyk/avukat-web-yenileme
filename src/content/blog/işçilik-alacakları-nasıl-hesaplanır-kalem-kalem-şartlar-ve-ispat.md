@@ -140,7 +140,7 @@ relatedCases:
     date: 2024-01-24
     summary: Ücret uyuşmazlığında meslek kuruluşu emsal ücret araştırması + TÜİK
       kazanç sorgusu birlikte değerlendirilir.
-coverImage: /uploads/blog/gemini_generated_image_7acnmi7acnmi7acn.png
+coverImage: /uploads/blog/gemini_generated_image_7acnmi7acnmi7acn.webp
 status: published
 noindex: false
 ---
