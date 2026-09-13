@@ -142,7 +142,7 @@ relatedCases:
     esas: BB 2018/32734
     karar: " Kübra Yıldız ve diğerleri"
     date: 2022-07-28
-coverImage: https://share.gemini.google/F0S2fwF5z1tz
+coverImage: /uploads/blog/fazla-mesai-bordro.png
 status: published
 noindex: false
 ---
